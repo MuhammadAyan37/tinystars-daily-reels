@@ -1,6 +1,6 @@
 # Tiny Stars daily reels
 
-Code that turns a day's phone clips from [Tiny Stars Daycare](https://tinystars.ca) (Grande Prairie, Alberta) into a short, cinematic vertical reel for Instagram, Facebook and TikTok. **Every face is blurred**, kids and staff alike, along with children's names on plates and walls, and every cut lands on the beat of the music.
+Code that turns a day's phone clips from [Tiny Stars Daycare](https://tinystars.ca) (Grande Prairie, Alberta) into a short, cinematic film in two versions: a vertical reel for Instagram, Facebook and TikTok, and a full-screen widescreen cut for the 55-inch TV at the daycare. **Every face is blurred**, kids and staff alike, along with children's names on plates and walls, and every cut lands on the beat of the music.
 
 ![The reel's graphics: the paper title card, a watercolour paint wash and the closing card](docs/demo.png)
 
@@ -16,6 +16,17 @@ Every parent asks "What did you do at daycare today?" and gets "Nothing." The re
 - the song stops dead while paint spreads across a frozen frame, then comes back on the **washable paint** table: *Fine art.*
 - the camera tilts up the whole classroom to its stained-glass window: "Nothing. Just growing up."
 - a last paint bleed opens the closing card, with contact details landing on the song's final notes and stars on its last hit.
+
+## Two versions of every film
+
+| Version | File | Format |
+| --- | --- | --- |
+| Phone | `exports/nothing_reel.mp4` | 1080×1920, H.264 |
+| TV | `exports/nothing_tv.mp4` | 1920×1080, H.264 High 4.2, full screen with no bars or side panels |
+
+`film.py` makes both. The TV version is a real re-edit rather than a resize: the story, the timing and the music are the same, but every shot is framed again and every title is laid out again for a wide screen, through `FRAMING` and `LAYOUT` in `edits/content.py`.
+
+Wide shots show more of the room, so `review_wide.py` shows each landscape clip's whole frame for checking by eye, and anything the phone crop used to hide gets blurred too. The vertical clips stay at the phone film's zoom, which keeps them inside what was already checked.
 
 ## Privacy first
 
@@ -37,11 +48,13 @@ uv pip install --python .venv/Scripts/python.exe -r requirements.txt
 .venv/Scripts/python.exe -I edits/detect.py                # every face in every frame, plus the camera's motion
 .venv/Scripts/python.exe -I edits/track.py --sheets        # link them into tracks, with sheets for checking by eye
 .venv/Scripts/python.exe -I edits/review.py stand          # one shot's tracks, through the film's framing
+.venv/Scripts/python.exe -I edits/review_wide.py           # every shot's whole frame, for what the TV version will reveal
 .venv/Scripts/python.exe -I edits/blur.py                  # bake the blur into 4K working copies
 .venv/Scripts/python.exe -I edits/photos.py IMG_8597       # the same for a photo
 .venv/Scripts/python.exe -I edits/film.py --stills 1 9 22  # check frames
-.venv/Scripts/python.exe -I edits/film.py                  # the reel, with music and without, plus its cover
-.venv/Scripts/python.exe -I edits/verify.py                # the final privacy scan
+.venv/Scripts/python.exe -I edits/film.py                  # the reel, with music and without, its cover and the TV version
+.venv/Scripts/python.exe -I edits/film.py --tv             # just the TV version (add --stills 1 9 22 to check frames)
+.venv/Scripts/python.exe -I edits/verify.py                # the final privacy scan (name a video to scan the TV version)
 ```
 
 The song, the shots, the timing (in beats) and the words all live in `edits/content.py`. `film.py` writes every frame to `work/frames.rgb` before encoding, so it needs about 5 GB of free disk but little memory. If it stops, run it again and it carries on from the last finished frame.

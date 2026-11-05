@@ -1,4 +1,4 @@
-"""Render the film: 1080x1920, 30 fps, cut on the beat, 25 seconds.
+"""Render the film in two versions, 1080x1920 for phones and 1920x1080 for the TV: 30 fps, cut on the beat, 25 seconds.
 
 Every parent asks "What did you do at daycare today?" and gets "Nothing." The film opens on that exchange, and a paint
 bleed opens a paper title card ("Here's what nothing looks like"). The band comes in on the marshmallows and spaghetti,
@@ -9,13 +9,14 @@ bleed opens a bright paper closing card, with the contact details landing on the
 
 Only the blurred working copies from blur.py and photos.py are ever read here, so no effect can touch an unblurred face.
 
-Usage: python -I edits/film.py [--stills t t t ...]
-  -> exports/nothing_reel.mp4, exports/nothing_reel_nomusic.mp4, exports/nothing_cover.jpg
-     (--stills only writes check frames to work/stills/)
+Usage: python -I edits/film.py [--tv] [--stills t t t ...]
+  -> exports/nothing_reel.mp4, exports/nothing_reel_nomusic.mp4, exports/nothing_cover.jpg, and then exports/nothing_tv.mp4
+     (--tv makes only the TV version; --stills only writes check frames to work/stills/ or work/stills_tv/)
 """
 import gc
 import json
 import math
+import subprocess
 import sys
 from pathlib import Path
 
@@ -25,8 +26,8 @@ import soundfile as sf
 from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from content import BREATH, CHAPTERS, END, HOOK, MUSIC, PILLS, ROOM, SHOTS, STEPS  # noqa: E402
-from lib import (CREAM, FPS, GOLD, H, INK, ITALIC, MAGENTA, ORANGE, PAPER, PURPLE, ROOT, SANS, SERIF, TEAL, VIOLET,  # noqa: E402
+from content import BREATH, CHAPTERS, END, HOOK, LAYOUT as L, MUSIC, PILLS, ROOM, SHOTS, STEPS  # noqa: E402
+from lib import (CREAM, FPS, GOLD, H, INK, ITALIC, MAGENTA, ORANGE, PAPER, PURPLE, ROOT, SANS, SERIF, TEAL, TV, VIOLET,  # noqa: E402
                  W, WHITE, Pill, blit, brush_stroke, clamp01, decode, ease_in_out, ease_out_back, ease_out_cubic,
                  ease_out_expo, encode, font, hash01, icon_image, lettering, logo_image, loudness_normalise,
                  periodic_noise, phone_copy, remux, render_frames, reveal_lr, rise, rounded_mask, star_image, to_sprite)
@@ -265,8 +266,8 @@ class Renderer:
         g = np.random.default_rng(2).normal(0, 1, (H, W)).astype(np.float32)
         g = cv2.GaussianBlur(g, (0, 0), 0.8) * 0.012 + cv2.resize(periodic_noise(H // 8, W // 8, 3), (W, H)) * 0.018
         self.paper = np.array(PAPER, np.float32)[None, None] / 255 * np.ones((H, W, 1), np.float32) + g[..., None]
-        self.shade_top = np.clip(1 - np.arange(H, dtype=np.float32) / 980, 0, 1)[:, None, None] ** 1.25
-        self.logo_small = to_sprite(logo_image(150))
+        self.shade_top = np.clip(1 - np.arange(H, dtype=np.float32) / L["shade"], 0, 1)[:, None, None] ** 1.25
+        self.logo_small = to_sprite(logo_image(L["logo"][0]))
         self.build_type()
 
     def release(self):
@@ -276,34 +277,36 @@ class Renderer:
         self.cache.clear()
 
     def build_type(self):
-        f_ask = font(ITALIC, 94)
+        f_ask = font(ITALIC, L["ask"]["size"])
         self.ask = [to_sprite(lettering(t, f_ask, 0, fill=CREAM, shadow=0.75)) for t in HOOK["ask"]]
-        self.answer = to_sprite(lettering(HOOK["answer"], font(ITALIC, 214), 0, fill=CREAM, shadow=0.8))
-        self.card = [to_sprite(lettering(HOOK["card"][0], font(SERIF, 176), 0, fill=INK, shadow=0)),
-                     to_sprite(lettering(HOOK["card"][1], font(ITALIC, 196), 0, fill=PURPLE, shadow=0)),
-                     to_sprite(lettering(HOOK["card"][2], font(SERIF, 176), 0, fill=INK, shadow=0))]
+        self.answer = to_sprite(lettering(HOOK["answer"], font(ITALIC, L["answer"]["size"]), 0, fill=CREAM, shadow=0.8))
+        sizes = L["card"]["sizes"]
+        self.card = [to_sprite(lettering(HOOK["card"][0], font(SERIF, sizes[0]), 0, fill=INK, shadow=0)),
+                     to_sprite(lettering(HOOK["card"][1], font(ITALIC, sizes[1]), 0, fill=PURPLE, shadow=0)),
+                     to_sprite(lettering(HOOK["card"][2], font(SERIF, sizes[2]), 0, fill=INK, shadow=0))]
         self.card_stroke = brush_stroke(self.card[1].shape[1] + 60, 62, GOLD, 5)
-        f_kick = font(SANS, 33, 700)
-        f_no = font(ITALIC, 172)
+        lc = L["chapter"]
+        f_kick = font(SANS, lc["kick"], 700)
+        f_no = font(ITALIC, lc["no"])
         self.chapters = {}
         for key, c in CHAPTERS.items():
             no = to_sprite(lettering("Nothing.", f_no, 0, fill=CREAM, shadow=0.8))
             self.chapters[key] = dict(kick=to_sprite(lettering(c["kicker"], f_kick, 9, fill=CREAM, shadow=0.8)), no=no,
-                                      real=to_sprite(lettering(c["real"], font(SERIF, 186), 0, fill=WHITE, shadow=0.85)),
+                                      real=to_sprite(lettering(c["real"], font(SERIF, lc["real"]), 0, fill=WHITE, shadow=0.85)),
                                       stroke=brush_stroke(no.shape[1] + 56, 86, MAGENTA if key == "crane" else GOLD,
                                                           7 if key == "crane" else 11))
         self.pills = [(k, b, x, y, Pill(t)) for k, b, t, x, y in PILLS]
-        f_step, f_step_kick = font(ITALIC, 96), font(SANS, 31, 700)
+        f_step, f_step_kick = font(ITALIC, L["step"]["size"]), font(SANS, L["step"]["kick"], 700)
         self.steps = []
         for st in STEPS:
             kick = to_sprite(lettering(st["kick"], f_step_kick, 9, fill=WHITE, shadow=0.8)) if st["kick"] else None
             lines = [to_sprite(lettering(t, f_step, 0, fill=WHITE, shadow=0.85)) for t in st["lines"]]
             self.steps.append(dict(st, kick=kick, lines=lines))
-        self.breath = to_sprite(lettering(BREATH, font(ITALIC, 128), 0, fill=WHITE, shadow=0.7))
-        self.room = [to_sprite(lettering(ROOM[0], font(ITALIC, 120), 0, fill=CREAM, shadow=0.85)),
-                     to_sprite(lettering(ROOM[1], font(SERIF, 150), 0, fill=WHITE, shadow=0.85))]
+        self.breath = to_sprite(lettering(BREATH, font(ITALIC, L["breath"]["size"]), 0, fill=WHITE, shadow=0.7))
+        self.room = [to_sprite(lettering(ROOM[0], font(ITALIC, L["room"]["sizes"][0]), 0, fill=CREAM, shadow=0.85)),
+                     to_sprite(lettering(ROOM[1], font(SERIF, L["room"]["sizes"][1]), 0, fill=WHITE, shadow=0.85))]
         # the closing card
-        self.e_logo = to_sprite(logo_image(330))
+        self.e_logo = to_sprite(logo_image(L["end"]["logo"][0]))
         self.e_l1 = to_sprite(lettering(END["line1"], font(ITALIC, 92), 0, fill=INK, shadow=0))
         self.e_l2 = to_sprite(lettering(END["line2"], font(ITALIC, 92), 0, fill=INK, shadow=0))
         self.e_stroke = brush_stroke(self.e_l2.shape[1] + 30, 34, GOLD, 13)
@@ -326,7 +329,7 @@ class Renderer:
             data = json.loads((FACES / f"{name}.json").read_text())
             portrait = data["h"] > data["w"]
             zmax = max(sh.get("zoom", (1.0, 1.0)))
-            self.clips[name] = Source(name, sh.get("turn", 0), min(2160, 1080 * zmax * 1.2) if portrait else None)
+            self.clips[name] = Source(name, sh.get("turn", 0), min(2160, W * zmax * 1.2) if portrait else None)
         return self.clips[name]
 
     @staticmethod
@@ -408,13 +411,13 @@ class Renderer:
     def card_picture(self, sg, t):
         since = t - sg["t0"]
         img = self.paint.blooms(self.paper.copy(), t, ease_out_cubic(since / 1.2) + 0.15 * since,
-                                [(1080, 120, 0.2, "plum"), (0, 1820, 0.22, "sun")])
-        ys = [700, 866, 1046]
+                                L["card"]["spots"])
+        ys = L["card"]["ys"]
         for i, spr in enumerate(self.card):
             rise(img, spr, W / 2, ys[i], (since - 0.12 - 0.11 * i) / 0.5)
         q = (since - 0.62) / 0.3
         if q > 0:
-            blit(img, reveal_lr(self.card_stroke, ease_in_out(q)), W / 2, ys[1] + 92, 1.0, -1.0)
+            blit(img, reveal_lr(self.card_stroke, ease_in_out(q)), W / 2, ys[1] + L["card"]["stroke"], 1.0, -1.0)
             # keep the word on top of its stroke
             blit(img, self.card[1], W / 2, ys[1])
         return img
@@ -435,24 +438,27 @@ class Renderer:
         hit = bt(END["hit"])
         after = since - hit
         grow = 0.8 + 0.03 * since + (0.14 * ease_out_expo(after / 0.5) if after > 0 else 0)
-        img = self.paint.blooms(self.paper.copy(), t, grow, [(1080, 0, 0.3, "plum"), (0, 1920, 0.32, "sun")])
-        y_logo = 492 - 3 * math.sin(since * 2.2)
+        le = L["end"]
+        _, x_logo, y0_logo = le["logo"]
+        cx, (y1, y2) = le["cx"], le["lines"]
+        img = self.paint.blooms(self.paper.copy(), t, grow, le["spots"])
+        y_logo = y0_logo - 3 * math.sin(since * 2.2)
         pl = (since - 0.1) / 0.45
         pop = 1 + 0.07 * math.exp(-after / 0.14) if after > 0 else 1.0
         if pl > 0:
-            blit(img, self.e_logo, W / 2, y_logo, (0.86 + 0.14 * ease_out_back(pl)) * pop, 0, clamp01(pl * 2.2))
-        rise(img, self.e_l1, W / 2, 728, (since - 0.45) / 0.5)
-        rise(img, self.e_l2, W / 2, 828, (since - 0.56) / 0.5)
+            blit(img, self.e_logo, x_logo, y_logo, (0.86 + 0.14 * ease_out_back(pl)) * pop, 0, clamp01(pl * 2.2))
+        rise(img, self.e_l1, cx, y1, (since - 0.45) / 0.5)
+        rise(img, self.e_l2, cx, y2, (since - 0.56) / 0.5)
         qs = (since - bt(1.9)) / 0.4
         if qs > 0:
-            blit(img, reveal_lr(self.e_stroke, ease_in_out(qs)), W / 2, 890)
-            blit(img, self.e_l2, W / 2, 828)
+            blit(img, reveal_lr(self.e_stroke, ease_in_out(qs)), cx, le["stroke"])
+            blit(img, self.e_l2, cx, y2)
         pp = (since - bt(3)) / 0.35
         if pp > 0:
-            blit(img, self.e_pill, W / 2, 998, 0.8 + 0.2 * ease_out_back(pp), 0, clamp01(pp * 2.5))
+            blit(img, self.e_pill, cx, le["pill"], 0.8 + 0.2 * ease_out_back(pp), 0, clamp01(pp * 2.5))
         block = 52 + max(txt.shape[1] for _, txt in self.e_rows)  # the rows are left-aligned, the block is centred
-        x_icon = (W - block) / 2 + 23
-        y = 1134
+        x_icon = cx - block / 2 + 23
+        y = le["rows"]
         for i, (icon, txt) in enumerate(self.e_rows):
             q = (since - bt(4 + i)) / 0.4
             if q > 0:
@@ -467,7 +473,7 @@ class Renderer:
                 if 0 < q < 1:
                     a0 = hash01(i, 1) * 2 * math.pi
                     d = (240 + 620 * hash01(i, 2)) * ease_out_expo(q * 1.4)
-                    blit(img, s, W / 2 + math.cos(a0) * d, y_logo + math.sin(a0) * d * 1.2 + 260 * q * q, 0.7 + 0.6 * hash01(i, 3),
+                    blit(img, s, x_logo + math.cos(a0) * d, y_logo + math.sin(a0) * d * 1.2 + 260 * q * q, 0.7 + 0.6 * hash01(i, 3),
                          q * 200 * (hash01(i, 4) - 0.5), clamp01((1 - q) * 3))
         return img
 
@@ -491,17 +497,17 @@ class Renderer:
         key, since, dur = sg["key"], t - sg["t0"], sg["t1"] - sg["t0"]
         if key == "ask":
             img = self.shaded(img, 0.55)
-            rise(img, self.ask[0], W / 2, 470, (since - 0.12) / 0.45)
-            rise(img, self.ask[1], W / 2, 572, (since - 0.42) / 0.45)
+            rise(img, self.ask[0], W / 2, L["ask"]["y"][0], (since - 0.12) / 0.45)
+            rise(img, self.ask[1], W / 2, L["ask"]["y"][1], (since - 0.42) / 0.45)
         elif key == "answer":
             img = self.shaded(img, 0.5)
-            rise(img, self.answer, W / 2, 560, (since - 0.04) / 0.34)
+            rise(img, self.answer, L["answer"]["x"], L["answer"]["y"], (since - 0.04) / 0.34)
         elif key == "breath":
             pass
         elif key == "room":
             img = img * (1 - 0.32 * clamp01((since - 0.1) / 0.4))
-            rise(img, self.room[0], W / 2, 800, (since - 0.15) / 0.45)
-            rise(img, self.room[1], W / 2, 950, (since - 0.15 - bt(1)) / 0.5)
+            rise(img, self.room[0], W / 2, L["room"]["ys"][0], (since - 0.15) / 0.45)
+            rise(img, self.room[1], W / 2, L["room"]["ys"][1], (since - 0.15 - bt(1)) / 0.5)
         for st in self.steps:
             if st["shot"] == key and bt(st["b0"]) <= since < bt(st["b1"]):
                 img = self.step(img, st, since - bt(st["b0"]), bt(st["b1"] - st["b0"]))
@@ -519,17 +525,18 @@ class Renderer:
             a = 0.96
             if key == "ask":
                 a *= clamp01((since - 0.2) / 0.3)
-            blit(img, self.logo_small, 112, 208, 1.0, 0, a)
+            blit(img, self.logo_small, L["logo"][1], L["logo"][2], 1.0, 0, a)
         return img
 
     def step(self, img, st, since, dur):
         """A plain caption saying what's happening, on a soft dark band so white type reads on the bright tables."""
-        y, leading = st["y"], 104
+        y, leading = st["y"], L["step"]["leading"]
         kick, lines = st["kick"], st["lines"]
         first = y + 62 if kick is not None else y
         mid = (y + first + leading * (len(lines) - 1)) / 2
         out = clamp01((dur - since) / 0.12)
-        band = np.exp(-((np.arange(H, dtype=np.float32) - mid) / (190 + 40 * len(lines))) ** 2)[:, None, None]
+        b0, b1 = L["step"]["band"]
+        band = np.exp(-((np.arange(H, dtype=np.float32) - mid) / (b0 + b1 * len(lines))) ** 2)[:, None, None]
         img = img * (1 - 0.55 * clamp01(since / 0.18) * out * band)
         if kick is not None:
             rise(img, kick * out, W / 2, y, since / 0.32)
@@ -541,12 +548,13 @@ class Renderer:
         c = self.chapters[key]
         out = clamp01((dur - since) / 0.16)
         img = self.shaded(img, 0.72 * out * clamp01(since / 0.2))
-        rise(img, c["kick"] * out, W / 2, 322, (since - 0.05) / 0.4)
-        rise(img, c["no"] * out, W / 2, 452, (since - 0.1) / 0.4)
+        lc = L["chapter"]
+        rise(img, c["kick"] * out, W / 2, lc["y_kick"], (since - 0.05) / 0.4)
+        rise(img, c["no"] * out, W / 2, lc["y_no"], (since - 0.1) / 0.4)
         q = (since - bt(1)) / 0.26
         if q > 0:
-            blit(img, reveal_lr(c["stroke"], ease_in_out(q)), W / 2, 462, 1.0, -1.5, out)
-        rise(img, c["real"] * out, W / 2, 628, (since - bt(1) - 0.2) / 0.42)
+            blit(img, reveal_lr(c["stroke"], ease_in_out(q)), W / 2, lc["y_stroke"], 1.0, -1.5, out)
+        rise(img, c["real"] * out, W / 2, lc["y_real"], (since - bt(1) - 0.2) / 0.42)
         return img
 
     # ----- one frame -----
@@ -589,30 +597,30 @@ class Renderer:
         key = sg["key"]
         if key == "answer" and nxt and t > sg["t1"] - bt(0.45):
             q = (t - (sg["t1"] - bt(0.45))) / bt(0.7)
-            return self.paint.bleed(img, self.composed(nxt, t), q, 540, 620, t, "plum")
+            return self.paint.bleed(img, self.composed(nxt, t), q, *L["bleed"]["answer"], t, "plum")
         if key == "card" and t < sg["t0"] + bt(0.25):
             q = (t + bt(0.45) - sg["t0"]) / bt(0.7)
-            return self.paint.bleed(self.composed(self.by_key["answer"], t), img, q, 540, 620, t, "plum")
+            return self.paint.bleed(self.composed(self.by_key["answer"], t), img, q, *L["bleed"]["answer"], t, "plum")
         if key == "card" and t > sg["t1"] - bt(0.7):
             q = (t - (sg["t1"] - bt(0.7))) / bt(0.95)
-            return self.paint.bleed(img, self.composed(nxt, t), q, 540, 880, t, "sun")
+            return self.paint.bleed(img, self.composed(nxt, t), q, *L["bleed"]["card"], t, "sun")
         if key == "mats" and t < sg["t0"] + bt(0.25):
             q = (t + bt(0.7) - sg["t0"]) / bt(0.95)
-            return self.paint.bleed(self.composed(self.by_key["card"], t), img, q, 540, 880, t, "sun")
+            return self.paint.bleed(self.composed(self.by_key["card"], t), img, q, *L["bleed"]["card"], t, "sun")
         if key == "breath":
             q = (t - sg["t0"]) / (sg["t1"] - sg["t0"])
             over = self.composed(nxt, t)
-            out = self.paint.bleed(img, over, 0.04 + q * 0.92, 540, 1120, t, "glass")
+            out = self.paint.bleed(img, over, 0.04 + q * 0.92, *L["bleed"]["breath"], t, "glass")
             # the line sits on the paint, and goes as the band returns
             a = clamp01((t - sg["t0"] - 0.08) / 0.2) * clamp01((sg["t1"] - t) / 0.08)
-            blit(out, self.breath, W / 2, 900, 1.0 + 0.03 * q, 0, a)
+            blit(out, self.breath, W / 2, L["breath"]["y"], 1.0 + 0.03 * q, 0, a)
             return out
         if key == "room" and t > sg["t1"] - bt(0.5):
             q = (t - (sg["t1"] - bt(0.5))) / bt(0.8)
-            return self.paint.bleed(img, self.composed(nxt, t), q, 540, 300, t, "plum")
+            return self.paint.bleed(img, self.composed(nxt, t), q, *L["bleed"]["room"], t, "plum")
         if key == "end" and t < sg["t0"] + bt(0.3):
             q = (t + bt(0.5) - sg["t0"]) / bt(0.8)
-            return self.paint.bleed(self.composed(self.by_key["room"], t), img, q, 540, 300, t, "plum")
+            return self.paint.bleed(self.composed(self.by_key["room"], t), img, q, *L["bleed"]["room"], t, "plum")
         return img
 
 
@@ -714,15 +722,26 @@ def main():
     r = Renderer()
     print(f"{len(r.segs)} segments, {r.total:.2f} s", flush=True)
     if "--stills" in sys.argv:
-        out = ROOT / "work" / "stills"
+        out = ROOT / "work" / ("stills_tv" if TV else "stills")
         out.mkdir(parents=True, exist_ok=True)
         for arg in sys.argv[sys.argv.index("--stills") + 1:]:
+            if arg == "--tv":
+                continue
             t = float(arg)
             fr = (np.clip(r.frame(t), 0, 1) * 255 + 0.5).astype(np.uint8)
             Image.fromarray(fr).save(out / f"t{t:06.2f}.jpg", quality=90)
             print("wrote", t, flush=True)
         return
     EXPORTS.mkdir(exist_ok=True)
+    if TV:
+        raw = ROOT / "work" / "frames_tv.rgb"
+        render_frames(r, raw)
+        music, dur = build_audio(r, music=True), r.total
+        del r
+        gc.collect()
+        encode(raw, EXPORTS / "nothing_tv.mp4", music, dur)
+        raw.unlink()
+        return
     cover = (np.clip(r.frame(bt(6.6)), 0, 1) * 255 + 0.5).astype(np.uint8)
     Image.fromarray(cover).save(EXPORTS / "nothing_cover.jpg", quality=95)
     raw = ROOT / "work" / "frames.rgb"
@@ -737,6 +756,8 @@ def main():
     if reel.stat().st_size > 29 * 2 ** 20:  # when the master already fits, a second encode would only lose quality
         phone_copy(reel, EXPORTS / "nothing_reel_phone.mp4")
     raw.unlink()
+    # every film ships in two versions: one for phones, one for the daycare's TV
+    subprocess.run([sys.executable, "-I", __file__, "--tv"], check=True)
 
 
 if __name__ == "__main__":

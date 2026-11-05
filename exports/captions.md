@@ -7,6 +7,7 @@ A 25-second daily reel for Tiny Stars Daycare, built on the question every paren
 | File | Use it for |
 |---|---|
 | `nothing_reel.mp4` | The reel: 25 seconds, full HD 1080×1920, with music and sound effects (Instagram Reels, Facebook Reels, TikTok). It's 26 MB, so this same file works from a computer or a phone. |
+| `nothing_tv.mp4` | For the daycare TV: 1920×1080, full screen with no bars or side panels. |
 | `nothing_reel_nomusic.mp4` | Sound effects only, if you'd rather add a sound inside the app |
 | `nothing_cover.jpg` | Cover image: "Here's what nothing looks like." |
 

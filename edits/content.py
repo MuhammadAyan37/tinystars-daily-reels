@@ -8,9 +8,11 @@ center (x, y as fractions of the frame) or pan ((x0, y0), (x1, y1)), steady (how
 dim (0 bright .. 1 low-key), punch (a small push on the cut), whip (the shot arrives on a whip pan, 1 or -1 for the
 direction).
 """
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+TV = "--tv" in sys.argv  # the widescreen version of the film: same story and timing, every shot and title laid out again
 RAW = ROOT / "source" / "2026-11-04_raw"
 
 # "Cinematic Corporate" by alex-morgan (Pixabay). Its chords run Gm Eb Bb F, four beats each. It builds under the opening,
@@ -90,3 +92,59 @@ END = {
     "rows": [("phone", "(780) 230-1599"), ("pin", "10629 West Side Drive, Grande Prairie"), ("globe", "tinystars.ca  ·  @tinystarsgp")],
     "hit": 7,  # beats into the closing card: the song's last hit
 }
+
+# where things sit on the 1080x1920 phone film; the TV version replaces these below
+LAYOUT = dict(
+    shade=980,
+    logo=(150, 112, 208),
+    ask=dict(size=94, y=(470, 572)),
+    answer=dict(size=214, x=540, y=560),
+    card=dict(sizes=(176, 196, 176), ys=(700, 866, 1046), stroke=92, spots=[(1080, 120, 0.2, "plum"), (0, 1820, 0.22, "sun")]),
+    chapter=dict(kick=33, no=172, real=186, y_kick=322, y_no=452, y_stroke=462, y_real=628),
+    step=dict(size=96, kick=31, leading=104, band=(190, 40)),
+    breath=dict(size=128, y=900),
+    room=dict(sizes=(120, 150), ys=(800, 950)),
+    end=dict(spots=[(1080, 0, 0.3, "plum"), (0, 1920, 0.32, "sun")], logo=(330, 540, 492), cx=540, lines=(728, 828), stroke=890,
+             pill=998, rows=1134),
+    bleed=dict(answer=(540, 620), card=(540, 880), breath=(540, 1120), room=(540, 300)),
+)
+
+if TV:
+    # Wide shots show more of the room, so each landscape clip's face tracks were checked again across its whole frame.
+    # The vertical clips stay at the phone film's zoom, which keeps them inside what was already checked.
+    FRAMING = {
+        "ask": dict(zoom=(1.2, 1.12), center=(0.44, 0.47)),
+        "answer": dict(zoom=(1.04, 1.0), center=(0.5, 0.78)),
+        "mats": dict(start=6, zoom=(1.45, 1.38), center=(0.67, 0.3)),
+        "poke": dict(zoom=(1.75, 1.65), pan=((0.54, 0.72), (0.53, 0.5))),
+        "legs": dict(zoom=(1.5, 1.42), pan=((0.43, 0.58), (0.41, 0.46))),
+        "stand": dict(zoom=(1.42, 1.48), pan=((0.52, 0.66), (0.48, 0.66))),
+        "class": dict(zoom=(1.16, 1.1), pan=((0.44, 0.56), (0.5, 0.56))),
+        "room": dict(zoom=(1.81, 1.73)),
+    }
+    for _sh in SHOTS:
+        _sh.update(FRAMING.get(_sh["key"], {}))
+    for _st, _y in zip(STEPS, (750, 850, 850, 120, 120)):
+        _st["y"] = _y
+    PILLS = [
+        ("class", 0.3, "FINE MOTOR SKILLS", 585, 960),
+        ("class", 1.1, "PROBLEM SOLVING", 1030, 960),
+        ("class", 1.9, "PATIENCE", 1405, 960),
+        ("art", 0.1, "COLOUR", 700, 900),
+        ("art", 0.7, "FOCUS", 960, 900),
+        ("art", 1.3, "SELF-EXPRESSION", 1270, 900),
+    ]
+    LAYOUT = dict(
+        shade=560,
+        logo=(120, 150, 110),
+        ask=dict(size=92, y=(170, 272)),
+        answer=dict(size=190, x=500, y=230),
+        card=dict(sizes=(160, 178, 160), ys=(330, 486, 650), stroke=84, spots=[(1920, 60, 0.2, "plum"), (0, 1020, 0.22, "sun")]),
+        chapter=dict(kick=33, no=150, real=170, y_kick=150, y_no=265, y_stroke=275, y_real=430),
+        step=dict(size=84, kick=31, leading=92, band=(130, 30)),
+        breath=dict(size=128, y=540),
+        room=dict(sizes=(110, 140), ys=(420, 570)),
+        end=dict(spots=[(1920, 0, 0.3, "plum"), (0, 1080, 0.32, "sun")], logo=(400, 490, 530), cx=1240, lines=(250, 350), stroke=412,
+                 pill=520, rows=650),
+        bleed=dict(answer=(960, 400), card=(960, 500), breath=(960, 620), room=(960, 200)),
+    )

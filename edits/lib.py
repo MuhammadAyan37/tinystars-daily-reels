@@ -3,6 +3,7 @@ import gc
 import json
 import math
 import subprocess
+import sys
 import time
 from pathlib import Path
 
@@ -12,7 +13,8 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 ROOT = Path(__file__).resolve().parent.parent
 FONTS = ROOT / "brand" / "fonts"
-W, H, FPS = 1080, 1920, 30
+TV = "--tv" in sys.argv  # see content.py
+W, H, FPS = (1920, 1080, 30) if TV else (1080, 1920, 30)
 
 # fonts: an elegant italic serif for the big words, a tight modern sans for everything small
 SERIF = "InstrumentSerif-Regular.ttf"
@@ -359,6 +361,7 @@ def encode(raw_path, out_path, audio, dur):
            "-r", str(FPS), "-i", str(raw_path), "-i", str(audio),
            "-filter_complex", "[0:v]scale=out_color_matrix=bt709:out_range=tv,format=yuv420p[v]",
            "-map", "[v]", "-map", "1:a", "-c:v", "libx264", "-preset", "slow", "-crf", "16", "-profile:v", "high",
+           *(["-level", "4.2"] if TV else []),  # what every TV and streaming stick can play
            "-maxrate", "24M", "-bufsize", "48M", "-x264-params", "rc-lookahead=20", "-threads", "4",
            "-g", str(FPS * 2), "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709",
            "-bsf:v", "h264_metadata=colour_primaries=1:transfer_characteristics=1:matrix_coefficients=1",

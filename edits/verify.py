@@ -3,7 +3,7 @@
 Runs YuNet at normal and larger size, and on the frame turned sideways, with a low threshold, so it errs on the side of
 raising alarms; hands, plates and the backs of heads will show up too. Every hit is cut out onto sheets for checking by eye.
 
-Usage: python -I edits/verify.py [video]
+Usage: python -I edits/verify.py [video]   (any size, so the 1080p TV version can be scanned too)
   -> work/verify_N.jpg  (each hit enlarged, labelled with its frame number and score)
 """
 import subprocess
@@ -15,12 +15,14 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parent.parent
 MODEL = ROOT / "models" / "face_detection_yunet_2023mar.onnx"
-W, H = 1080, 1920
 SCORE = 0.55
 
 
 def main():
     video = sys.argv[1] if len(sys.argv) > 1 else str(ROOT / "exports" / "nothing_reel.mp4")
+    probe = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height", "-of", "csv=p=0", video],
+                           capture_output=True, text=True, check=True).stdout
+    W, H = (int(v) for v in probe.strip().split(",")[:2])
     det = cv2.FaceDetectorYN.create(str(MODEL), "", (W, H), SCORE, 0.3, 200)
     p = subprocess.Popen(["ffmpeg", "-v", "error", "-i", video, "-f", "rawvideo", "-pix_fmt", "bgr24", "-"],
                          stdout=subprocess.PIPE, bufsize=W * H * 3)
