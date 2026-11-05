@@ -5,7 +5,7 @@ carried a little past its first and last hit, and the boxes are smoothed so the 
 edits/faces.json holds what was decided by eye:
   {"IMG_xxxx": {"only": [the track ids that are faces], or "drop": [ids that are not], "keep": [weak ids that are],
                 "add": [{"keys": {"frame": [x, y, w, h], ...}}],   # hand-placed tracks, interpolated between keys
-                "patches": [{"frame": f, "poly": [[x, y], ...]}]}}  # things on the wall (children's names): see blur.py
+                "patches": [{"frame": f, "poly": [[x, y], ...]}]}}  # names on plates and walls: see blur.py
 
 Usage: python -I edits/track.py [--sheets] [IMG_xxxx ...]
   -> work/tracks/IMG_xxxx.json  {"n", "tracks": [{"id", "start", "boxes": [[x, y, w, h], ...]}]}

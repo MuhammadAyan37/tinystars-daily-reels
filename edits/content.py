@@ -14,15 +14,15 @@ ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "source" / "2026-11-04_raw"
 
 # "Cinematic Corporate" by alex-morgan (Pixabay). Its chords run Gm Eb Bb F, four beats each. It builds under the opening,
-# the band comes in on film beat 8, stops dead at 20 (the song's own break), and comes back on 22 at a later F bar, the
+# the band comes in on film beat 8, stops dead at 24 (the song's own break), and comes back on 26 at a later Gm bar, the
 # chord that would have come next anyway, then plays straight through to the song's real ending.
 MUSIC = {
     "file": "cinematic_corporate_alexmorgan_556231.mp3",
     "bpm": 110.02,
     "first_beat": 0.0,
     # (first film beat, first song beat, how many beats)
-    "parts": [(0, 32, 20), (20, 74, 2), (22, 96, 24)],
-    "lifts": [8, 22],
+    "parts": [(0, 32, 24), (24, 74, 2), (26, 100, 20)],
+    "lifts": [8, 26],
 }
 
 HOOK = {"ask": ["“What did you do", "at daycare today?”"], "answer": "“Nothing.”",
@@ -35,37 +35,49 @@ SHOTS = [
     dict(key="answer", clip="IMG_8589", start=58, beats=2, speed=0.9, zoom=(1.5, 1.42), center=(0.6, 0.66), dim=0.4, steady=8,
          whip=1),
     dict(key="card", kind="card", beats=3),
-    # the band comes in, the camera rises off the table to show the whole room at work
-    dict(key="crane", clip="IMG_8666", start=12, beats=3, speed=1.04, turn=2, zoom=(1.0, 1.0), center=(0.52, 0.5), punch=0.05),
-    dict(key="hands", clip="IMG_8687", start=22, beats=2, speed=1.0, zoom=(1.3, 1.22), center=(0.56, 0.62), steady=8, whip=1),
-    dict(key="build", clip="IMG_8690", start=8, beats=2, speed=0.9, zoom=(1.18, 1.08), center=(0.46, 0.5), steady=8, whip=-1),
-    dict(key="hero", clip="IMG_8691", start=10, beats=3, speed=0.82, zoom=(1.04, 1.12), pan=((0.51, 0.6), (0.36, 0.6)), steady=10, whip=1),
-    dict(key="fist", clip="IMG_8694", start=70, beats=2, speed=1.0, zoom=(1.38, 1.42), pan=((0.225, 1.0), (0.34, 1.0)), steady=8, whip=-1),  # framed low: names are on the wall above
+    # the band comes in on the materials, then how it's done, step by step, in close-up
+    dict(key="mats", clip="IMG_8675", start=18, beats=3, speed=0.85, zoom=(1.05, 1.0), center=(0.76, 0.5), punch=0.05),
+    dict(key="poke", clip="IMG_8687", start=34, beats=2, speed=0.8, zoom=(1.6, 1.52), pan=((0.54, 0.74), (0.53, 0.47)), whip=1),
+    dict(key="legs", clip="IMG_8690", start=8, beats=2, speed=0.9, zoom=(1.7, 1.62), pan=((0.43, 0.55), (0.41, 0.41)), whip=-1),
+    # the payoff: he opens his hand, the tower stays up, and the picture holds on it while the title lands
+    dict(key="stand", clip="IMG_8691", start=31, beats=6, speed=[(0, 0.6), (2, 0.45), (3, 0.35), (3.4, 0.02), (6, 0.02)],
+         zoom=(1.46, 1.54), pan=((0.335, 0.68), (0.31, 0.68)), whip=1),
+    # three plates, three pairs of hands, and no faces in shot
+    dict(key="class", clip="IMG_8675", start=0, beats=3, speed=0.6, zoom=(1.04, 1.0), pan=((0.36, 0.5), (0.42, 0.5)), whip=-1),
     # the song stops: the last frame holds while paint spreads across it
-    dict(key="breath", kind="hold", beats=2, of="fist"),
+    dict(key="breath", kind="hold", beats=2, of="class"),
     # it comes back bigger, straight down onto the paint table
-    dict(key="slide", clip="IMG_8583", start=0, beats=3, speed=1.1, zoom=(1.08, 1.08), center=(0.5, 0.5), punch=0.06, steady=8),
-    dict(key="brush", clip="IMG_8586", start=18, beats=2, speed=1.0, zoom=(1.28, 1.2), center=(0.48, 0.42), steady=8, whip=1),
-    dict(key="art", clip="IMG_8592", start=20, beats=2, speed=0.85, zoom=(1.16, 1.24), center=(0.55, 0.42), steady=10, whip=-1),
-    dict(key="table", clip="IMG_8588", start=0, beats=1, speed=1.0, zoom=(1.14, 1.08), center=(0.5, 0.6), steady=6, whip=1),
+    dict(key="slide", clip="IMG_8583", start=0, beats=2, speed=1.1, zoom=(1.08, 1.08), center=(0.5, 0.5), punch=0.06, steady=8),
+    dict(key="art", clip="IMG_8592", start=20, beats=2, speed=0.85, zoom=(1.16, 1.24), center=(0.55, 0.42), steady=10, whip=1),
+    dict(key="table", clip="IMG_8588", start=0, beats=1, speed=1.0, zoom=(1.14, 1.08), center=(0.5, 0.6), steady=6, whip=-1),
     # the whole room, the window, the point
     dict(key="room", kind="photo", photo="IMG_8597", beats=4, zoom=(1.36, 1.3), pan=((0.54, 0.62), (0.54, 0.39))),
-    dict(key="end", kind="end", beats=12),
+    dict(key="end", kind="end", beats=11),
 ]
 
+# at: how many beats into its shot the chapter title starts
 CHAPTERS = {
-    "crane": {"kicker": "MARSHMALLOW TOWERS", "real": "Engineering.", "beats": 5.0},
-    "slide": {"kicker": "WASHABLE PAINT", "real": "Fine art.", "beats": 5.0},
+    "stand": {"kicker": "MARSHMALLOW TOWERS", "real": "Engineering.", "at": 3.0, "beats": 3.0},
+    "slide": {"kicker": "WASHABLE PAINT", "real": "Fine art.", "at": 0.0, "beats": 4.0},
 }
 
-# (shot it starts in, beat within that shot, text)
+# what's happening, in plain words. b0, b1: the beats within the shot it's on screen; y: where it sits, clear of the action
+STEPS = [
+    dict(shot="mats", b0=0.2, b1=3.0, y=1330, kick="THE CHALLENGE", lines=["Marshmallows + spaghetti.", "Build a tower."]),
+    dict(shot="poke", b0=0.1, b1=2.0, y=1400, kick="STEP 1", lines=["Push the spaghetti in."]),
+    dict(shot="legs", b0=0.1, b1=2.0, y=1400, kick="STEP 2", lines=["Add more legs."]),
+    dict(shot="stand", b0=0.2, b1=2.9, y=430, kick="STEP 3", lines=["Now let go…"]),
+    dict(shot="class", b0=0.1, b1=3.0, y=1240, kick=None, lines=["Every child", "built their own."]),
+]
+
+# (shot it starts in, beat within that shot, text, x, y)
 PILLS = [
-    ("hero", 0.2, "FINE MOTOR SKILLS"),
-    ("hero", 1.2, "PROBLEM SOLVING"),
-    ("hero", 2.2, "PATIENCE"),
-    ("art", 0.1, "COLOUR"),
-    ("art", 0.7, "FOCUS"),
-    ("art", 1.3, "SELF-EXPRESSION"),
+    ("class", 0.3, "FINE MOTOR SKILLS", 540, 1465),
+    ("class", 1.1, "PROBLEM SOLVING", 372, 1547),
+    ("class", 1.9, "PATIENCE", 810, 1547),
+    ("art", 0.1, "COLOUR", 540, 1250),
+    ("art", 0.7, "FOCUS", 540, 1332),
+    ("art", 1.3, "SELF-EXPRESSION", 540, 1414),
 ]
 
 BREATH = "Then, the paint."
@@ -76,5 +88,5 @@ END = {
     "line2": "bright futures tomorrow.",
     "pill": "NOW ENROLLING",
     "rows": [("phone", "(780) 230-1599"), ("pin", "10629 West Side Drive, Grande Prairie"), ("globe", "tinystars.ca  ·  @tinystarsgp")],
-    "hit": 8,  # beats into the closing card: the song's last hit
+    "hit": 7,  # beats into the closing card: the song's last hit
 }

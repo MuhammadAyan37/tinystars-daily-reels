@@ -1,9 +1,10 @@
 """Render the film: 1080x1920, 30 fps, cut on the beat, 25 seconds.
 
-Every parent asks "What did you do at daycare today?" and gets "Nothing." The film opens on that exchange, a paint bleed
-opens a paper title card ("Here's what nothing looks like"), and the band comes in as the camera rises off the table.
-"Nothing." gets struck through with a brush stroke, twice: Engineering, then Fine art. The song stops dead while paint
-spreads across a frozen frame, comes back bigger, and settles on the whole room: "Nothing. Just growing up." A last paint
+Every parent asks "What did you do at daycare today?" and gets "Nothing." The film opens on that exchange, and a paint
+bleed opens a paper title card ("Here's what nothing looks like"). The band comes in on the marshmallows and spaghetti,
+then the challenge is shown step by step in close-up, until a boy lets go of his tower and it stays up. Only then is
+"Nothing." struck through with a brush stroke: Engineering. The song stops dead while paint spreads across a frozen frame,
+comes back bigger for the second one, Fine art, and settles on the whole room: "Nothing. Just growing up." A last paint
 bleed opens a bright paper closing card, with the contact details landing on the song's final notes.
 
 Only the blurred working copies from blur.py and photos.py are ever read here, so no effect can touch an unblurred face.
@@ -24,7 +25,7 @@ import soundfile as sf
 from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from content import BREATH, CHAPTERS, END, HOOK, MUSIC, PILLS, ROOM, SHOTS  # noqa: E402
+from content import BREATH, CHAPTERS, END, HOOK, MUSIC, PILLS, ROOM, SHOTS, STEPS  # noqa: E402
 from lib import (CREAM, FPS, GOLD, H, INK, ITALIC, MAGENTA, ORANGE, PAPER, PURPLE, ROOT, SANS, SERIF, TEAL, VIOLET,  # noqa: E402
                  W, WHITE, Pill, blit, brush_stroke, clamp01, decode, ease_in_out, ease_out_back, ease_out_cubic,
                  ease_out_expo, encode, font, hash01, icon_image, lettering, logo_image, loudness_normalise,
@@ -291,7 +292,13 @@ class Renderer:
                                       real=to_sprite(lettering(c["real"], font(SERIF, 186), 0, fill=WHITE, shadow=0.85)),
                                       stroke=brush_stroke(no.shape[1] + 56, 86, MAGENTA if key == "crane" else GOLD,
                                                           7 if key == "crane" else 11))
-        self.pills = [(k, b, Pill(t)) for k, b, t in PILLS]
+        self.pills = [(k, b, x, y, Pill(t)) for k, b, t, x, y in PILLS]
+        f_step, f_step_kick = font(ITALIC, 96), font(SANS, 31, 700)
+        self.steps = []
+        for st in STEPS:
+            kick = to_sprite(lettering(st["kick"], f_step_kick, 9, fill=WHITE, shadow=0.8)) if st["kick"] else None
+            lines = [to_sprite(lettering(t, f_step, 0, fill=WHITE, shadow=0.85)) for t in st["lines"]]
+            self.steps.append(dict(st, kick=kick, lines=lines))
         self.breath = to_sprite(lettering(BREATH, font(ITALIC, 128), 0, fill=WHITE, shadow=0.7))
         self.room = [to_sprite(lettering(ROOM[0], font(ITALIC, 120), 0, fill=CREAM, shadow=0.85)),
                      to_sprite(lettering(ROOM[1], font(SERIF, 150), 0, fill=WHITE, shadow=0.85))]
@@ -495,22 +502,39 @@ class Renderer:
             img = img * (1 - 0.32 * clamp01((since - 0.1) / 0.4))
             rise(img, self.room[0], W / 2, 800, (since - 0.15) / 0.45)
             rise(img, self.room[1], W / 2, 950, (since - 0.15 - bt(1)) / 0.5)
-        # chapter titles run across several shots
+        for st in self.steps:
+            if st["shot"] == key and bt(st["b0"]) <= since < bt(st["b1"]):
+                img = self.step(img, st, since - bt(st["b0"]), bt(st["b1"] - st["b0"]))
+        # chapter titles can run across several shots
         for ck, c in CHAPTERS.items():
             s0 = self.by_key[ck]
-            t0, t1 = s0["t0"], s0["t0"] + bt(c["beats"])
+            t0 = s0["t0"] + bt(c["at"])
+            t1 = t0 + bt(c["beats"])
             if t0 <= t < t1 and sg["kind"] == "clip":
                 img = self.chapter(img, ck, t - t0, t1 - t0)
-        for k, b, pill in self.pills:
-            s0 = self.by_key[k]
-            if sg is s0:
-                n = sum(1 for kk, bb, _ in self.pills if kk == k and bb <= b)
-                pill.draw(img, W / 2, 1250 + 82 * (n - 1), (since - bt(b)) / 0.32)
+        for k, b, x, y, pill in self.pills:
+            if sg is self.by_key[k]:
+                pill.draw(img, x, y, (since - bt(b)) / 0.32)
         if sg["kind"] in ("clip", "photo", "hold"):
             a = 0.96
             if key == "ask":
                 a *= clamp01((since - 0.2) / 0.3)
             blit(img, self.logo_small, 112, 208, 1.0, 0, a)
+        return img
+
+    def step(self, img, st, since, dur):
+        """A plain caption saying what's happening, on a soft dark band so white type reads on the bright tables."""
+        y, leading = st["y"], 104
+        kick, lines = st["kick"], st["lines"]
+        first = y + 62 if kick is not None else y
+        mid = (y + first + leading * (len(lines) - 1)) / 2
+        out = clamp01((dur - since) / 0.12)
+        band = np.exp(-((np.arange(H, dtype=np.float32) - mid) / (190 + 40 * len(lines))) ** 2)[:, None, None]
+        img = img * (1 - 0.55 * clamp01(since / 0.18) * out * band)
+        if kick is not None:
+            rise(img, kick * out, W / 2, y, since / 0.32)
+        for i, spr in enumerate(lines):
+            rise(img, spr * out, W / 2, first + leading * i, (since - 0.05 - 0.16 * i) / 0.38)
         return img
 
     def chapter(self, img, key, since, dur):
@@ -572,7 +596,7 @@ class Renderer:
         if key == "card" and t > sg["t1"] - bt(0.7):
             q = (t - (sg["t1"] - bt(0.7))) / bt(0.95)
             return self.paint.bleed(img, self.composed(nxt, t), q, 540, 880, t, "sun")
-        if key == "crane" and t < sg["t0"] + bt(0.25):
+        if key == "mats" and t < sg["t0"] + bt(0.25):
             q = (t + bt(0.7) - sg["t0"]) / bt(0.95)
             return self.paint.bleed(self.composed(self.by_key["card"], t), img, q, 540, 880, t, "sun")
         if key == "breath":
@@ -660,12 +684,15 @@ def build_audio(r, music=True):
     i = 0
     tone = room_tone(sr, bt(8))
     mix[i:len(tone)] += tone
+    breath, end = r.by_key["breath"]["t0"], r.by_key["end"]["t0"]
     ev = [(swish(sr, 0.5, seed=2), bt(4.55), -9), (swish(sr, 0.7, 300, 3000, seed=3), bt(7.3), -9),
-          (sub_boom(sr), bt(8), -3), (sub_boom(sr), bt(22), -2), (swish(sr, 1.05, 240, 2600, seed=5), bt(20.05), -8),
-          (swish(sr, 0.5, seed=8), bt(33.5), -9), (shimmer(sr), bt(34) + bt(END["hit"]), -9)]
+          (sub_boom(sr), bt(MUSIC["lifts"][0]), -3), (sub_boom(sr), bt(MUSIC["lifts"][1]), -2),
+          (swish(sr, 1.05, 240, 2600, seed=5), breath + 0.03, -8), (swish(sr, 0.5, seed=8), end - bt(0.5), -9),
+          (shimmer(sr), end + bt(END["hit"]), -9),
+          (shimmer(sr, seed=7), r.by_key["stand"]["t0"] + bt(3.0), -15)]  # a small chime as the tower holds
     # the two strike-throughs, and every whip pan
-    for ck in CHAPTERS:
-        ev.append((swish(sr, 0.3, 900, 7000, seed=6), r.by_key[ck]["t0"] + bt(1), -10))
+    for ck, c in CHAPTERS.items():
+        ev.append((swish(sr, 0.3, 900, 7000, seed=6), r.by_key[ck]["t0"] + bt(c["at"] + 1), -10))
     for sg in r.segs:
         if sg["shot"].get("whip"):
             ev.append((swish(sr, 0.26, 700, 6000, seed=10 + sg["i"]), sg["t0"] - 0.13, -15))

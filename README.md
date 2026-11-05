@@ -11,7 +11,8 @@ Code that turns a day's phone clips from [Tiny Stars Daycare](https://tinystars.
 Every parent asks "What did you do at daycare today?" and gets "Nothing." The reel (1080×1920, 30 fps, H.264 + AAC, normalised to −14 LUFS, 25 seconds) opens on that exchange, then:
 
 - a **watercolour paint bleed** opens a paper title card: "Here's what nothing looks like."
-- the band comes in as the camera rises off the table onto a room full of kids building **marshmallow towers**, and "Nothing." gets struck through with a brush stroke: *Engineering.*
+- the band comes in on the marshmallows and spaghetti, and the **marshmallow tower** challenge is shown step by step in close-up: push the spaghetti in, add more legs, let go.
+- the tower stays up, and only then does "Nothing." get struck through with a brush stroke: *Engineering.*
 - the song stops dead while paint spreads across a frozen frame, then comes back on the **washable paint** table: *Fine art.*
 - the camera tilts up the whole classroom to its stained-glass window: "Nothing. Just growing up."
 - a last paint bleed opens the closing card, with contact details landing on the song's final notes and stars on its last hit.
@@ -35,7 +36,7 @@ uv pip install --python .venv/Scripts/python.exe -r requirements.txt
 .venv/Scripts/python.exe -I tools/fetch_assets.py          # fonts, face model, logo, song
 .venv/Scripts/python.exe -I edits/detect.py                # every face in every frame, plus the camera's motion
 .venv/Scripts/python.exe -I edits/track.py --sheets        # link them into tracks, with sheets for checking by eye
-.venv/Scripts/python.exe -I edits/review.py hero           # one shot's tracks, through the film's framing
+.venv/Scripts/python.exe -I edits/review.py stand          # one shot's tracks, through the film's framing
 .venv/Scripts/python.exe -I edits/blur.py                  # bake the blur into 4K working copies
 .venv/Scripts/python.exe -I edits/photos.py IMG_8597       # the same for a photo
 .venv/Scripts/python.exe -I edits/film.py --stills 1 9 22  # check frames
