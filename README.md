@@ -68,7 +68,15 @@ Each picture is drawn at 1.5 to 2 times its final size and scaled down, so type 
 - not happy in the first month? we'll refund your registration
 - the phone number
 
-Each sample uses a different modern Google font: Manrope, Plus Jakarta Sans, Outfit, Inter Tight, Fraunces with DM Sans, and Sora. They're written to `exports/offer_sample_1.jpg` through `exports/offer_sample_6.jpg`, plus `exports/offer_samples.jpg` side by side. The photos come from the daycare's Google page and its Drive, and go through `photos.py` first like every other photo. Ad copy and the campaign plan are in [`exports/offer_ad.md`](exports/offer_ad.md).
+Each sample uses a different modern Google font: Manrope, Plus Jakarta Sans, Outfit, Inter Tight, Fraunces with DM Sans, and Sora. They're written to `exports/offer_sample_1.jpg` through `exports/offer_sample_6.jpg`, plus `exports/offer_samples.jpg` side by side.
+
+Samples 7 to 12 are photo grids, the kind of page Little Penguins runs, taken further:
+
+- 5 to 9 captioned real photos (classrooms, the turf yard, the play gym, art, birthdays)
+- laid out as a classic grid, a bento, a band, arches, a magazine strip or a sidebar
+- the offer and the promise set clearly in each
+
+They're written to `exports/offer_sample_7.jpg` through `exports/offer_sample_12.jpg`, plus `exports/offer_samples_grids.jpg` side by side. The photos come from the daycare's Google page and its Drive, and go through `photos.py` first like every other photo. Ad copy and the campaign plan are in [`exports/offer_ad.md`](exports/offer_ad.md).
 
 ## Two versions of every film
 
