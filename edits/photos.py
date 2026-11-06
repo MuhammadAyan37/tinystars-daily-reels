@@ -18,8 +18,7 @@ from PIL import Image, ImageOps
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from blur import blur_face, blur_patch  # noqa: E402
-from content import RAW  # noqa: E402
-from detect import MODEL, TURNS, merge, turned_back  # noqa: E402
+from detect import MODEL, TURNS, merge, raw_path, turned_back  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 FIXES = ROOT / "edits" / "faces.json"
@@ -51,7 +50,7 @@ def main():
     fixes = json.loads(FIXES.read_text()) if FIXES.exists() else {}
     det = cv2.FaceDetectorYN.create(str(MODEL), "", (320, 320), 0.4, 0.3, 500)
     for name in sys.argv[1:]:
-        rgb = ImageOps.exif_transpose(Image.open(RAW / f"{name}.HEIC")).convert("RGB")
+        rgb = ImageOps.exif_transpose(Image.open(raw_path(name, (".heic",)))).convert("RGB")
         img = cv2.cvtColor(np.asarray(rgb), cv2.COLOR_RGB2BGR)
         fx = fixes.get(name, {})
         boxes = find(img, det)

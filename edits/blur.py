@@ -95,6 +95,8 @@ def bake(name, fixes):
     for i, fr in enumerate(frames(path, w, h)):
         img = fr.copy()
         for p in patches:
+            if "frames" in p and not p["frames"][0] <= i <= p["frames"][1]:
+                continue  # a patch can be limited to the frames where its subject is in the picture
             M = T[i] @ np.linalg.inv(T[p["frame"]])
             pts = np.c_[np.array(p["poly"], np.float64), np.ones(len(p["poly"]))] @ M.T
             blur_patch(img, pts[:, :2])

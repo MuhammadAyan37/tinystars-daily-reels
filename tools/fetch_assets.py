@@ -13,11 +13,14 @@ FILES = {
     "brand/fonts/InstrumentSerif-Regular.ttf": f"{FONTS}/instrumentserif/InstrumentSerif-Regular.ttf",
     "brand/fonts/InstrumentSerif-Italic.ttf": f"{FONTS}/instrumentserif/InstrumentSerif-Italic.ttf",
     "brand/fonts/InterTight.ttf": f"{FONTS}/intertight/InterTight%5Bwght%5D.ttf",
+    "brand/fonts/CrimsonPro-Italic.ttf": f"{FONTS}/crimsonpro/CrimsonPro-Italic%5Bwght%5D.ttf",
     "models/face_detection_yunet_2023mar.onnx":
         "https://github.com/opencv/opencv_zoo/raw/main/models/face_detection_yunet/face_detection_yunet_2023mar.onnx",
     "brand/logo.png": "https://tinystars.ca/assets/images/logo/logo.png",
     "source/music/cinematic_corporate_alexmorgan_556231.mp3":
         "https://cdn.pixabay.com/download/audio/2026/06/23/audio_506b25c5cd.mp3",
+    "source/music/acoustic_upbeat_octosound_301015.mp3":
+        "https://cdn.pixabay.com/download/audio/2025/02/13/audio_a51a7cf804.mp3",
 }
 
 

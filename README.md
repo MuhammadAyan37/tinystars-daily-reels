@@ -17,6 +17,31 @@ Every parent asks "What did you do at daycare today?" and gets "Nothing." The re
 - the camera tilts up the whole classroom to its stained-glass window: "Nothing. Just growing up."
 - a last paint bleed opens the closing card, with contact details landing on the song's final notes and stars on its last hit.
 
+## The second film: "While you're at work"
+
+A 25-second paid ad, told as the updates a working parent gets from the daycare during the day.
+
+**The hook** opens on the best moment of the day: a teacher's hand swooping in for a high five, with her real "High five!", under "What your kid does while you're at work". The picture stops a hair before the hands meet, then rewinds to the morning, so the viewer waits for the payoff. The day then plays in order, each part arriving as an update on a phone:
+
+- **9:52 AM, Outside time ☀️**: the band comes in on a kick, the ball is caught by the fence, and the toddler walks on across the yard.
+- **11:18 AM, Music time 🎶**: a boy claps, then dances, arms flung wide, in two shots.
+- **1:34 PM, Little helper 💧**: a girl puts her water bottle back on the table, and the high five from the opening finally lands, in slow motion with its real slap.
+- **4:05 PM, Ready for pickup 🎒**: the classroom, quiet again.
+
+Only the steadiest footage is used. `updates.py` measures each clip's shake from the camera motion that `detect.py` records, and smooths the handheld yard clips along that path.
+
+Older updates stack up behind the new one, and the last one is the invitation: **Now enrolling ⭐ Book a tour**. The song is "Acoustic Upbeat" by OctoSound; every cut lands on its beat, and the film ends on the song's own last chord.
+
+`updates.py` makes three versions from one timeline, each laid out for its own screen:
+
+| Version | File | Format |
+| --- | --- | --- |
+| Reels, Stories, TikTok | `exports/updates_reel.mp4` | 1080×1920, every word inside the 720×1200 band the apps leave clear of their buttons |
+| Facebook and Instagram feed | `exports/updates_feed.mp4` | 1080×1350 (4:5) |
+| TV | `exports/updates_tv.mp4` | 1920×1080, full screen, every shot framed again |
+
+Ad copy and setup notes are in [`exports/updates_ad.md`](exports/updates_ad.md).
+
 ## Two versions of every film
 
 | Version | File | Format |
@@ -55,7 +80,11 @@ uv pip install --python .venv/Scripts/python.exe -r requirements.txt
 .venv/Scripts/python.exe -I edits/film.py                  # the reel, with music and without, its cover and the TV version
 .venv/Scripts/python.exe -I edits/film.py --tv             # just the TV version (add --stills 1 9 22 to check frames)
 .venv/Scripts/python.exe -I edits/verify.py                # the final privacy scan (name a video to scan the TV version)
+.venv/Scripts/python.exe -I edits/updates.py --stills 1 9 22  # the ad: check frames (add --feed or --tv for the other layouts)
+.venv/Scripts/python.exe -I edits/updates.py               # the ad in all three versions
 ```
+
+The privacy scripts look for originals in every `source/*_raw` folder, so each film's clips can stay in the folder for the day they were filmed.
 
 The song, the shots, the timing (in beats) and the words all live in `edits/content.py`. `film.py` writes every frame to `work/frames.rgb` before encoding, so it needs about 5 GB of free disk but little memory. If it stops, run it again and it carries on from the last finished frame.
 
@@ -65,8 +94,8 @@ The logo in `tools/fetch_assets.py` is the small one from the website. Put a lar
 
 - **Python** with NumPy, OpenCV (YuNet face detection, optical-flow slow motion, compositing) and Pillow (lettering and graphics, `pillow-heif` for iPhone photos)
 - **FFmpeg** for H.264/AAC encoding and two-pass EBU R128 loudness normalisation
-- **Fonts:** Instrument Serif for the big words and Inter Tight for small print, both from Google Fonts (OFL)
-- **Music:** "Cinematic Corporate" by alex-morgan on [Pixabay](https://pixabay.com/music/corporate-cinematic-corporate-556231/) (Pixabay Content License). The brush, boom and chime sounds are made in `film.py`.
+- **Fonts:** Instrument Serif for the big words and Inter Tight for small print, plus Crimson Pro Italic for the ad's closing line, all from Google Fonts (OFL). The ad's emoji come from Segoe UI Emoji, which ships with Windows.
+- **Music:** "Cinematic Corporate" by alex-morgan on [Pixabay](https://pixabay.com/music/corporate-cinematic-corporate-556231/) for "Nothing", and "Acoustic Upbeat" by OctoSound on [Pixabay](https://pixabay.com/music/happy-childrens-tunes-acoustic-upbeat-301015/) for the ad (Pixabay Content License). The brush, boom and chime sounds are made in `film.py` and `updates.py`.
 
 ## License
 

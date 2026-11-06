@@ -27,8 +27,17 @@ SCORE = 0.4
 TURNS = (None, cv2.ROTATE_90_CLOCKWISE, cv2.ROTATE_180, cv2.ROTATE_90_COUNTERCLOCKWISE)
 
 
+def raw_path(name, exts=(".mov",)):
+    """A day's original file by name: this film's own folder first, then every other day's (source/*_raw)."""
+    for folder in [RAW, *sorted((ROOT / "source").glob("*_raw"), reverse=True)]:
+        for p in folder.iterdir():
+            if p.stem.upper() == name.upper() and p.suffix.lower() in exts:
+                return p
+    raise SystemExit(f"no original for {name}")
+
+
 def clip_path(name):
-    return next(p for p in RAW.iterdir() if p.stem.upper() == name and p.suffix.lower() == ".mov")
+    return raw_path(name)
 
 
 def clip_size(path):

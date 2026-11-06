@@ -9,6 +9,7 @@ source/
 work/
 exports/*
 !exports/captions.md
+!exports/updates_ad.md
 *.heic
 *.HEIC
 *.jpg
