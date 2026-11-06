@@ -1,14 +1,21 @@
 # New-family offer: picture ad, copy and campaign plan
 
-A picture ad for Tiny Stars Daycare. The main photo is the stained-glass classroom. Over it sits a printed coupon with a tear-off edge: **$100 off your first 2 months + free registration**. Below that is a parent's 5-star words from Google, three small real photos (indoor play gym, painting, turf play yard) and a **Book a tour** button with the phone number.
+A picture ad for Tiny Stars Daycare. The stained-glass classroom fills the whole picture, lightly graded so it still looks like a real photo. One clean white card carries everything to read:
+
+- who it's for: new families, ages 1 to 12, Grande Prairie
+- **$100 off** in big type, then "your first 2 months **+ free registration**"
+- three small real photos (indoor play gym, painting, turf play yard)
+- a **Book a tour** button and the phone number
+
+There are no stickers, glows or stars, nothing that looks generated. The TV version also carries a parent's words from Google.
 
 ## Files
 
 | File | Use it for |
 |---|---|
-| `offer_feed.jpg` | 1080×1350 (4:5): Facebook and Instagram feeds |
-| `offer_story.jpg` | 1080×1920 (9:16): Stories and Reels. Every word sits clear of the apps' buttons; the bottom strip is only photos. |
-| `offer_tv.jpg` | 1920×1080: the daycare TV |
+| `offer_feed.jpg` | 1440×1800 (4:5), Meta's recommended size: Facebook and Instagram feeds |
+| `offer_story.jpg` | 1440×2560 (9:16), Meta's recommended size: Stories and Reels. Every word sits clear of the apps' buttons. |
+| `offer_tv.jpg` | 3840×2160 (4K): the daycare TV |
 | `offer_photos.jpg` | The photos the ad uses, plus spares |
 
 ## What I looked at first
@@ -17,7 +24,7 @@ A picture ad for Tiny Stars Daycare. The main photo is the stained-glass classro
 - **Little Penguins** (@littlepenguinsdaycare): a calm, professionally filmed reel of the space (7.4K views, 86 likes), and an ad made from a grid of real photos with one line of text and a waitlist button. It looks premium, but it has no offer.
 - **Most other daycare posts** in the "Grande Prairie daycare" search are loud, AI-made flyers with cartoon children. Real photos stand out against them.
 
-This ad takes the clear offer from Kita and the real, calm photography from Little Penguins, and adds social proof from a real review. None of them have all three.
+This ad takes the clear offer from Kita and the real, calm photography from Little Penguins, set in a clean, modern layout that none of them use.
 
 ## Meta ad copy
 
@@ -81,4 +88,4 @@ Come and see the rooms for yourself. New families get $100 off their first 2 mon
 
 ## Alt text
 
-A bright daycare classroom with colourful stained-glass designs on the windows and snow outside. A printed coupon reads "New family offer: $100 off your first 2 months, plus free registration." Below are five gold stars with a parent's quote, small photos of an indoor play gym, a child's flower painting and a turf play yard, and a "Book a tour" button with the phone number (780) 230-1599.
+A bright daycare classroom with colourful stained-glass designs on the windows and snow outside. A white card reads "New families, ages 1 to 12, Grande Prairie. $100 off your first 2 months, plus free registration." Below are small photos of an indoor play gym, a child's flower painting and a turf play yard, and a "Book a tour" button with the phone number (780) 230-1599.

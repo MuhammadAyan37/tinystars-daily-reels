@@ -1,89 +1,92 @@
-"""The new-family offer: a picture ad for Meta (feed and Stories/Reels) and a full-screen card for the daycare TV.
+"""The new-family offer: a picture ad for Meta (feed and Stories/Reels) and a full-screen picture for the daycare TV.
 
-One real photograph of the stained-glass classroom carries the picture. Over it lies a printed coupon, perforated like
-a ticket you could tear off: $100 off your first 2 months, plus free registration. Under it, a parent's words from the
-Google reviews and three small real photos (the play gym, painting, the turf yard), then the button to book a tour.
-Every photo comes from the daycare's Google page or its own Drive, blurred where anyone is in the picture (photos.py).
+A real photograph does the work: the stained-glass classroom, full bleed, graded only lightly so it still looks like a
+photo. One white card carries everything to read, set the way a modern app sets it: who it's for, $100 off your first
+2 months plus free registration in big type, three small real photos (the play gym, painting, the turf yard) and the
+button to book a tour. No stickers, glows or stars: nothing that looks generated.
+
+Every photo comes from the daycare's Google page or its own Drive, blurred wherever anyone is in the picture
+(photos.py). Each version is drawn at well over its final size and scaled down, so edges and type stay crisp.
 
 Usage: python -I edits/offer.py [feed|story|tv ...]   (all three when none is named)
-  -> exports/offer_feed.jpg   1080 x 1350  Facebook and Instagram feeds
-  -> exports/offer_story.jpg  1080 x 1920  Stories and Reels (every word inside the area the apps leave clear)
-  -> exports/offer_tv.jpg     1920 x 1080  the daycare TV
-  -> work/offer_<format>_zones.jpg          the same with the apps' covered areas shaded, for checking
+  -> exports/offer_feed.jpg   1440 x 1800  Facebook and Instagram feeds (Meta's recommended size for 4:5)
+  -> exports/offer_story.jpg  1440 x 2560  Stories and Reels (every word inside the area the apps leave clear)
+  -> exports/offer_tv.jpg     3840 x 2160  the daycare TV, in 4K
+  -> work/offer_story_zones.jpg            the story with the apps' covered areas shaded, for checking
 """
-import math
 import sys
 from pathlib import Path
 
 import numpy as np
-from PIL import Image, ImageChops, ImageDraw, ImageEnhance, ImageFilter, ImageFont
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 ROOT = Path(__file__).resolve().parent.parent
 CLEAN = ROOT / "work" / "clean"
 FONTS = ROOT / "brand" / "fonts"
 OUT = ROOT / "exports"
-TILT = 1.1  # degrees, anticlockwise
-S = 2  # drawn at twice the size, then scaled down, for clean edges on every shape and letter
 
-INK = (35, 20, 48)
-PURPLE = (92, 38, 110)
-PLUM = (64, 26, 80)
-GOLD = (246, 196, 52)
-MAGENTA = (196, 40, 112)
-PAPER = (250, 244, 232)
-CARD = (255, 252, 246)
-GREY = (112, 100, 116)
+INK = (24, 19, 32)
+SOFT = (92, 86, 100)
+PURPLE = (84, 38, 120)
+CARD = (255, 255, 255)
+LINE = (232, 228, 236)
 
-OFFER = dict(kicker=["NEW", "FAMILY", "OFFER"], price="$100 off", months="your first 2 months", extra="+ FREE REGISTRATION")
-QUOTE = "“Hands-down the best choice we ever made for our child.”"
-QUOTE_BY = "A Tiny Stars parent, on Google"
-TOP = "NOW ENROLLING  ·  AGES 1 TO 12"
+EYEBROW = "New families  ·  Ages 1 to 12  ·  Grande Prairie"
+PRICE = "$100 off"
+MONTHS = "your first 2 months"
+EXTRA = "+ free registration"
 CTA = "Book a tour"
 PHONE = "(780) 230-1599"
-WEB = "tinystars.ca  ·  10629 West Side Dr, Grande Prairie"
-HERO = dict(name="g02", cx=0.5, cy=0.52)
-THUMBS = [dict(name="g21", label="Indoor play gym", cx=0.55, cy=0.55),
-          dict(name="IMG_8880_F", label="Hands-on art", cx=0.36, cy=0.46, zoom=1.5),
-          dict(name="g18", label="Turf play yard", cx=0.62, cy=0.55)]
+WEB = "tinystars.ca  ·  10629 West Side Drive"
+QUOTE = ["“Hands-down the best choice", "we ever made for our child.”"]
+QUOTE_BY = "A Tiny Stars parent, on Google"
+HERO = "g02"
+PLACES = [dict(name="g21", label=["Indoor", "play gym"], cx=0.55, cy=0.56, zoom=1.0),
+          dict(name="IMG_8880_S", label=["Hands-on", "art"], cx=0.36, cy=0.5, zoom=1.9),
+          dict(name="g18", label=["Turf", "play yard"], cx=0.6, cy=0.66, zoom=1.35)]
 
-# every position in pixels of the finished picture; the drawing scales them by S
-LAYOUT = {
-    "feed": dict(size=(1080, 1350), hero=(0, 0, 1080, 724), logo=(40, 40, 188), top=(1040, 58, "right"),
-                 coupon=(48, 540, 984, 362), quote=(540, 954), thumbs=(48, 1014, 984, 158), labels=1204,
-                 cta=(48, 1238, 372, 78), contact=(452, 1238)),
-    "story": dict(size=(1080, 1920), hero=(0, 0, 1080, 1000), logo=(48, 262, 200), top=(1032, 282, "right"),
-                  coupon=(48, 712, 984, 392), quote=(540, 1150), cta=(48, 1262, 380, 92), contact=(462, 1264),
-                  strip=(0, 1440, 1080, 480)),
-    "tv": dict(size=(1920, 1080), hero=(0, 0, 1000, 1080), logo=(48, 48, 184), top=None,
-               coupon=(880, 132, 980, 360), quote=(1450, 568), thumbs=(1040, 690, 820, 160), labels=884,
-               cta=(1040, 930, 370, 84), contact=(1442, 930), top_tv=(1450, 92)),
+# positions in "base" pixels (the 1080-wide frame for the phone pictures, 1920-wide for the TV); out is the delivered
+# size, and ss how much bigger than that it is drawn before scaling down
+FORMATS = {
+    "feed": dict(base=(1080, 1350), out=(1440, 1800), ss=2.0, hero=(0.55, 0.57, 1.42), logo=(32, 32, 112),
+                 card=(28, 756, 1024, 566), pad=52),
+    "story": dict(base=(1080, 1920), out=(1440, 2560), ss=2.0, hero=(0.62, 0.56, 1.3), logo=(40, 236, 120),
+                  card=(40, 836, 1000, 576), pad=48, right=940),
+    "tv": dict(base=(1920, 1080), out=(3840, 2160), ss=1.5, hero=(0.36, 0.47, 1.06), logo=(48, 48, 132),
+               card=(1150, 44, 726, 992), pad=60),
 }
+S = 1.0  # pixels per base pixel while drawing; set per format
+
+
+def u(v):
+    return int(round(v * S))
 
 
 # ---------- type ----------
 def sans(size, weight):
-    f = ImageFont.truetype(str(FONTS / "InterTight.ttf"), int(size * S))
+    f = ImageFont.truetype(str(FONTS / "InterTight.ttf"), u(size))
     f.set_variation_by_axes([weight])
     return f
 
 
-def serif(size, italic=False):
-    return ImageFont.truetype(str(FONTS / ("InstrumentSerif-Italic.ttf" if italic else "InstrumentSerif-Regular.ttf")),
-                              int(size * S))
+def serif_italic(size):
+    return ImageFont.truetype(str(FONTS / "InstrumentSerif-Italic.ttf"), u(size))
 
 
-def tracked_width(d, text, f, track):
-    return sum(d.textlength(c, font=f) for c in text) + track * S * (len(text) - 1)
+def width(d, s, f, track=0.0):
+    return sum(d.textlength(c, font=f) for c in s) + u(track) * (len(s) - 1) if track else d.textlength(s, font=f)
 
 
-def tracked(d, xy, text, f, fill, track=0, anchor="ls"):
-    """Letter-spaced text. anchor: l/m/r horizontally, then the font's own vertical anchor."""
-    x, y = xy
-    w = tracked_width(d, text, f, track)
+def text(d, x, y, s, f, fill, track=0.0, anchor="ls"):
+    """Text at a baseline, with optional letter-spacing (negative tightens big type, the way it's set in print)."""
+    w = width(d, s, f, track)
     x = x - w / 2 if anchor[0] == "m" else x - w if anchor[0] == "r" else x
-    for c in text:
+    if not track:
+        d.text((x, y), s, font=f, fill=fill, anchor="l" + anchor[1])
+        return w
+    for c in s:
         d.text((x, y), c, font=f, fill=fill, anchor="l" + anchor[1])
-        x += d.textlength(c, font=f) + track * S
+        x += d.textlength(c, font=f) + u(track)
     return w
 
 
@@ -99,23 +102,21 @@ def photo(name):
 def cover(im, w, h, cx=0.5, cy=0.5, zoom=1.0):
     """Crop to the box's shape around (cx, cy), then scale to fill it."""
     iw, ih = im.size
-    k = max(w / iw, h / ih) * zoom
+    k = max(w / iw, h / ih) * max(1.0, zoom)  # never wider than the photo itself
     cw, ch = w / k, h / k
     x0 = max(0.0, min(cx * iw - cw / 2, iw - cw))
     y0 = max(0.0, min(cy * ih - ch / 2, ih - ch))
     return im.resize((w, h), Image.LANCZOS, box=(x0, y0, x0 + cw, y0 + ch))
 
 
-def grade(im, warm=1.0):
-    """A light touch: a little warmth, contrast and saturation, and fine detail brought out. Nothing that looks done."""
-    im = ImageEnhance.Contrast(im).enhance(1.05)
-    im = ImageEnhance.Color(im).enhance(1.06)
-    if warm:
-        r, g, b = im.split()
-        r = r.point(lambda v: min(255, int(v * (1 + 0.025 * warm))))
-        b = b.point(lambda v: int(v * (1 - 0.03 * warm)))
-        im = Image.merge("RGB", (r, g, b))
-    return im.filter(ImageFilter.UnsharpMask(radius=1.4 * S, percent=45, threshold=2))
+def grade(im):
+    """Barely there: a touch of contrast and warmth, colour left as the camera saw it, highlights held a little."""
+    a = np.asarray(im, np.float32) / 255
+    a = a - 0.06 * np.clip(a - 0.82, 0, None) / 0.18 * a  # roll off the brightest windows and skies
+    a = 0.5 + (a - 0.5) * 1.04
+    a *= np.array([1.012, 1.0, 0.985], np.float32)
+    im = Image.fromarray((np.clip(a, 0, 1) * 255 + 0.5).astype(np.uint8))
+    return im.filter(ImageFilter.UnsharpMask(radius=max(1.0, S * 0.5), percent=28, threshold=3))
 
 
 def rounded(w, h, r):
@@ -124,268 +125,179 @@ def rounded(w, h, r):
     return m
 
 
-def grain(size, amount, seed):
-    """Paper tooth: a faint, fine noise, so flat colour doesn't look like a screen."""
-    rng = np.random.default_rng(seed)
-    n = rng.normal(0, 1, (size[1] // 2 + 1, size[0] // 2 + 1)).astype(np.float32)
-    n = np.asarray(Image.fromarray(n).resize(size, Image.BILINEAR))
-    return n * amount
-
-
-def add_grain(im, amount=2.2, seed=1):
-    a = np.asarray(im, np.float32)
-    a += grain(im.size, amount, seed)[..., None]
-    return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), im.mode)
-
-
-def shadow(canvas, mask, xy, blur, offset, opacity, col=PLUM):
-    """A soft drop shadow for a shape, as if it were lying on the page."""
+def shadow(canvas, mask, xy, blur, offset, opacity):
+    """A wide, faint shadow: just enough to lift the card off the photo."""
     pad = blur * 3
     m = Image.new("L", (mask.width + 2 * pad, mask.height + 2 * pad), 0)
     m.paste(mask, (pad, pad))
     m = m.filter(ImageFilter.GaussianBlur(blur)).point(lambda v: int(v * opacity))
-    layer = Image.new("RGBA", m.size, col + (0,))
+    layer = Image.new("RGBA", m.size, (20, 12, 28, 0))
     layer.putalpha(m)
     canvas.alpha_composite(layer, (xy[0] - pad + offset[0], xy[1] - pad + offset[1]))
 
 
-def star(size, col):
-    k = 4
-    s = size * k
-    pts = []
-    for i in range(10):
-        r = (0.5 if i % 2 == 0 else 0.21) * s
-        a = -math.pi / 2 + i * math.pi / 5
-        pts.append((s / 2 + r * math.cos(a), s / 2 + r * 1.02 * math.sin(a) + s * 0.03))
-    m = Image.new("L", (s, s), 0)
-    ImageDraw.Draw(m).polygon(pts, fill=255)
-    out = Image.new("RGBA", (size, size), col + (0,))
-    out.putalpha(m.resize((size, size), Image.LANCZOS))
-    return out
+def paste_rounded(canvas, im, x, y, r):
+    im = im.convert("RGBA")
+    im.putalpha(rounded(im.width, im.height, r))
+    canvas.alpha_composite(im, (x, y))
 
 
-def logo(width):
-    im = Image.open(ROOT / "brand" / "logo_hd.png").convert("RGBA")
-    return im.resize((width, round(im.height * width / im.width)), Image.LANCZOS)
+def logo_badge(canvas, x, y, size):
+    """The logo on a small white tile in the corner of the photo."""
+    s = u(size)
+    tile = Image.new("RGBA", (s, s), CARD + (255,))
+    tile.putalpha(rounded(s, s, u(size * 0.24)))
+    lg = Image.open(ROOT / "brand" / "logo_hd.png").convert("RGBA")
+    k = s * 0.84 / max(lg.size)
+    lg = lg.resize((round(lg.width * k), round(lg.height * k)), Image.LANCZOS)
+    tile.alpha_composite(lg, ((s - lg.width) // 2, (s - lg.height) // 2))
+    shadow(canvas, tile.getchannel("A"), (u(x), u(y)), u(16), (0, u(6)), 0.22)
+    canvas.alpha_composite(tile, (u(x), u(y)))
 
 
-# ---------- pieces ----------
-def coupon(w, h):
-    """The offer as a printed coupon: a coloured stub, a perforated tear line with half-circle notches, the offer."""
-    stub = int(w * 0.235)
-    r_notch = 19 * S
-    card = Image.new("RGBA", (w, h), CARD + (255,))
-    d = ImageDraw.Draw(card)
-    d.rectangle((0, 0, stub, h), fill=PURPLE + (255,))
-    # the paper's tooth, a touch stronger on the coloured stub, like ink on card
-    card = Image.fromarray(np.dstack([np.clip(np.asarray(card, np.float32)[..., :3] + grain((w, h), 2.4, 7)[..., None], 0, 255),
-                                      np.full((h, w), 255, np.float32)]).astype(np.uint8), "RGBA")
-    d = ImageDraw.Draw(card)
-    # perforation: short dashes down the tear line
-    dash, gap = 9 * S, 8 * S
-    y = r_notch + 10 * S
-    while y < h - r_notch - 10 * S:
-        d.rounded_rectangle((stub - 2 * S, y, stub + 2 * S, y + dash), 2 * S, fill=PAPER + (255,))
-        y += dash + gap
-    # stub: a gold star and the words, stacked
-    sz = int(stub * 0.30)
-    st = star(sz, GOLD)
-    card.alpha_composite(st, (stub // 2 - sz // 2, int(h * 0.20)))
-    f = sans(25, 800)
-    y0 = int(h * 0.20) + sz + 30 * S
-    for i, word in enumerate(OFFER["kicker"]):
-        tracked(d, (stub / 2, y0 + i * 36 * S), word, f, (255, 246, 228), 4, "ms")
-    # the offer
-    cx = stub + (w - stub) / 2
-    fp = serif(170)
-    d.text((cx, h * 0.47), OFFER["price"], font=fp, fill=PURPLE, anchor="ms")
-    d.text((cx, h * 0.66), OFFER["months"], font=serif(60, italic=True), fill=INK, anchor="ms")
-    fe = sans(26, 800)
-    tw = tracked_width(d, OFFER["extra"], fe, 3)
-    pw, ph = tw + 56 * S, 58 * S
-    px0, py0 = cx - pw / 2, h * 0.76
-    d.rounded_rectangle((px0, py0, px0 + pw, py0 + ph), ph / 2, fill=GOLD)
-    tracked(d, (cx, py0 + ph / 2 + 1 * S), OFFER["extra"], fe, INK, 3, "mm")
-    # corners and notches cut out of the card itself, so whatever lies behind shows through
-    m = rounded(w, h, 26 * S)
-    md = ImageDraw.Draw(m)
-    for ny in (0, h):
-        md.ellipse((stub - r_notch, ny - r_notch, stub + r_notch, ny + r_notch), fill=0)
-    card.putalpha(ImageChops.multiply(card.getchannel("A"), m))
-    return card
+def arrow(d, x, y, length, col, lw):
+    d.line([(x, y), (x + length, y)], fill=col, width=lw)
+    k = length * 0.42
+    d.line([(x + length - k, y - k), (x + length, y), (x + length - k, y + k)], fill=col, width=lw, joint="curve")
 
 
-def logo_tab(width):
-    """The logo on a small white card, like a label stuck to the photo."""
-    lg = logo(int(width * 0.86))
-    tab = Image.new("RGBA", (width, lg.height + int(width * 0.14)), (0, 0, 0, 0))
-    m = rounded(tab.width, tab.height, 24 * S)
-    white = Image.new("RGBA", tab.size, (255, 253, 249, 255))
-    white.putalpha(m)
-    tab.alpha_composite(white)
-    tab.alpha_composite(lg, ((tab.width - lg.width) // 2, (tab.height - lg.height) // 2))
-    return tab
-
-
-def frosted_pill(canvas, x, y, text, anchor="right", size=21):
-    """Tracked capitals on a dark frosted pill, read clearly over any photo."""
+def button(canvas, x, y, w, h, size=30):
+    """The call to action: a solid pill, label and arrow centred."""
     d = ImageDraw.Draw(canvas)
-    f = sans(size, 750)
-    tw = tracked_width(d, text, f, 3.2)
-    w, h = int(tw + 44 * S), int(54 * S)
-    x0 = x - w if anchor == "right" else x - w // 2 if anchor == "center" else x
-    region = canvas.crop((x0, y, x0 + w, y + h)).convert("RGB").filter(ImageFilter.GaussianBlur(14 * S))
-    glass = Image.blend(region, Image.new("RGB", (w, h), INK), 0.55).convert("RGBA")
-    glass.putalpha(rounded(w, h, h // 2))
-    canvas.alpha_composite(glass, (x0, y))
-    tracked(ImageDraw.Draw(canvas), (x0 + w / 2, y + h / 2 + 1 * S), text, f, (255, 250, 240), 3.2, "mm")
-
-
-def quote(canvas, cx, y, width_limit):
-    d = ImageDraw.Draw(canvas)
-    stars = 5
-    ss = 30 * S
-    gap = 4 * S
-    sw = stars * ss + (stars - 1) * gap
-    fq = serif(37, italic=True)
-    fb = sans(19, 600)
-    qw = d.textlength(QUOTE, font=fq)
-    total = sw + 18 * S + qw
-    if total > width_limit:  # too wide for one line: stars above, the words below
-        x = cx - sw / 2
-        for i in range(stars):
-            canvas.alpha_composite(star(ss, GOLD), (int(x + i * (ss + gap)), int(y - ss)))
-        d.text((cx, y + 44 * S), QUOTE, font=fq, fill=INK, anchor="ms")
-        tracked(d, (cx, y + 78 * S), QUOTE_BY.upper(), fb, GREY, 2.5, "ms")
-        return
-    x = cx - total / 2
-    for i in range(stars):
-        canvas.alpha_composite(star(ss, GOLD), (int(x + i * (ss + gap)), int(y - ss * 0.86)))
-    d.text((x + sw + 18 * S, y), QUOTE, font=fq, fill=INK, anchor="ls")
-    tracked(d, (cx, y + 34 * S), QUOTE_BY.upper(), fb, GREY, 2.5, "ms")
-
-
-def button(canvas, x, y, w, h):
-    d = ImageDraw.Draw(canvas)
-    m = rounded(w, h, h // 2)
-    shadow(canvas, m, (x, y), 10 * S, (0, 6 * S), 0.28)
-    b = Image.new("RGBA", (w, h), PURPLE + (255,))
-    b.putalpha(m)
-    canvas.alpha_composite(b, (x, y))
-    f = sans(31, 700)
+    b = Image.new("RGBA", (u(w), u(h)), PURPLE + (255,))
+    b.putalpha(rounded(u(w), u(h), u(h / 2)))
+    canvas.alpha_composite(b, (u(x), u(y)))
+    f = sans(size, 680)
     tw = d.textlength(CTA, font=f)
-    aw = 34 * S
-    x0 = x + w / 2 - (tw + 16 * S + aw) / 2
-    d.text((x0, y + h / 2), CTA, font=f, fill=(255, 250, 240), anchor="lm")
-    # an arrow, drawn: the font's own is too thin at this size
-    ax, ay = x0 + tw + 16 * S, y + h / 2
-    lw = int(4.2 * S)
-    d.line([(ax, ay), (ax + aw, ay)], fill=GOLD, width=lw)
-    d.line([(ax + aw - 13 * S, ay - 12 * S), (ax + aw, ay), (ax + aw - 13 * S, ay + 12 * S)], fill=GOLD, width=lw,
-           joint="curve")
+    al = u(size * 0.8)
+    x0 = u(x + w / 2) - (tw + u(14) + al) / 2
+    d.text((x0, u(y + h / 2)), CTA, font=f, fill=CARD, anchor="lm")
+    arrow(d, x0 + tw + u(14), u(y + h / 2) + u(1), al, CARD, max(2, u(size * 0.1)))
 
 
-def contact(canvas, x, y, h):
+def place(canvas, d, x, y, p, size, label_size):
+    """One small real photo with its two-line label beside it."""
+    im = grade(cover(photo(p["name"]), u(size), u(size), p["cx"], p["cy"], p["zoom"]))
+    paste_rounded(canvas, im, u(x), u(y), u(size * 0.2))
+    f = sans(label_size, 620)
+    lx = u(x + size + 16)
+    mid = y + size / 2
+    text(d, lx, u(mid - 4), p["label"][0], f, INK)
+    text(d, lx, u(mid - 4 + label_size * 1.18), p["label"][1], f, INK)
+
+
+# ---------- the card ----------
+def white_card(canvas, x, y, w, h, r, blur):
+    m = rounded(u(w), u(h), u(r))
+    shadow(canvas, m, (u(x), u(y)), u(blur), (0, u(blur * 0.3)), 0.20)
+    c = Image.new("RGBA", (u(w), u(h)), CARD + (255,))
+    c.putalpha(m)
+    canvas.alpha_composite(c, (u(x), u(y)))
+
+
+def card_phone(canvas, x, y, w, h, pad, right=None):
+    """Feed and story: the offer, the places, the button."""
+    white_card(canvas, x, y, w, h, 36, 34)
     d = ImageDraw.Draw(canvas)
-    d.text((x, y + h * 0.46), PHONE, font=sans(36, 750), fill=INK, anchor="ls")
-    d.text((x, y + h * 0.88), WEB, font=sans(21, 500), fill=GREY, anchor="ls")
+    x0 = x + pad
+    x1 = right if right is not None else x + w - pad
+    # who it's for
+    yy = y + pad + 20
+    d.ellipse((u(x0), u(yy - 15), u(x0 + 12), u(yy - 3)), fill=PURPLE)
+    text(d, u(x0 + 24), u(yy), EYEBROW, sans(23, 600), PURPLE, 0.2)
+    # the offer, in big type
+    yy += 158
+    text(d, u(x0 - 7), u(yy), PRICE, sans(172, 820), INK, -7)
+    yy += 60
+    wm = text(d, u(x0), u(yy), MONTHS, sans(40, 520), SOFT)
+    text(d, u(x0) + wm + u(12), u(yy), EXTRA, sans(40, 760), PURPLE)
+    # the places
+    yy += 40
+    col = (x1 - x0) / len(PLACES)
+    for i, p in enumerate(PLACES):
+        place(canvas, d, x0 + i * col, yy, p, 96, 24)
+    # the button and the phone number
+    yy += 96 + 34
+    bw = 400
+    button(canvas, x0, yy, bw, 86)
+    tx = x0 + bw + 32
+    text(d, u(tx), u(yy + 42), PHONE, sans(36, 720), INK, -0.4)
+    text(d, u(tx), u(yy + 74), WEB, sans(19, 500), SOFT)
 
 
-def thumbs(canvas, x, y, w, h, labels_y=None, gap=16, radius=20, label_size=22):
-    n = len(THUMBS)
-    tw = (w - gap * S * (n - 1)) // n
+def card_tv(canvas, x, y, w, h, pad):
+    """The TV: the same card, stood up beside the photo, with a parent's words, read from across the room."""
+    white_card(canvas, x, y, w, h, 40, 40)
     d = ImageDraw.Draw(canvas)
-    for i, t in enumerate(THUMBS):
-        px = x + i * (tw + gap * S)
-        im = grade(cover(photo(t["name"]), tw, h, t["cx"], t["cy"], t.get("zoom", 1.0))).convert("RGBA")
-        m = rounded(tw, h, radius * S)
-        shadow(canvas, m, (px, y), 8 * S, (0, 4 * S), 0.16)
-        im.putalpha(m)
-        canvas.alpha_composite(im, (px, y))
-        if labels_y is not None:
-            tracked(d, (px + tw / 2, labels_y), t["label"].upper(), sans(label_size, 700), INK, 2.2, "ms")
-        else:  # labels on the photos themselves, on a small frosted chip
-            frosted_pill(canvas, px + tw // 2, y + h - 74 * S, t["label"].upper(), anchor="center", size=19)
+    x0 = x + pad
+    yy = y + pad + 22
+    d.ellipse((u(x0), u(yy - 16), u(x0 + 13), u(yy - 3)), fill=PURPLE)
+    text(d, u(x0 + 26), u(yy), "New families  ·  Ages 1 to 12", sans(25, 600), PURPLE, 0.2)
+    yy += 168
+    text(d, u(x0 - 6), u(yy), PRICE, sans(158, 820), INK, -6)
+    yy += 64
+    text(d, u(x0), u(yy), MONTHS, sans(44, 520), SOFT)
+    yy += 54
+    text(d, u(x0), u(yy), EXTRA, sans(44, 760), PURPLE)
+    # a parent's words
+    yy += 50
+    d.line((u(x0), u(yy), u(x + w - pad), u(yy)), fill=LINE, width=max(1, u(2)))
+    yy += 66
+    fq = serif_italic(44)
+    text(d, u(x0), u(yy), QUOTE[0], fq, INK)
+    text(d, u(x0), u(yy + 48), QUOTE[1], fq, INK)
+    text(d, u(x0), u(yy + 88), QUOTE_BY, sans(20, 560), SOFT, 0.2)
+    # the places, side by side
+    yy += 128
+    col = (w - 2 * pad) / len(PLACES)
+    for i, p in enumerate(PLACES):
+        px = x0 + i * col
+        im = grade(cover(photo(p["name"]), u(col - 18), u(126), p["cx"], p["cy"], p["zoom"] * 0.9))
+        paste_rounded(canvas, im, u(px), u(yy), u(20))
+        text(d, u(px), u(yy + 126 + 32), " ".join(p["label"]), sans(21, 620), INK)
+    # the button and the number
+    yy += 126 + 64
+    button(canvas, x0, yy, 300, 84, 29)
+    tx = x0 + 300 + 26
+    text(d, u(tx), u(yy + 40), PHONE, sans(34, 720), INK, -0.4)
+    text(d, u(tx), u(yy + 70), "tinystars.ca", sans(19, 500), SOFT)
 
 
 # ---------- the picture ----------
 def render(fmt):
-    L = {k: (tuple(int(v * S) if isinstance(v, (int, float)) else v for v in val) if isinstance(val, tuple) else
-             (int(val * S) if isinstance(val, (int, float)) else val)) for k, val in LAYOUT[fmt].items()}
-    W, H = L["size"]
-    canvas = add_grain(Image.new("RGB", (W, H), PAPER), 1.8, 3).convert("RGBA")
-    hx, hy, hw, hh = L["hero"]
-    hero = grade(cover(photo(HERO["name"]), hw, hh, HERO["cx"], HERO["cy"])).convert("RGBA")
-    # a soft shade at the very top so the label and pill sit cleanly on the window light
-    shade = np.linspace(0.30, 0, int(hh * 0.30))[:, None] * np.ones((1, hw))
-    sh = Image.fromarray((np.vstack([shade, np.zeros((hh - shade.shape[0], hw))]) * 255).astype(np.uint8), "L")
-    dark = Image.new("RGBA", (hw, hh), INK + (0,))
-    dark.putalpha(sh)
-    hero.alpha_composite(dark)
-    canvas.alpha_composite(hero, (hx, hy))
-
-    if "strip" in L:  # the bottom of a Story, under the apps' buttons: more of the rooms, a picture and nothing to read
-        sx, sy, sw, shh = L["strip"]
-        n = len(THUMBS)
-        each = sw // n
-        for i, t in enumerate(THUMBS):
-            im = grade(cover(photo(t["name"]), each - 4 * S if i < n - 1 else sw - each * i, shh, t["cx"], t["cy"], t.get("zoom", 1.0)))
-            canvas.paste(im, (sx + i * each, sy))
-        fade = np.linspace(1, 0, 90 * S)[:, None] * np.ones((1, sw))
-        f = Image.new("RGBA", (sw, fade.shape[0]), PAPER + (0,))
-        f.putalpha(Image.fromarray((fade * 255).astype(np.uint8), "L"))
-        canvas.alpha_composite(f, (sx, sy))
-
-    if fmt == "tv":  # the right-hand page
-        d = ImageDraw.Draw(canvas)
-        tx, ty = L["top_tv"]
-        tracked(d, (tx, ty), TOP, sans(22, 750), PURPLE, 3.4, "ms")
-
-    lx, ly, lw = L["logo"]
-    tab = logo_tab(lw)
-    shadow(canvas, tab.getchannel("A"), (lx, ly), 12 * S, (0, 6 * S), 0.30)
-    canvas.alpha_composite(tab, (lx, ly))
-    if L["top"]:
-        x, y, anchor = L["top"]
-        frosted_pill(canvas, x, y, TOP, anchor)
-
-    cx, cy, cw, ch = L["coupon"]
-    # laid down by hand: a degree off square, the way a real card never lands quite straight
-    cp = coupon(cw, ch).rotate(TILT, resample=Image.BICUBIC, expand=True)
-    px, py = cx - (cp.width - cw) // 2, cy - (cp.height - ch) // 2
-    shadow(canvas, cp.getchannel("A"), (px, py), 22 * S, (0, 16 * S), 0.34)
-    canvas.alpha_composite(cp, (px, py))
-
-    qx, qy = L["quote"]
-    quote(canvas, qx, qy, {"feed": 984, "story": 880, "tv": 860}[fmt] * S)  # the story keeps clear of the Reels buttons
-    if "thumbs" in L:
-        x, y, w, h = L["thumbs"]
-        thumbs(canvas, x, y, w, h, L.get("labels"))
-    bx, by, bw, bh = L["cta"]
-    button(canvas, bx, by, bw, bh)
-    ox, oy = L["contact"]
-    contact(canvas, ox, oy, bh)
-
-    out = canvas.convert("RGB").resize((W // S, H // S), Image.LANCZOS)
+    global S
+    F = FORMATS[fmt]
+    bw, bh = F["base"]
+    S = F["out"][0] / bw * F["ss"]
+    W, H = u(bw), u(bh)
+    canvas = Image.new("RGBA", (W, H), (0, 0, 0, 255))
+    cx, cy, zoom = F["hero"]
+    canvas.alpha_composite(grade(cover(photo(HERO), W, H, cx, cy, zoom)).convert("RGBA"))
+    logo_badge(canvas, *F["logo"])
+    if fmt == "tv":
+        card_tv(canvas, *F["card"], F["pad"])
+    else:
+        card_phone(canvas, *F["card"], F["pad"], F.get("right"))
+    out = canvas.convert("RGB").resize(F["out"], Image.LANCZOS)
     OUT.mkdir(exist_ok=True)
     out.save(OUT / f"offer_{fmt}.jpg", quality=95, subsampling=0, optimize=True)
-    zones(out, fmt).save(ROOT / "work" / f"offer_{fmt}_zones.jpg", quality=88)
+    if fmt == "story":
+        zones(out).save(ROOT / "work" / "offer_story_zones.jpg", quality=88)
     print("wrote", OUT / f"offer_{fmt}.jpg", out.size, flush=True)
 
 
-def zones(im, fmt):
-    """Shade what the apps cover, to check every word sits clear of it."""
+def zones(im):
+    """Shade what Reels covers (the top 220 and bottom 500 of a 1080 x 1920 frame, and the buttons on the right)."""
     z = im.convert("RGBA")
+    k = im.width / 1080
     d = ImageDraw.Draw(z)
-    if fmt == "story":  # Reels: the top 220 px and the bottom 500 px carry the app's own text and buttons
-        for box in ((0, 0, 1080, 220), (0, 1420, 1080, 1920), (960, 1000, 1080, 1420)):
-            d.rectangle(box, fill=(255, 0, 0, 60))
+    for box in ((0, 0, 1080, 220), (0, 1420, 1080, 1920), (960, 1000, 1080, 1420)):
+        d.rectangle(tuple(int(v * k) for v in box), fill=(255, 0, 0, 70))
     return z.convert("RGB")
 
 
 def main():
-    fmts = [a for a in sys.argv[1:] if a in LAYOUT] or list(LAYOUT)
-    for fmt in fmts:
+    for fmt in [a for a in sys.argv[1:] if a in FORMATS] or list(FORMATS):
         render(fmt)
 
 
