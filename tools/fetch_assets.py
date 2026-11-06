@@ -21,6 +21,9 @@ FILES = {
     "brand/fonts/Sora.ttf": f"{FONTS}/sora/Sora%5Bwght%5D.ttf",
     "brand/fonts/DMSans.ttf": f"{FONTS}/dmsans/DMSans%5Bopsz,wght%5D.ttf",
     "brand/fonts/Fraunces.ttf": f"{FONTS}/fraunces/Fraunces%5BSOFT,WONK,opsz,wght%5D.ttf",
+    # rounder, bolder faces for the on-brand samples (13 to 18)
+    "brand/fonts/Unbounded.ttf": f"{FONTS}/unbounded/Unbounded%5Bwght%5D.ttf",
+    "brand/fonts/BricolageGrotesque.ttf": f"{FONTS}/bricolagegrotesque/BricolageGrotesque%5Bopsz,wdth,wght%5D.ttf",
     "models/face_detection_yunet_2023mar.onnx":
         "https://github.com/opencv/opencv_zoo/raw/main/models/face_detection_yunet/face_detection_yunet_2023mar.onnx",
     "brand/logo.png": "https://tinystars.ca/assets/images/logo/logo.png",

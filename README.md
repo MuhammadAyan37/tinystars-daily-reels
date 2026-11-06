@@ -76,7 +76,18 @@ Samples 7 to 12 are photo grids, the kind of page Little Penguins runs, taken fu
 - laid out as a classic grid, a bento, a band, arches, a magazine strip or a sidebar
 - the offer and the promise set clearly in each
 
-They're written to `exports/offer_sample_7.jpg` through `exports/offer_sample_12.jpg`, plus `exports/offer_samples_grids.jpg` side by side. The photos come from the daycare's Google page and its Drive, and go through `photos.py` first like every other photo. Ad copy and the campaign plan are in [`exports/offer_ad.md`](exports/offer_ad.md).
+They're written to `exports/offer_sample_7.jpg` through `exports/offer_sample_12.jpg`, plus `exports/offer_samples_grids.jpg` side by side.
+
+Samples 13 to 18 lead with the promise ("Not happy in the first month? We'll refund your registration."), with the $100 off as a smaller line, and wear the logo's own colours, its deep purple, pink and gold, and its star:
+
+- 13: a photo dump of tilted prints on lilac, with star and pill stickers and 'refund' in gold highlighter
+- 14: the logo's purple-to-gold ramp as the whole page
+- 15: the promise as a chat between a parent and Tiny Stars
+- 16: a night-purple page with the promise lit in gold to pink
+- 17: a wall of photos with a star sticker on it
+- 18: the look of the daycare's own Oct 20 post, done properly: colour-framed photos, logo-style lettering, ribbons and the contact line
+
+They use the newest photos too: the class painting (every child's face blurred), the block city with its smiley chairs and the rocket playroom. They're written to `exports/offer_sample_13.jpg` through `exports/offer_sample_18.jpg`, plus `exports/offer_samples_brand.jpg`. Fonts: Bricolage Grotesque and Unbounded, both from Google Fonts (OFL). The photos come from the daycare's Google page and its Drive, and go through `photos.py` first like every other photo. Ad copy and the campaign plan are in [`exports/offer_ad.md`](exports/offer_ad.md).
 
 ## Two versions of every film
 
@@ -132,7 +143,7 @@ The logo in `tools/fetch_assets.py` is the small one from the website. Put a lar
 
 - **Python** with NumPy, OpenCV (YuNet face detection, optical-flow slow motion, compositing) and Pillow (lettering and graphics, `pillow-heif` for iPhone photos)
 - **FFmpeg** for H.264/AAC encoding and two-pass EBU R128 loudness normalisation
-- **Fonts:** Instrument Serif for the big words and Inter Tight for small print (plus Manrope, Plus Jakarta Sans, Outfit, Sora, DM Sans and Fraunces for the offer samples), plus Crimson Pro Italic for the ad's closing line, all from Google Fonts (OFL). The ad's emoji come from Segoe UI Emoji, which ships with Windows.
+- **Fonts:** Instrument Serif for the big words and Inter Tight for small print (plus Manrope, Plus Jakarta Sans, Outfit, Sora, DM Sans, Fraunces, Bricolage Grotesque and Unbounded for the offer samples), plus Crimson Pro Italic for the ad's closing line, all from Google Fonts (OFL). The ad's emoji come from Segoe UI Emoji, which ships with Windows.
 - **Music:** "Cinematic Corporate" by alex-morgan on [Pixabay](https://pixabay.com/music/corporate-cinematic-corporate-556231/) for "Nothing", and "Acoustic Upbeat" by OctoSound on [Pixabay](https://pixabay.com/music/happy-childrens-tunes-acoustic-upbeat-301015/) for the ad (Pixabay Content License). The brush, boom and chime sounds are made in `film.py` and `updates.py`.
 
 ## License
