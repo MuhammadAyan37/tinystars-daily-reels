@@ -1,7 +1,7 @@
 """Blur every face in the photos the film uses.
 
-Finds faces at several sizes and four rotations. edits/faces.json can drop false hits and add missed ones by hand, in
-pixels of the upright photo: {"IMG_xxxx": {"drop": [i], "add": [[x, y, w, h]]}}.
+Finds faces at several sizes and four rotations. edits/faces.json can drop false hits ("drop": [i], or "all" for a photo with
+nobody in it) and add missed ones by hand, in pixels of the upright photo: {"IMG_xxxx": {"drop": [i], "add": [[x, y, w, h]]}}.
 
 Usage: python -I edits/photos.py IMG_xxxx ...
   -> work/clean/IMG_xxxx.jpg  (full resolution, upright, blurred)
@@ -50,13 +50,15 @@ def main():
     fixes = json.loads(FIXES.read_text()) if FIXES.exists() else {}
     det = cv2.FaceDetectorYN.create(str(MODEL), "", (320, 320), 0.4, 0.3, 500)
     for name in sys.argv[1:]:
-        rgb = ImageOps.exif_transpose(Image.open(raw_path(name, (".heic",)))).convert("RGB")
+        rgb = ImageOps.exif_transpose(Image.open(raw_path(name, (".heic", ".jpg", ".jpeg", ".png")))).convert("RGB")
         img = cv2.cvtColor(np.asarray(rgb), cv2.COLOR_RGB2BGR)
         fx = fixes.get(name, {})
         boxes = find(img, det)
+        # "drop": "all" is for photos checked by eye to have nobody in them (empty rooms: every hit is a toy or a mural)
+        drop = range(len(boxes)) if fx.get("drop") == "all" else fx.get("drop", [])
         vis = img.copy()
         for i, b in enumerate(boxes):
-            keep = (b[4] >= KEEP or i in fx.get("keep", [])) and i not in fx.get("drop", [])
+            keep = (b[4] >= KEEP or i in fx.get("keep", [])) and i not in drop
             x, y, w, h = map(int, b[:4])
             col = (0, 200, 0) if keep else (0, 0, 255)
             cv2.rectangle(vis, (x, y), (x + w, y + h), col, 5)
@@ -67,7 +69,7 @@ def main():
         small = 1500 / max(vis.shape[:2])
         cv2.imwrite(str(REVIEW / f"{name}.jpg"), cv2.resize(vis, None, fx=small, fy=small, interpolation=cv2.INTER_AREA),
                     [cv2.IMWRITE_JPEG_QUALITY, 85])
-        kept = [b[:4] for i, b in enumerate(boxes) if (b[4] >= KEEP or i in fx.get("keep", [])) and i not in fx.get("drop", [])]
+        kept = [b[:4] for i, b in enumerate(boxes) if (b[4] >= KEEP or i in fx.get("keep", [])) and i not in drop]
         for b in kept + fx.get("add", []):
             blur_face(img, b)
         for p in fx.get("patches", []):

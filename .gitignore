@@ -10,6 +10,7 @@ work/
 exports/*
 !exports/captions.md
 !exports/updates_ad.md
+!exports/offer_ad.md
 *.heic
 *.HEIC
 *.jpg

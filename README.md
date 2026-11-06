@@ -42,6 +42,20 @@ Older updates stack up behind the new one, and the last one is the invitation: *
 
 Ad copy and setup notes are in [`exports/updates_ad.md`](exports/updates_ad.md).
 
+## The picture ad: the new-family offer
+
+A single picture for a paid Meta campaign. The stained-glass classroom fills the top. Over it lies a printed coupon, perforated like a ticket with half-circle notches cut out of the card and set down a degree off square: **$100 off your first 2 months + free registration**. Under it come a parent's 5-star words from Google, three small real photos (indoor play gym, painting, turf play yard) and a **Book a tour** button.
+
+`offer.py` lays it out three ways:
+
+| Version | File | Format |
+| --- | --- | --- |
+| Facebook and Instagram feed | `exports/offer_feed.jpg` | 1080×1350 (4:5) |
+| Stories and Reels | `exports/offer_story.jpg` | 1080×1920, every word clear of the apps' buttons (`work/offer_story_zones.jpg` shades them) |
+| TV | `exports/offer_tv.jpg` | 1920×1080 |
+
+It's drawn at twice the size and scaled down, so the type and the coupon's edges stay clean. The photos come from the daycare's Google page and its Drive, and go through `photos.py` first like every other photo. Ad copy and the campaign plan are in [`exports/offer_ad.md`](exports/offer_ad.md).
+
 ## Two versions of every film
 
 | Version | File | Format |
@@ -82,6 +96,8 @@ uv pip install --python .venv/Scripts/python.exe -r requirements.txt
 .venv/Scripts/python.exe -I edits/verify.py                # the final privacy scan (name a video to scan the TV version)
 .venv/Scripts/python.exe -I edits/updates.py --stills 1 9 22  # the ad: check frames (add --feed or --tv for the other layouts)
 .venv/Scripts/python.exe -I edits/updates.py               # the ad in all three versions
+.venv/Scripts/python.exe -I edits/photos.py g02 g21 g18 IMG_8880_F  # the picture ad's photos, blurred where anyone is in them
+.venv/Scripts/python.exe -I edits/offer.py                 # the picture ad: feed, story and TV
 ```
 
 The privacy scripts look for originals in every `source/*_raw` folder, so each film's clips can stay in the folder for the day they were filmed.
