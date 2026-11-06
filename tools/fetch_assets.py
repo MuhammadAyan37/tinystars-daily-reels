@@ -14,6 +14,13 @@ FILES = {
     "brand/fonts/InstrumentSerif-Italic.ttf": f"{FONTS}/instrumentserif/InstrumentSerif-Italic.ttf",
     "brand/fonts/InterTight.ttf": f"{FONTS}/intertight/InterTight%5Bwght%5D.ttf",
     "brand/fonts/CrimsonPro-Italic.ttf": f"{FONTS}/crimsonpro/CrimsonPro-Italic%5Bwght%5D.ttf",
+    # modern sans and serif faces for the offer samples (offer_samples.py)
+    "brand/fonts/Manrope.ttf": f"{FONTS}/manrope/Manrope%5Bwght%5D.ttf",
+    "brand/fonts/PlusJakartaSans.ttf": f"{FONTS}/plusjakartasans/PlusJakartaSans%5Bwght%5D.ttf",
+    "brand/fonts/Outfit.ttf": f"{FONTS}/outfit/Outfit%5Bwght%5D.ttf",
+    "brand/fonts/Sora.ttf": f"{FONTS}/sora/Sora%5Bwght%5D.ttf",
+    "brand/fonts/DMSans.ttf": f"{FONTS}/dmsans/DMSans%5Bopsz,wght%5D.ttf",
+    "brand/fonts/Fraunces.ttf": f"{FONTS}/fraunces/Fraunces%5BSOFT,WONK,opsz,wght%5D.ttf",
     "models/face_detection_yunet_2023mar.onnx":
         "https://github.com/opencv/opencv_zoo/raw/main/models/face_detection_yunet/face_detection_yunet_2023mar.onnx",
     "brand/logo.png": "https://tinystars.ca/assets/images/logo/logo.png",

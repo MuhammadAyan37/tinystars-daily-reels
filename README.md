@@ -60,7 +60,15 @@ There are no stickers or glows. The painting is the sharpest frame of its clip, 
 | Stories and Reels | `exports/offer_story.jpg` | 1440×2560, every word clear of the apps' buttons (`work/offer_story_zones.jpg` shades them) |
 | TV | `exports/offer_tv.jpg` | 3840×2160 (4K), with a parent's words from Google |
 
-Each picture is drawn at 1.5 to 2 times its final size and scaled down, so type and edges stay crisp. The photos come from the daycare's Google page and its Drive, and go through `photos.py` first like every other photo. Ad copy and the campaign plan are in [`exports/offer_ad.md`](exports/offer_ad.md).
+Each picture is drawn at 1.5 to 2 times its final size and scaled down, so type and edges stay crisp.
+
+`offer_samples.py` sets the same short message six ways, for choosing a look that also works on the banner outside. Each one reads in under five seconds:
+
+- $100 off your first 2 months
+- not happy in the first month? we'll refund your registration
+- the phone number
+
+Each sample uses a different modern Google font: Manrope, Plus Jakarta Sans, Outfit, Inter Tight, Fraunces with DM Sans, and Sora. They're written to `exports/offer_sample_1.jpg` through `exports/offer_sample_6.jpg`, plus `exports/offer_samples.jpg` side by side. The photos come from the daycare's Google page and its Drive, and go through `photos.py` first like every other photo. Ad copy and the campaign plan are in [`exports/offer_ad.md`](exports/offer_ad.md).
 
 ## Two versions of every film
 
@@ -116,7 +124,7 @@ The logo in `tools/fetch_assets.py` is the small one from the website. Put a lar
 
 - **Python** with NumPy, OpenCV (YuNet face detection, optical-flow slow motion, compositing) and Pillow (lettering and graphics, `pillow-heif` for iPhone photos)
 - **FFmpeg** for H.264/AAC encoding and two-pass EBU R128 loudness normalisation
-- **Fonts:** Instrument Serif for the big words and Inter Tight for small print, plus Crimson Pro Italic for the ad's closing line, all from Google Fonts (OFL). The ad's emoji come from Segoe UI Emoji, which ships with Windows.
+- **Fonts:** Instrument Serif for the big words and Inter Tight for small print (plus Manrope, Plus Jakarta Sans, Outfit, Sora, DM Sans and Fraunces for the offer samples), plus Crimson Pro Italic for the ad's closing line, all from Google Fonts (OFL). The ad's emoji come from Segoe UI Emoji, which ships with Windows.
 - **Music:** "Cinematic Corporate" by alex-morgan on [Pixabay](https://pixabay.com/music/corporate-cinematic-corporate-556231/) for "Nothing", and "Acoustic Upbeat" by OctoSound on [Pixabay](https://pixabay.com/music/happy-childrens-tunes-acoustic-upbeat-301015/) for the ad (Pixabay Content License). The brush, boom and chime sounds are made in `film.py` and `updates.py`.
 
 ## License
