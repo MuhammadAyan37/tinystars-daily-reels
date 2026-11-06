@@ -87,7 +87,16 @@ Samples 13 to 18 lead with the promise ("Not happy in the first month? We'll ref
 - 17: a wall of photos with a star sticker on it
 - 18: the look of the daycare's own Oct 20 post, done properly: colour-framed photos, logo-style lettering, ribbons and the contact line
 
-They use the newest photos too: the class painting (every child's face blurred), the block city with its smiley chairs and the rocket playroom. They're written to `exports/offer_sample_13.jpg` through `exports/offer_sample_18.jpg`, plus `exports/offer_samples_brand.jpg`. Fonts: Bricolage Grotesque and Unbounded, both from Google Fonts (OFL). The photos come from the daycare's Google page and its Drive, and go through `photos.py` first like every other photo. Ad copy and the campaign plan are in [`exports/offer_ad.md`](exports/offer_ad.md).
+They use the newest photos too: the class painting (every child's face blurred), the block city with its smiley chairs and the rocket playroom. They're written to `exports/offer_sample_13.jpg` through `exports/offer_sample_18.jpg`, plus `exports/offer_samples_brand.jpg`. Fonts: Bricolage Grotesque and Unbounded, both from Google Fonts (OFL).
+
+`offer_modern.py` makes samples 19 to 22, each built on a look people like right now:
+
+- 19, liquid glass: real photos under panes of glass that bend the light at their edges, over an aurora of the logo's colours, with a sparkle trail
+- 20, puffy 3D: the promise blown up into glossy balloon letters, photo stickers on a pastel check, a holographic star
+- 21, cover: the stained-glass classroom as a magazine cover, with round-photo cover lines, a star badge and a barcode
+- 22, scrapbook: taped polaroids with handwritten captions on dot-grid paper, 'refund' circled in pen, the $100 off on a sticky note
+
+The glass, the balloon shading and the foil are computed from the image itself (OpenCV distance fields and remapping), not pasted in. They're written to `exports/offer_sample_19.jpg` through `exports/offer_sample_22.jpg`, plus `exports/offer_samples_modern.jpg`. Caveat (OFL) is the handwriting. The photos come from the daycare's Google page and its Drive, and go through `photos.py` first like every other photo. Ad copy and the campaign plan are in [`exports/offer_ad.md`](exports/offer_ad.md).
 
 ## Two versions of every film
 
@@ -143,7 +152,7 @@ The logo in `tools/fetch_assets.py` is the small one from the website. Put a lar
 
 - **Python** with NumPy, OpenCV (YuNet face detection, optical-flow slow motion, compositing) and Pillow (lettering and graphics, `pillow-heif` for iPhone photos)
 - **FFmpeg** for H.264/AAC encoding and two-pass EBU R128 loudness normalisation
-- **Fonts:** Instrument Serif for the big words and Inter Tight for small print (plus Manrope, Plus Jakarta Sans, Outfit, Sora, DM Sans, Fraunces, Bricolage Grotesque and Unbounded for the offer samples), plus Crimson Pro Italic for the ad's closing line, all from Google Fonts (OFL). The ad's emoji come from Segoe UI Emoji, which ships with Windows.
+- **Fonts:** Instrument Serif for the big words and Inter Tight for small print (plus Manrope, Plus Jakarta Sans, Outfit, Sora, DM Sans, Fraunces, Bricolage Grotesque, Unbounded and Caveat for the offer samples), plus Crimson Pro Italic for the ad's closing line, all from Google Fonts (OFL). The ad's emoji come from Segoe UI Emoji, which ships with Windows.
 - **Music:** "Cinematic Corporate" by alex-morgan on [Pixabay](https://pixabay.com/music/corporate-cinematic-corporate-556231/) for "Nothing", and "Acoustic Upbeat" by OctoSound on [Pixabay](https://pixabay.com/music/happy-childrens-tunes-acoustic-upbeat-301015/) for the ad (Pixabay Content License). The brush, boom and chime sounds are made in `film.py` and `updates.py`.
 
 ## License
