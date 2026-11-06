@@ -1,10 +1,11 @@
-# New-family offer: picture ad, copy and campaign plan
+# Christmas offer for new families: picture ad, copy and campaign plan
 
 A picture ad for Tiny Stars Daycare. The stained-glass classroom fills the whole picture, lightly graded so it still looks like a real photo. One clean white card carries everything to read:
 
-- who it's for: new families, ages 1 to 12, Grande Prairie
+- the deadline: "Christmas offer for new families · Enrol by December 24"
 - **$100 off** in big type, then "your first 2 months **+ free registration**"
-- three small real photos (indoor play gym, painting, turf play yard)
+- a ✓ **30-day happiness promise** tag, plus "Ages 1 to 12" and "Grande Prairie"
+- three small real photos (indoor play gym, painting, the turf play yard with a rainbow over it)
 - a **Book a tour** button and the phone number
 
 There are no stickers, glows or stars, nothing that looks generated. The TV version also carries a parent's words from Google.
@@ -29,9 +30,9 @@ This ad takes the clear offer from Kita and the real, calm photography from Litt
 ## Meta ad copy
 
 **Primary text, option A (the offer)**
-New families get $100 off their first 2 months at Tiny Stars, plus free registration. 🌟
+Our Christmas offer for new families: $100 off your first 2 months at Tiny Stars, plus free registration. Enrol by December 24. 🎄
 
-We're a licensed daycare and out-of-school care in Grande Prairie for ages 1 to 12, with bright classrooms, an indoor play gym for the cold months and our own turf play yard.
+We're a licensed daycare and out-of-school care in Grande Prairie for ages 1 to 12, with bright classrooms, an indoor play gym for the cold months and our own turf play yard. Every new family also gets our 30-day happiness promise.
 
 📞 Book a tour: (780) 230-1599
 📍 10629 West Side Drive, Grande Prairie
@@ -39,14 +40,15 @@ We're a licensed daycare and out-of-school care in Grande Prairie for ages 1 to 
 **Primary text, option B (a parent's words)**
 "Hands-down the best choice we ever made for our child." A Tiny Stars parent wrote that on Google.
 
-Come and see the rooms for yourself. New families get $100 off their first 2 months and free registration.
+Come and see the rooms for yourself. Until December 24, new families get $100 off their first 2 months, free registration and our 30-day happiness promise.
 
 📞 (780) 230-1599 · 🌐 tinystars.ca
 
 **Headlines** (40 characters or fewer)
 1. $100 off your first 2 months (28)
-2. Free registration at Tiny Stars (31)
+2. Christmas offer: free registration (35)
 3. Book a tour in Grande Prairie (29)
+4. Enrol by Dec 24 and save (25)
 
 **Description** (30 characters or fewer): Ages 1 to 12 · West Side Dr (27)
 
@@ -66,12 +68,13 @@ Come and see the rooms for yourself. New families get $100 off their first 2 mon
   - your child's age: 12–19 months / 19 months–3 / 3–5 / 5–6 / 6–12
   - when you'd like to start: this month / next month / later
   - the best time for a tour
-- **Form intro:** "New families get $100 off their first 2 months, plus free registration. Tell us a little about your child and we'll call you to book a tour."
+- **Form intro:** "Our Christmas offer: new families who enrol by December 24 get $100 off their first 2 months, free registration and our 30-day happiness promise. Tell us a little about your child and we'll call you to book a tour."
 - **Form privacy link:** Meta asks for a privacy policy link on the form. If tinystars.ca doesn't have a privacy page yet, it needs one before the form can go live.
 - **Location:** a 15 km radius around 10629 West Side Drive (Grande Prairie and the edge of the county).
 - **Audience:** ages 22 to 45. Leave Advantage+ audience on so Meta can find parents.
 - **Placements:** Advantage+ placements, with **Customize placements**: the 4:5 picture for Feeds, the 9:16 picture for Stories and Reels.
-- **Budget:** start at about $35 a day with option A and option B in the same ad set. After 7 days, keep the one with the cheaper cost per lead and turn the other off. Raise the budget by about 20% every few days while the cost per lead holds. Over 30 days that spends $1,000 to $1,500, with the rest of the $2,000 kept for scaling what works.
+- **Dates:** run it from now until December 24, about 6 to 7 weeks. Ease off from December 20, when parents are busy with the holidays.
+- **Budget:** start at about $35 a day with option A and option B in the same ad set. After 7 days, keep the one with the cheaper cost per lead and turn the other off. Raise the budget by about 20% every few days while the cost per lead holds. Through to December 24 that spends about $1,500 to $1,800, keeping the rest of the $2,000 for the best week.
 
 **What decides whether you get the 10**
 - **Call every lead within 5 minutes during the day.** Leads go cold within hours, and fast follow-up makes the biggest difference of anything here.
@@ -80,7 +83,13 @@ Come and see the rooms for yourself. New families get $100 off their first 2 mon
 
 ## Before the ad goes live
 
-- **Pin down the offer wording:** is it $100 off each of the first 2 months ($200 in total) or $100 off in total? Who counts as a new family? Is there an end date? A deadline ("enrol by November 30") usually brings more people in. State the terms in the form intro, and in the primary text if the deadline is short.
+- **Pin down the offer wording:** is it $100 off each of the first 2 months ($200 in total) or $100 off in total? Who counts as a new family? Does "enrol by December 24" mean signing up by then, or starting by then? Write the terms in the form intro.
+- **Define the 30-day happiness promise.** Registration is already free in this offer, so "we refund your registration" would mean nothing. Pick one:
+  - (a) not happy in the first 30 days, leave with no notice period and nothing more owed;
+  - (b) not happy in the first 30 days, get the second month's $100 discount as cash back;
+  - (c) not happy in the first 30 days, your last week is free.
+
+  Option (a) costs you least and is easy to explain. Say it in the primary text and at the tour.
 - **Alberta's affordability grant:** if Tiny Stars is in the provincial flat-fee program, check that a parent-fee discount fits its rules.
 - **The review quote:** it's public on Google and shown without a name. It's still kind to ask that parent if you can use their words in an ad.
 - **Photos:** all from the Tiny Stars Google page and your Drive. Nobody's face is in any of them, the child's name on the painting is blurred, and a face scan of all three finished pictures found no faces.
@@ -88,4 +97,4 @@ Come and see the rooms for yourself. New families get $100 off their first 2 mon
 
 ## Alt text
 
-A bright daycare classroom with colourful stained-glass designs on the windows and snow outside. A white card reads "New families, ages 1 to 12, Grande Prairie. $100 off your first 2 months, plus free registration." Below are small photos of an indoor play gym, a child's flower painting and a turf play yard, and a "Book a tour" button with the phone number (780) 230-1599.
+A bright daycare classroom with colourful stained-glass designs on the windows and snow outside. A white card reads "Christmas offer for new families. Enrol by December 24. $100 off your first 2 months, plus free registration. 30-day happiness promise. Ages 1 to 12. Grande Prairie." Below are small photos of an indoor play gym, a child's flower painting and a turf play yard, and a "Book a tour" button with the phone number (780) 230-1599.

@@ -31,7 +31,9 @@ PURPLE = (84, 38, 120)
 CARD = (255, 255, 255)
 LINE = (232, 228, 236)
 
-EYEBROW = "New families  ·  Ages 1 to 12  ·  Grande Prairie"
+EYEBROW = "Christmas offer for new families  ·  Enrol by December 24"
+PROMISE = "30-day happiness promise"
+TAGS = ["Ages 1 to 12", "Grande Prairie"]
 PRICE = "$100 off"
 MONTHS = "your first 2 months"
 EXTRA = "+ free registration"
@@ -43,15 +45,15 @@ QUOTE_BY = "A Tiny Stars parent, on Google"
 HERO = "g02"
 PLACES = [dict(name="g21", label=["Indoor", "play gym"], cx=0.55, cy=0.56, zoom=1.0),
           dict(name="IMG_8880_S", label=["Hands-on", "art"], cx=0.36, cy=0.5, zoom=1.9),
-          dict(name="g18", label=["Turf", "play yard"], cx=0.6, cy=0.66, zoom=1.35)]
+          dict(name="IMG_7690", label=["Turf", "play yard"], cx=0.44, cy=0.5, zoom=2.3)]
 
 # positions in "base" pixels (the 1080-wide frame for the phone pictures, 1920-wide for the TV); out is the delivered
 # size, and ss how much bigger than that it is drawn before scaling down
 FORMATS = {
     "feed": dict(base=(1080, 1350), out=(1440, 1800), ss=2.0, hero=(0.55, 0.57, 1.42), logo=(32, 32, 112),
-                 card=(28, 756, 1024, 566), pad=52),
+                 card=(28, 680, 1024, 642), pad=52),
     "story": dict(base=(1080, 1920), out=(1440, 2560), ss=2.0, hero=(0.62, 0.56, 1.3), logo=(40, 236, 120),
-                  card=(40, 836, 1000, 576), pad=48, right=940),
+                  card=(40, 760, 1000, 652), pad=48, right=940),
     "tv": dict(base=(1920, 1080), out=(3840, 2160), ss=1.5, hero=(0.36, 0.47, 1.06), logo=(48, 48, 132),
                card=(1150, 44, 726, 992), pad=60),
 }
@@ -186,6 +188,27 @@ def place(canvas, d, x, y, p, size, label_size):
     text(d, lx, u(mid - 4 + label_size * 1.18), p["label"][1], f, INK)
 
 
+def tag(canvas, x, y, label, size=22, tick=False):
+    """A small rounded tag, the way an app shows a feature. Returns its width in base pixels."""
+    d = ImageDraw.Draw(canvas)
+    f = sans(size, 640 if tick else 560)
+    h = size * 2.2
+    tw = d.textlength(label, font=f) / S
+    iw = size * 0.95 if tick else 0
+    w = tw + 2 * size * 0.85 + (iw + size * 0.42 if tick else 0)
+    t = Image.new("RGBA", (u(w), u(h)), ((240, 233, 247) if tick else (241, 239, 243)) + (255,))
+    t.putalpha(rounded(u(w), u(h), u(h / 2)))
+    canvas.alpha_composite(t, (u(x), u(y)))
+    tx = x + size * 0.85
+    if tick:  # a drawn tick, crisper than any font's
+        cx, cy, k = tx + iw / 2, y + h / 2, iw / 2
+        d.line([(u(cx - k * 0.8), u(cy + k * 0.02)), (u(cx - k * 0.22), u(cy + k * 0.6)), (u(cx + k * 0.85), u(cy - k * 0.62))],
+               fill=PURPLE, width=max(2, u(size * 0.14)), joint="curve")
+        tx += iw + size * 0.42
+    text(d, u(tx), u(y + h / 2), label, f, PURPLE if tick else SOFT, anchor="lm")
+    return w
+
+
 # ---------- the card ----------
 def white_card(canvas, x, y, w, h, r, blur):
     m = rounded(u(w), u(h), u(r))
@@ -211,8 +234,12 @@ def card_phone(canvas, x, y, w, h, pad, right=None):
     yy += 60
     wm = text(d, u(x0), u(yy), MONTHS, sans(40, 520), SOFT)
     text(d, u(x0) + wm + u(12), u(yy), EXTRA, sans(40, 760), PURPLE)
-    # the places
-    yy += 40
+    # the promise and the plain facts
+    yy += 30
+    tx = x0
+    for i, label in enumerate([PROMISE] + TAGS):
+        tx += tag(canvas, tx, yy, label, 22, tick=i == 0) + 12
+    yy += 48 + 32
     col = (x1 - x0) / len(PLACES)
     for i, p in enumerate(PLACES):
         place(canvas, d, x0 + i * col, yy, p, 96, 24)
@@ -232,15 +259,20 @@ def card_tv(canvas, x, y, w, h, pad):
     x0 = x + pad
     yy = y + pad + 22
     d.ellipse((u(x0), u(yy - 16), u(x0 + 13), u(yy - 3)), fill=PURPLE)
-    text(d, u(x0 + 26), u(yy), "New families  ·  Ages 1 to 12", sans(25, 600), PURPLE, 0.2)
+    text(d, u(x0 + 26), u(yy), "Christmas offer  ·  Enrol by December 24", sans(25, 600), PURPLE, 0.2)
     yy += 168
     text(d, u(x0 - 6), u(yy), PRICE, sans(158, 820), INK, -6)
     yy += 64
     text(d, u(x0), u(yy), MONTHS, sans(44, 520), SOFT)
     yy += 54
     text(d, u(x0), u(yy), EXTRA, sans(44, 760), PURPLE)
+    yy += 30
+    tx = x0
+    for i, label in enumerate([PROMISE, TAGS[0]]):
+        tx += tag(canvas, tx, yy, label, 23, tick=i == 0) + 12
+    yy += 51
     # a parent's words
-    yy += 50
+    yy += 36
     d.line((u(x0), u(yy), u(x + w - pad), u(yy)), fill=LINE, width=max(1, u(2)))
     yy += 66
     fq = serif_italic(44)
