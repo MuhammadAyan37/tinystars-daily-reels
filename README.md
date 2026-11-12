@@ -187,6 +187,14 @@ They're written to `exports/rednova_ad_36.jpg` through `exports/rednova_ad_41.jp
 
 They're written to `exports/rednova_ad_42.jpg` through `exports/rednova_ad_47.jpg`, plus `exports/rednova_ads_trees.jpg`.
 
+`rednova_trees_flat.py` makes the same six trees again (48 to 53), made by hand rather than rendered, because the glossy ones read as AI-made. It uses:
+- flat paper-cut tiers with only a real paper shadow;
+- flat ornaments, beads and stars, with no shine and no glow;
+- bows drawn with a slightly uneven pen line;
+- the photos as prints with thin white borders, on a page with a faint paper texture.
+
+They're written to `exports/rednova_ad_48.jpg` through `exports/rednova_ad_53.jpg`, plus `exports/rednova_ads_trees_flat.jpg`.
+
 ## Two versions of every film
 
 | Version | File | Format |
@@ -236,6 +244,7 @@ uv pip install --python .venv/Scripts/python.exe -r requirements.txt
 .venv/Scripts/python.exe -I edits/rednova_like.py          # Red Nova samples 30 to 35: the clean grid and the daycare's own style
 .venv/Scripts/python.exe -I edits/rednova_christmas.py     # Red Nova samples 36 to 41: fully Christmas, the offer said gently
 .venv/Scripts/python.exe -I edits/rednova_trees.py         # Red Nova samples 42 to 47: aesthetic photo trees in six colours
+.venv/Scripts/python.exe -I edits/rednova_trees_flat.py    # Red Nova samples 48 to 53: the same trees, flat and hand-made
 ```
 
 The privacy scripts look for originals in every `source/*_raw` folder, so each film's clips can stay in the folder for the day they were filmed.
