@@ -170,6 +170,23 @@ The photos get a natural, bright grade (`natural`). They're written to `exports/
 
 They're written to `exports/rednova_ad_36.jpg` through `exports/rednova_ad_41.jpg`, plus `exports/rednova_ads_christmas2.jpg`.
 
+`rednova_trees.py` makes six more photo trees (42 to 47), softer and more aesthetic, each in its own colours. All of them:
+- stack the room's six photos into a tree;
+- add tinsel beads, small baubles, warm lights and presents with satin bows;
+- set lowercase serif titles and the gentle offer;
+- carry a fine film grain.
+
+| Sample | Colours | Topper |
+| --- | --- | --- |
+| 42 | blush | a satin bow |
+| 43 | sage | a gold star |
+| 44 | ice, in falling snow | a silver star |
+| 45 | champagne, a tree drawn in fairy lights | a gold star |
+| 46 | velvet: emerald on burgundy | a gold star |
+| 47 | lavender (the brand's purple) | the star buddy |
+
+They're written to `exports/rednova_ad_42.jpg` through `exports/rednova_ad_47.jpg`, plus `exports/rednova_ads_trees.jpg`.
+
 ## Two versions of every film
 
 | Version | File | Format |
@@ -218,6 +235,7 @@ uv pip install --python .venv/Scripts/python.exe -r requirements.txt
 .venv/Scripts/python.exe -I edits/rednova_aesthetic.py     # Red Nova samples 22 to 29, the soft aesthetic set
 .venv/Scripts/python.exe -I edits/rednova_like.py          # Red Nova samples 30 to 35: the clean grid and the daycare's own style
 .venv/Scripts/python.exe -I edits/rednova_christmas.py     # Red Nova samples 36 to 41: fully Christmas, the offer said gently
+.venv/Scripts/python.exe -I edits/rednova_trees.py         # Red Nova samples 42 to 47: aesthetic photo trees in six colours
 ```
 
 The privacy scripts look for originals in every `source/*_raw` folder, so each film's clips can stay in the folder for the day they were filmed.
