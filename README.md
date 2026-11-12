@@ -153,6 +153,17 @@ The eight:
 
 They're written to `exports/rednova_ad_22.jpg` through `exports/rednova_ad_29.jpg`, plus `exports/rednova_ads_aesthetic.jpg`.
 
+`rednova_like.py` makes six more (30 to 35) in two styles the owner pointed to.
+- **30–32, the clean grid:** photos of the room edge to edge with thin white gutters, then a cream panel with the logo, a serif headline, the offer and a button. 31 is the Christmas version.
+- **33–34, the daycare's own Oct 20 post done properly:**
+  - the logo on top and photos in colour frames;
+  - "Red Nova" in logo-style lettering and the offer on a bright banner;
+  - the contact row with icons;
+  - a 3D star buddy drawn in code, which wears a Santa hat in 34.
+- **35, both together.**
+
+The photos get a natural, bright grade (`natural`). They're written to `exports/rednova_ad_30.jpg` through `exports/rednova_ad_35.jpg`, plus `exports/rednova_ads_like.jpg`.
+
 ## Two versions of every film
 
 | Version | File | Format |
@@ -199,6 +210,7 @@ uv pip install --python .venv/Scripts/python.exe -r requirements.txt
 .venv/Scripts/python.exe -I edits/rednova_ad.py            # the Red Nova samples (name numbers to draw only those)
 .venv/Scripts/python.exe -I edits/rednova_modern.py        # Red Nova samples 14 to 21, with the photos cleaned up
 .venv/Scripts/python.exe -I edits/rednova_aesthetic.py     # Red Nova samples 22 to 29, the soft aesthetic set
+.venv/Scripts/python.exe -I edits/rednova_like.py          # Red Nova samples 30 to 35: the clean grid and the daycare's own style
 ```
 
 The privacy scripts look for originals in every `source/*_raw` folder, so each film's clips can stay in the folder for the day they were filmed.
