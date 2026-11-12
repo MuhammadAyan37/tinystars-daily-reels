@@ -121,6 +121,19 @@ Six work at any time of year:
 
 The bow, the holly and the baubles are drawn and lit in code like the balloon letters (no clip art). They're written to `exports/rednova_ad_1.jpg` through `exports/rednova_ad_13.jpg`, plus `exports/rednova_ads_christmas.jpg` and `exports/rednova_ads_anytime.jpg` to compare.
 
+`rednova_modern.py` makes eight more (14 to 21), each built on three to five of the best photos with the sand-and-diggers bin as the star. It first cleans the photos up (`enhance`): the yellow of the ceiling lights pulled back, shadows lifted, colours richer, detail crisper. The eight:
+
+- 14, hero and strip: the sand bin big, three more photos in a row, a spinning "new room" badge
+- 15, bento on red: five photos under a giant condensed "RED NOVA"
+- 16, shapes: photos cut into an arch, a circle, a pill and a star, each on its own colour block
+- 17, photo letters: "NEW" spelled in three photos of the room, two more below
+- 18, story: the room as a stack of story cards, with progress bars and a puffy heart
+- 19, Christmas gift: the sand bin wrapped with a satin ribbon and bow, three more photos beside it
+- 20, editorial: a big serif title, three numbered photos in a magazine grid
+- 21, now showing: the room on a strip of 35 mm film, on a snowy red night
+
+They're written to `exports/rednova_ad_14.jpg` through `exports/rednova_ad_21.jpg`, plus `exports/rednova_ads_modern.jpg`.
+
 ## Two versions of every film
 
 | Version | File | Format |
@@ -165,6 +178,7 @@ uv pip install --python .venv/Scripts/python.exe -r requirements.txt
 .venv/Scripts/python.exe -I edits/offer.py                 # the picture ad: feed, story and TV
 .venv/Scripts/python.exe -I edits/photos.py IMG_1294 IMG_1291 IMG_1286 IMG_1308 IMG_1310  # the new room's photos
 .venv/Scripts/python.exe -I edits/rednova_ad.py            # the Red Nova samples (name numbers to draw only those)
+.venv/Scripts/python.exe -I edits/rednova_modern.py        # Red Nova samples 14 to 21, with the photos cleaned up
 ```
 
 The privacy scripts look for originals in every `source/*_raw` folder, so each film's clips can stay in the folder for the day they were filmed.
