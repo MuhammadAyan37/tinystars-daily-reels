@@ -164,6 +164,12 @@ They're written to `exports/rednova_ad_22.jpg` through `exports/rednova_ad_29.jp
 
 The photos get a natural, bright grade (`natural`). They're written to `exports/rednova_ad_30.jpg` through `exports/rednova_ad_35.jpg`, plus `exports/rednova_ads_like.jpg`.
 
+`rednova_christmas.py` makes six that are Christmas through and through (36 to 41). They put the promise gently: "We're so sure you'll love it, your first month is worry-free", with "Ask us about our first-month promise" under it, so it reads as confident rather than desperate.
+- **Pieces drawn in code:** pine garlands with lights and baubles, a woven red tartan, wrapped presents, a fir tree of photos, gold bead tinsel, polaroids pegged to a garland, and the star buddy in a Santa hat.
+- **The six:** a pine grid, tartan, a photo tree, a red panel, a card edged in lights, and a garland at night.
+
+They're written to `exports/rednova_ad_36.jpg` through `exports/rednova_ad_41.jpg`, plus `exports/rednova_ads_christmas2.jpg`.
+
 ## Two versions of every film
 
 | Version | File | Format |
@@ -211,6 +217,7 @@ uv pip install --python .venv/Scripts/python.exe -r requirements.txt
 .venv/Scripts/python.exe -I edits/rednova_modern.py        # Red Nova samples 14 to 21, with the photos cleaned up
 .venv/Scripts/python.exe -I edits/rednova_aesthetic.py     # Red Nova samples 22 to 29, the soft aesthetic set
 .venv/Scripts/python.exe -I edits/rednova_like.py          # Red Nova samples 30 to 35: the clean grid and the daycare's own style
+.venv/Scripts/python.exe -I edits/rednova_christmas.py     # Red Nova samples 36 to 41: fully Christmas, the offer said gently
 ```
 
 The privacy scripts look for originals in every `source/*_raw` folder, so each film's clips can stay in the folder for the day they were filmed.
