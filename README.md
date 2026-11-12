@@ -134,6 +134,25 @@ The bow, the holly and the baubles are drawn and lit in code like the balloon le
 
 They're written to `exports/rednova_ad_14.jpg` through `exports/rednova_ad_21.jpg`, plus `exports/rednova_ads_modern.jpg`.
 
+`rednova_aesthetic.py` makes eight soft, aesthetic ones (22 to 29), the calm Pinterest look rather than bold or retro:
+- **Palette:** oat, linen, dusty rose and sage, with a muted rosewood for Red Nova.
+- **Type:** lowercase words in Instrument Serif and Inter Tight.
+- **Details:** thin satin "coquette" bows, and a fine film grain over everything.
+- **Photos:** a soft, airy grade (`soft`): brighter, matte blacks, colour eased off, creamy highlights.
+
+The eight:
+
+- 22, mood board: four photos in a soft masonry grid
+- 23, bows: three arched photos, each tied with a satin bow
+- 24, dreamy: a pastel cloud gradient, photo widgets, a frosted glass card
+- 25, photo dump: printed photos with orange date stamps, scattered on oat
+- 26, arch: one big arched photo with two round ones
+- 27, Christmas sage: four photos on sage and cream, a bow at the centre, pine sprigs in a fine line
+- 28, checklist: photos beside a soft note card listing what's in the room
+- 29, fade: the sand bin full width, fading into linen
+
+They're written to `exports/rednova_ad_22.jpg` through `exports/rednova_ad_29.jpg`, plus `exports/rednova_ads_aesthetic.jpg`.
+
 ## Two versions of every film
 
 | Version | File | Format |
@@ -179,6 +198,7 @@ uv pip install --python .venv/Scripts/python.exe -r requirements.txt
 .venv/Scripts/python.exe -I edits/photos.py IMG_1294 IMG_1291 IMG_1286 IMG_1308 IMG_1310  # the new room's photos
 .venv/Scripts/python.exe -I edits/rednova_ad.py            # the Red Nova samples (name numbers to draw only those)
 .venv/Scripts/python.exe -I edits/rednova_modern.py        # Red Nova samples 14 to 21, with the photos cleaned up
+.venv/Scripts/python.exe -I edits/rednova_aesthetic.py     # Red Nova samples 22 to 29, the soft aesthetic set
 ```
 
 The privacy scripts look for originals in every `source/*_raw` folder, so each film's clips can stay in the folder for the day they were filmed.
