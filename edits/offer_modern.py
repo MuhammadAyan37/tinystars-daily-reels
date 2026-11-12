@@ -300,7 +300,7 @@ def side_shade(c, y0, y1, w, col, a):
     """A soft shadow from the left edge, under a column of cover lines."""
     W_, H_ = u(w), u(y1 - y0)
     gx = np.clip(1 - np.linspace(0, 1, W_, dtype=np.float32), 0, 1) ** 1.6
-    gy = np.sin(np.linspace(0, np.pi, H_, dtype=np.float32)) ** 0.6
+    gy = np.clip(np.sin(np.linspace(0, np.pi, H_, dtype=np.float32)), 0, 1) ** 0.6
     lay = Image.new("RGBA", (W_, H_), col + (0,))
     lay.putalpha(Image.fromarray((np.outer(gy, gx) * a * 255).astype(np.uint8)))
     c.alpha_composite(lay, (0, u(y0)))

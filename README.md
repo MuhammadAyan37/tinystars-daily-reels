@@ -98,6 +98,29 @@ They use the newest photos too: the class painting (every child's face blurred),
 
 The glass, the balloon shading and the foil are computed from the image itself (OpenCV distance fields and remapping), not pasted in. They're written to `exports/offer_sample_19.jpg` through `exports/offer_sample_22.jpg`, plus `exports/offer_samples_modern.jpg`. Caveat (OFL) is the handwriting. The photos come from the daycare's Google page and its Drive, and go through `photos.py` first like every other photo. Ad copy and the campaign plan are in [`exports/offer_ad.md`](exports/offer_ad.md).
 
+## The picture ad: Red Nova, the new room
+
+`rednova_ad.py` makes thirteen samples announcing Red Nova, the daycare's newest room, with the promise "Love your first month, or we'll refund your parent portion." They use the photos of the room taken the day it opened, before any children were in it. Seven are dressed for Christmas:
+
+- 1, ornaments: the room hung on the tree as gold-rimmed photo baubles, on a snowy night
+- 2, Christmas card: an arched window onto the room, holly in the corners, a red and gold border
+- 3, gift wrap: "a new room to unwrap", a satin ribbon and bow, a gift tag
+- 4, garland: polaroids hung on a string of fairy lights
+- 5, snow globe: the room inside a snow globe on a gold base
+- 6, candy cane: puffy "NOW OPEN" letters on candy stripes, photo stickers, a holographic star
+- 7, advent calendar: the room behind numbered doors
+
+Six work at any time of year:
+
+- 8, grand opening: the room with a ribbon and bow across it, ready to cut
+- 9, liquid glass over an aurora of red and purple
+- 10, magazine cover: the new room issue
+- 11, scrapbook: taped polaroids, "refund" circled in pen, a sticky note
+- 12, clean bento grid: "Say hello to Red Nova."
+- 13, room tour: a big photo with the play kitchen, mural, hideout and tables pointed out
+
+The bow, the holly and the baubles are drawn and lit in code like the balloon letters (no clip art). They're written to `exports/rednova_ad_1.jpg` through `exports/rednova_ad_13.jpg`, plus `exports/rednova_ads_christmas.jpg` and `exports/rednova_ads_anytime.jpg` to compare.
+
 ## Two versions of every film
 
 | Version | File | Format |
@@ -140,6 +163,8 @@ uv pip install --python .venv/Scripts/python.exe -r requirements.txt
 .venv/Scripts/python.exe -I edits/updates.py               # the ad in all three versions
 .venv/Scripts/python.exe -I edits/photos.py g02 g21 g18 IMG_8880_S  # the picture ad's photos, blurred where anyone is in them
 .venv/Scripts/python.exe -I edits/offer.py                 # the picture ad: feed, story and TV
+.venv/Scripts/python.exe -I edits/photos.py IMG_1294 IMG_1291 IMG_1286 IMG_1308 IMG_1310  # the new room's photos
+.venv/Scripts/python.exe -I edits/rednova_ad.py            # the Red Nova samples (name numbers to draw only those)
 ```
 
 The privacy scripts look for originals in every `source/*_raw` folder, so each film's clips can stay in the folder for the day they were filmed.
