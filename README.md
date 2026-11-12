@@ -197,6 +197,17 @@ They're written to `exports/rednova_ad_48.jpg` through `exports/rednova_ad_53.jp
 
 `rednova_trees10.py` makes the flat tree with ten photos (54 to 59) in the same six colours. It adds the four low-light shots the owner sent (IMG_1289 to 1292). Every photo is brought up to a normal daylight level first (`bright`: exposure set from the photo's own median, shadows lifted, then the natural grade), and the ten stack one, two, three, four. They're written to `exports/rednova_ad_54.jpg` through `exports/rednova_ad_59.jpg`, plus `exports/rednova_ads_trees10.jpg`.
 
+`rednova_more.py` makes six different Christmas layouts that aren't trees (60 to 65). They keep the same hand-made style and use the ten brightened photos. They're written to `exports/rednova_ad_60.jpg` through `exports/rednova_ad_65.jpg`, plus `exports/rednova_ads_more.jpg`.
+
+| Sample | Layout |
+| --- | --- |
+| 60 | a wreath of round photos with flat leaves and berries |
+| 61 | a Christmas postcard with a photo stamp, a postmark and a handwritten note |
+| 62 | a window at night whose panes are photos of the room |
+| 63 | photo-booth strips on blush paper |
+| 64 | an advent calendar |
+| 65 | polaroids on a red gingham cloth with a note card |
+
 ## Two versions of every film
 
 | Version | File | Format |
@@ -249,6 +260,7 @@ uv pip install --python .venv/Scripts/python.exe -r requirements.txt
 .venv/Scripts/python.exe -I edits/rednova_trees_flat.py    # Red Nova samples 48 to 53: the same trees, flat and hand-made
 .venv/Scripts/python.exe -I edits/photos.py IMG_1289 IMG_1290 IMG_1292 IMG_1297  # the low-light shots
 .venv/Scripts/python.exe -I edits/rednova_trees10.py       # Red Nova samples 54 to 59: ten-photo flat trees, low light fixed
+.venv/Scripts/python.exe -I edits/rednova_more.py          # Red Nova samples 60 to 65: wreath, postcard, window, photo booth, advent, gingham
 ```
 
 The privacy scripts look for originals in every `source/*_raw` folder, so each film's clips can stay in the folder for the day they were filmed.
