@@ -620,18 +620,14 @@ def x7(c):
     t(d, x + 34, y + 62, "NOW OPEN", face(B, 22, 800), GOLD, 3.2)
     t(d, x + 30, y + 170, ROOM, fit_serif([ROOM], w - 70, 132), WHITE, -1)
     t(d, x + 34, y + 204, "our newest room", face(B, 24, 600), (255, 222, 226))
+    # Nov 13: the owner asked for a photo in the middle door instead of the "brand new!" star card, so the learning
+    # shelf (busy board, books, puzzles) fills it as door 21
     for name, (cc, rr, sp), num in [("IMG_1286", (2, 0, 1), "1"), ("IMG_1294", (0, 1, 2), "7"),
                                     ("IMG_1308", (2, 1, 1), "12"), ("IMG_1310", (0, 2, 1), "18"),
-                                    ("IMG_1291", (2, 2, 1), "24")]:
+                                    ("IMG_1312", (1, 2, 1), "21"), ("IMG_1291", (2, 2, 1), "24")]:
         x, y, w, h = cell(cc, rr, sp)
         tile(c, name, x, y, w, h, 26, label=True, star=None)
         number(c, x + w - 38, y + 38, num, fn)
-    x, y, w, h = cell(1, 2)
-    panel(c, x, y, w, h, 26, (255, 240, 214), lift=0)
-    st = Image.new("RGBA", (u(130), u(130)), GOLD + (255,))
-    st.putalpha(star(130, 0.52))
-    c.alpha_composite(st, (u(x + w / 2 - 65), u(y + 26)))
-    t(d, x + w / 2, y + 196, "brand new!", face("Caveat", 44, 700), RUBY, 0, "ms")
     x, y, w, h = cell(0, 3, 3)
     panel(c, x, y, w, h, 26, CREAM, lift=0)
     t(d, W / 2, y + 62, f"{XMAS.upper()}  ·  FOR NEW FAMILIES", face(B, 21, 800), CHERRY, 3, "ms")
