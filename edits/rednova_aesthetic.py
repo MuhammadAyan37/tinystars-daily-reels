@@ -48,11 +48,10 @@ BUTTER = (250, 240, 212)
 BLUSH = (250, 230, 228)
 CHAMPAGNE = (214, 182, 120)
 
-TITLE = "red nova is now open"
-# the owner's line, in this set's lowercase: a new space to shine, with our first-month happiness with christmas
-# offer guaranteed
-PROM = ["a new space to shine, with our first-month", "happiness with christmas offer guaranteed!"]
-HAPPY = "christmas offer"
+TITLE = "red nova"
+# the owner's line, word for word (see rednova_ad.GUAR)
+PROM = R.GUAR
+HAPPY = R.HAPPY
 CTA = "book a tour  ·  (780) 230-1599"
 WEB = "tinystars.ca"
 ADDR = "10629 west side drive, grande prairie"
@@ -144,7 +143,7 @@ def pill(c, x, y, w, h, s, bg, fg, f, anchor="l"):
 
 
 def promise(c, x, y, lead, f, anchor="ls", ink=COCOA, word=ROSEWOOD):
-    """The promise in a light sans, with 'christmas offer' in rosewood italic serif, a flat sparkle before it
+    """The promise in a light sans, with 'Christmas offer' in rosewood italic serif, a flat sparkle before it
     and a flat star after it (left-aligned, the sparkle hangs in the margin)."""
     d = ImageDraw.Draw(c)
     t(d, x, y, PROM[0], f, ink, 0, anchor)
@@ -422,11 +421,12 @@ def a28(c):
         t(d, 664, y, s_, face(I, 26, 400), COCOA)
     d.line((u(616), u(790), u(988), u(790)), fill=(226, 214, 200, 255), width=u(1.5))
     fs = serif(31)
-    lines_ = ["a new space to shine,", "with our first-month", "happiness with", "christmas offer guaranteed!"]
+    lines_ = ["Red Nova is now open —", "A new space to shine,", "with our first-month", "happiness with",
+              "Christmas offer guaranteed!"]
     for k, s_ in enumerate(lines_):
-        t(d, 616, 838 + k * 38, s_, fs, ROSEWOOD if k == 3 else COCOA)
-    R.twinkle(c, 616 + wid(lines_[0], fs) + 20, 838 - 11, 20, ROSEWOOD)
-    R.flat_star(c, 616 + wid(lines_[3], fs) + 18, 952 - 11, 21, ROSEWOOD)
+        t(d, 616, 830 + k * 36, s_, fs, ROSEWOOD if k == 4 else COCOA)
+    R.twinkle(c, 616 + wid(lines_[0], fs) + 20, 830 - 11, 20, ROSEWOOD)
+    R.flat_star(c, 616 + wid(lines_[4], fs) + 18, 974 - 11, 21, ROSEWOOD)
     pill(c, 56, 1080, 968, 82, CTA, COCOA, LINEN, face(I, 28, 600))
     footer(c, 1240)
 

@@ -30,7 +30,7 @@ from offer_samples import BASE, INK, LIFT, OUT, SIZE, SS, WHITE, face, logo, pic
 from rednova_ad import bez, fit_serif, serif  # noqa: E402
 
 I = "InterTight"
-TITLE = "red nova is now open"
+TITLE = "red nova"
 SUB = "a new room, just in time for christmas"
 CTA = "book a tour  ·  (780) 230-1599"
 

@@ -1,8 +1,8 @@
 """Red Nova, our newest room, is open: thirteen picture-ad samples to choose from, seven dressed for Christmas and six
 for any time of year.
 
-Every sample says the same few things: Red Nova is now open, the promise (a new space to shine, with our first-month
-happiness with Christmas offer guaranteed), and how to book a tour. The photos are the new room itself, taken the day it opened, with
+Every sample says the same few things: the owner's line, word for word ("Red Nova is now open — A new space to shine,
+with our first-month happiness with Christmas offer guaranteed!"), and how to book a tour. The photos are the new room itself, taken the day it opened, with
 nobody in them; they still went through photos.py like every other photo.
 
   Christmas   1 Ornaments: the room hung on the tree as photo baubles, on a snowy night
@@ -41,14 +41,14 @@ from offer_samples import (BASE, CROPS, INK, LABELS, LIFT, OUT, PHONE, SIZE, SOF
 
 ROOM = "Red Nova"
 # The owner's line (Nov 12): "✨ Red Nova is now open — A new space to shine, with our first-month happiness with
-# Christmas offer guaranteed! ⭐". The headlines carry "Red Nova is now open"; the rest is the promise, word for word,
-# with the sparkle and the star drawn flat and "Christmas offer" picked out.
-GUAR = ["A new space to shine, with our first-month", "happiness with Christmas offer guaranteed!"]
+# Christmas offer guaranteed! ⭐". It goes on every sample word for word, the sparkle and the star drawn flat and
+# "Christmas offer" picked out; the headlines name the room, so "is now open" isn't said twice.
+GUAR = ["Red Nova is now open — A new space to shine, with our", "first-month happiness with Christmas offer guaranteed!"]
 HAPPY = "Christmas offer"
 PROM = GUAR
 PROM_FIT = ["M  " + s + "  M" for s in GUAR]  # room for the sparkle and the star when sizing the type
-LEAD, BIG = "A new space to shine, with our first-month", ["happiness with Christmas", "offer guaranteed!"]
-NOW_OPEN = "Red Nova is now open"
+LEAD = ["Red Nova is now open — A new space to shine,", "with our first-month"]
+BIG = ["happiness with Christmas", "offer guaranteed!"]
 CTA = f"Book a tour  ·  {PHONE}"
 XMAS = "Christmas offer"
 ADDRESS = "10629 West Side Drive, Grande Prairie"
@@ -499,7 +499,7 @@ def x3(c):
     d = ImageDraw.Draw(c)
     f = fit(U, ["A new room", "to unwrap."], 640, 78, 800, -2)
     stack(d, 48, 258, ["A new room", "to unwrap."], f, WHITE, 92, -2)
-    t(d, 52, 388, f"{ROOM} is now open", face(B, 32, 700), GOLD, 0)
+    t(d, 52, 388, f"{ROOM}, our newest room", face(B, 32, 700), GOLD, 0)
     band(c, 0, 438, W, 74, GOLD_SATIN)
     band(c, 762, 0, 74, 920, GOLD_SATIN, vertical=True)
     card(c, "IMG_1294", 352, 690, 560, 400, -4, border=14, r=22)
@@ -650,7 +650,7 @@ def r1(c):
     bow(c, W / 2, 738, 128, RED_PUFF)
     d = ImageDraw.Draw(c)
     t(d, W / 2, 958, "GRAND OPENING  ·  OUR NEWEST ROOM", face(B, 22, 800), CHERRY, 3.2, "ms")
-    t(d, W / 2, 1050, f"{NOW_OPEN}.", fit(B, [f"{NOW_OPEN}."], W - 120, 92, 800, -3), INK, -3, "ms")
+    t(d, W / 2, 1050, f"{ROOM}.", fit(B, [f"{ROOM}."], W - 120, 92, 800, -3), INK, -3, "ms")
     f = fit(B, PROM_FIT, W - 170, 40, 500, -0.4)
     promise(c, W / 2, 1114, 48, f, SOFT, CHERRY, -0.4, "ms")
     button(c, W / 2 - 320, 1196, 640, 80, CTA, CHERRY, WHITE, face(B, 29, 700))
@@ -701,9 +701,10 @@ def r3(c):
         glow_text(c, 148, y + 12, LABELS[n], face(B, 34, 750), WHITE, -0.3)
     S.sticker(c, 870, 610, 300, [("NOW", -14, face(B, 52, 800, wdth=75)), ("OPEN", 38, face(B, 52, 800, wdth=75))],
               -10, fill=CHERRY)
-    fl = fit(B, [LEAD], W - 150, 46, 500, -0.4)
-    glow_text(c, 104, 966, LEAD, fl, (246, 234, 240), -0.4)
-    twinkle(c, 66, 950, 30, GOLD)
+    fl = fit(B, LEAD, W - 150, 44, 500, -0.4)
+    glow_text(c, 104, 914, LEAD[0], fl, (246, 234, 240), -0.4)
+    glow_text(c, 104, 966, LEAD[1], fl, (246, 234, 240), -0.4)
+    twinkle(c, 66, 898, 30, GOLD)
     f = fit(B, [BIG[0], BIG[1] + "  M"], W - 96, 116, 800, -3)
     accent(c, 46, 1076, BIG[0], "Christmas", f, WHITE, GOLD, -3)
     accent(c, 46, 1176, BIG[1], "offer", f, WHITE, GOLD, -3)
@@ -741,7 +742,7 @@ def r4(c):
     doodle_star(c, 72, 640, 46, S.SUN, seed=1)
     doodle_star(c, 1020, 660, 38, CHERRY, seed=2)
     heart(c, 400, 640, 26, CHERRY)
-    cap = f"{NOW_OPEN}! a new space to shine, with our first-month..."
+    cap = "Red Nova is now open — A new space to shine, with our first-month..."
     twinkle(c, 74, 724, 34, S.SUN)
     t(d, 108, 744, cap, fit(C, [cap], W - 160, 60, 700), PEN, 0)
     BIG2 = ["happiness with  Christmas", "offer  guaranteed!"]
@@ -816,7 +817,7 @@ def r6(c):
     callout(c, 676, 404, 860, 440, "Little tables", f)
     d = ImageDraw.Draw(c)
     t(d, W / 2, 870, "TAKE A PEEK INSIDE OUR NEWEST ROOM", face(B, 21, 800), GOLD, 3.2, "ms")
-    t(d, W / 2, 970, f"{NOW_OPEN}.", fit(B, [f"{NOW_OPEN}."], W - 120, 96, 800, -3), WHITE, -3, "ms")
+    t(d, W / 2, 970, f"{ROOM}.", fit(B, [f"{ROOM}."], W - 120, 96, 800, -3), WHITE, -3, "ms")
     fp = fit(B, PROM_FIT, W - 170, 42, 600, -0.6)
     promise(c, W / 2, 1040, 50, fp, (236, 222, 232), GOLD, -0.6, "ms")
     button(c, W / 2 - 330, 1132, 660, 84, CTA, CHERRY, WHITE, face(B, 31, 700))

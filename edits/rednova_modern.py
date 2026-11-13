@@ -30,7 +30,7 @@ import rednova_ad as R  # noqa: E402
 from offer_modern import aurora, glow_text, heart, inflate, liquid_pill, shade  # noqa: E402
 from offer_samples import (BASE, CROPS, INK, LABELS, LIFT, OUT, SIZE, SOFT, SS, WEB, WHITE, accent, button,  # noqa: E402
                            die_cut, face, fit, glow, logo, panel, picture, put, ramp, sparkle, star, stick, t, u)
-from rednova_ad import (ADDRESS, CHERRY, CREAM, CTA, DEEP_GOLD, GOLD, NOW_OPEN, PROM_FIT, RED_PUFF, RED_SATIN, ROOM, RUBY,  # noqa
+from rednova_ad import (ADDRESS, CHERRY, CREAM, CTA, DEEP_GOLD, GOLD, PROM_FIT, RED_PUFF, RED_SATIN, ROOM, RUBY,  # noqa
                         WINE, XMAS, badge_logo, band, bow, fit_serif, footer, holly, promise, serif, snow, wid)
 
 B, U = "BricolageGrotesque", "Unbounded"
@@ -310,8 +310,8 @@ def s14(c):
         shaped(c, n, x, 716, 322, 216, r=28, lift=0.12)
         chip_on(c, x + 14, 880, LABELS[n], 16)
     spin_badge(c, 930, 680, 210, "NEW ROOM • NOW OPEN • RED NOVA • ", CHERRY, WHITE, GOLD)
-    f = fit(B, [f"{NOW_OPEN}."], 1000, 96, 800, -3)
-    t(d, 36, 1032, f"{NOW_OPEN}.", f, INK, -3)
+    f = fit(B, [f"{ROOM}."], 1000, 96, 800, -3)
+    t(d, 36, 1032, f"{ROOM}.", f, INK, -3)
     fp = fit(B, PROM_FIT, 1000, 40, 500, -0.5)
     promise(c, 40, 1090, 46, fp, SOFT, CHERRY, -0.5)
     button(c, 40, 1172, 1000, 86, CTA, CHERRY, WHITE, face(B, 32, 700))
@@ -355,8 +355,8 @@ def s16(c):
     shaped(c, "RN_sand", 568, 540, 420, 420, "star", crop=SAND_CLOSE, rim=10, lift=0.3)
     for x, y, s_, col in [(520, 120, 30, CHERRY), (40, 900, 26, GOLD), (1030, 560, 24, (124, 58, 220))]:
         sparkle(c, x, y, s_, col)
-    f = fit(B, [f"{NOW_OPEN}."], W - 100, 92, 800, -3)
-    t(d, W / 2, 1040, f"{NOW_OPEN}.", f, INK, -3, "ms")
+    f = fit(B, [f"{ROOM}."], W - 100, 92, 800, -3)
+    t(d, W / 2, 1040, f"{ROOM}.", f, INK, -3, "ms")
     fp = fit(B, PROM_FIT, W - 170, 40, 500, -0.5)
     promise(c, W / 2, 1096, 46, fp, SOFT, CHERRY, -0.5, "ms")
     button(c, W / 2 - 330, 1180, 660, 84, CTA, CHERRY, WHITE, face(B, 31, 700))
@@ -418,7 +418,7 @@ def s19(c):
     c.alpha_composite(logo(104), (u(40), u(26)))
     S.pill_sticker(c, 870, 76, XMAS, face(B, 24, 700), CHERRY, WHITE, -3)
     d = ImageDraw.Draw(c)
-    t(d, 40, 260, NOW_OPEN, fit_serif([NOW_OPEN], 760, 128), CHERRY, -1)
+    t(d, 40, 260, ROOM, fit_serif([ROOM], 760, 128), CHERRY, -1)
     holly(c, 930, 214, 84, -10)
     hx, hy, hw, hh = 40, 300, 600, 640
     shaped(c, "RN_sand", hx, hy, hw, hh, r=30, crop=(0.47, 0.78, 1.45), lift=0.25)
@@ -447,7 +447,7 @@ def s20(c):
     d.line((u(40), u(92), u(W - 40), u(92)), fill=INK + (255,), width=u(1.5))
     c.alpha_composite(logo(92), (u(W / 2 - 46), u(16)))
     t(d, 34, 290, ROOM, serif(236, italic=False), INK, -4)
-    t(d, W - 40, 350, "is now open.", serif(76), CHERRY, -1, "rs")
+    t(d, W - 40, 350, "our newest room.", serif(76), CHERRY, -1, "rs")
     shaped(c, "RN_sand", 40, 390, 560, 520, r=0, crop=(0.47, 0.78, 1.4), lift=0)
     shaped(c, "RN_kitchen", 616, 390, 424, 252, r=0, lift=0)
     shaped(c, "RN_books", 616, 658, 424, 252, r=0, lift=0)

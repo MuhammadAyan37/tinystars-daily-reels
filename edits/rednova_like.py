@@ -39,7 +39,8 @@ ORANGE = S.ORANGE
 PHONE = "(780) 230-1599"
 EMAIL = "info@tinystars.ca"
 ADDR = "10629 West Side Drive, Grande Prairie"
-BANNER = ["A new space to shine, with", "our first-month happiness", "with Christmas offer", "guaranteed!"]
+BANNER = ["Red Nova is now open —", "A new space to shine,", "with our first-month", "happiness with Christmas",
+          "offer guaranteed!"]
 
 PHOTOS = {"RB_sand": "IMG_1286", "RB_kitchen": "IMG_1294", "RB_books": "IMG_1308", "RB_tent": "IMG_1291",
           "RB_rug": "IMG_1310", "RB_busy": "IMG_1312"}
@@ -213,7 +214,7 @@ def l30(c):
     lg = logo(150)
     c.alpha_composite(lg, (u(W / 2) - lg.width // 2, u(826)))
     d = ImageDraw.Draw(c)
-    t(d, W / 2, 1046, "Red Nova, our newest room, is now open.", fit(F, ["Red Nova, our newest room, is now open."], W - 120, 52,
+    t(d, W / 2, 1046, "Red Nova, our newest room.", fit(F, ["Red Nova, our newest room."], W - 120, 52,
                                                                     500, -0.6, opsz=72), PLUM, -0.6, "ms")
     one_line(c, 1096, (84, 70, 92), MAGENTA)
     t(d, W / 2, 1166, "Grande Prairie  ·  tinystars.ca", face(D, 19, 500), (150, 140, 150), 1, "ms")
@@ -234,7 +235,7 @@ def l31(c):
     c.alpha_composite(lg, (u(W / 2) - lg.width // 2, u(818)))
     tag(c, W / 2, 976, "Christmas offer", CHERRY, WHITE, face(D, 21, 700), h=46, turn=-2)
     d = ImageDraw.Draw(c)
-    t(d, W / 2, 1060, "Red Nova, our newest room, is now open.", fit(F, ["Red Nova, our newest room, is now open."], W - 120, 52,
+    t(d, W / 2, 1060, "Red Nova, our newest room.", fit(F, ["Red Nova, our newest room."], W - 120, 52,
                                                                     500, -0.6, opsz=72), PLUM, -0.6, "ms")
     one_line(c, 1108, (84, 70, 92), CHERRY)
     S.button(c, W / 2 - 280, 1170, 560, 74, f"Book a tour  ·  {PHONE}", CHERRY, WHITE, face(D, 24, 700))
@@ -288,7 +289,7 @@ def own_post(c, names, xmas=False):
     S.button(c, 790 - 210, 610, 420, 54, lab, PURPLE, WHITE, face(D, 22 if xmas else 25, 700))
     logo_type(c, 790, 760, ["Red Nova"], fit(UB, ["Red Nova"], 440, 96, 900), 0, stroke=5)
     stops = [(0, CHERRY), (1, MAGENTA)] if xmas else [(0, MAGENTA), (1, (250, 136, 56))]
-    offer_banner(c, 566, 796, 450, 158, BANNER, stops, banner_font(450), 33, marks=True)
+    offer_banner(c, 566, 790, 450, 170, BANNER, stops, banner_font(450), 29, marks=True)
     if xmas:
         holly(c, 1000, 806, 60, 20)
     star_buddy(c, 84 if xmas else 96, 1046 if xmas else 1022, 186, 8 if xmas else -10, hat=xmas)
@@ -321,7 +322,7 @@ def l35(c):
     c.alpha_composite(lg, (u(W / 2) - lg.width // 2, u(718)))
     for x, y, sz, col in [(400, 760, 26, SUN), (680, 790, 30, MAGENTA), (90, 900, 22, SUN), (990, 920, 24, MAGENTA)]:
         sparkle(c, x, y, sz, col)
-    logo_type(c, W / 2, 976, ["Red Nova is now open!"], fit(UB, ["Red Nova is now open!"], W - 120, 74, 900), 0,
+    logo_type(c, W / 2, 976, ["Red Nova!"], fit(UB, ["Red Nova!"], W - 120, 74, 900), 0,
               stroke=5)
     S.button(c, W / 2 - 400, 1008, 800, 90, "", PURPLE, WHITE, face(D, 24, 700))
     d = ImageDraw.Draw(c)

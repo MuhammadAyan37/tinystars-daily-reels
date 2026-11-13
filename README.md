@@ -100,7 +100,7 @@ The glass, the balloon shading and the foil are computed from the image itself (
 
 ## The picture ad: Red Nova, the new room
 
-`rednova_ad.py` makes thirteen samples announcing Red Nova, the daycare's newest room, with the owner's line "Red Nova is now open, a new space to shine, with our first-month happiness with Christmas offer guaranteed", a flat sparkle before it and a flat star after it. Every Red Nova sample (1 to 65) carries this line; it replaced the earlier refund wording on Nov 12. They use the photos of the room taken the day it opened, before any children were in it. Seven are dressed for Christmas:
+`rednova_ad.py` makes thirteen samples announcing Red Nova, the daycare's newest room, with the owner's line, word for word: "Red Nova is now open — A new space to shine, with our first-month happiness with Christmas offer guaranteed!", a flat sparkle before it and a flat star after it. Every Red Nova sample (1 to 65) carries this line; it replaced the earlier refund wording on Nov 12. They use the photos of the room taken the day it opened, before any children were in it. Seven are dressed for Christmas:
 
 - 1, ornaments: the room hung on the tree as gold-rimmed photo baubles, on a snowy night
 - 2, Christmas card: an arched window onto the room, holly in the corners, a red and gold border

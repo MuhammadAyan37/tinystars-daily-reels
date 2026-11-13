@@ -31,7 +31,7 @@ from rednova_ad import fit_serif, leaf_mask, serif  # noqa: E402
 from rednova_modern import ring_text  # noqa: E402
 
 I, C = "InterTight", "Caveat"
-TITLE = "red nova is now open"
+TITLE = "red nova"
 SUB = "a new room, just in time for christmas"
 CTA = "book a tour  ·  (780) 230-1599"
 FOOT = "tinystars.ca  ·  10629 west side drive, grande prairie"
@@ -48,8 +48,7 @@ CROP = {"RC_sand": (0.47, 0.8, 1.6), "RC_kitchen": (0.5, 0.56, 1.25), "RC_books"
 
 # ---------- words ----------
 def promise(c, cx, y, ink, hi, size=26, lead=36, anchor="m", x=None):
-    """a new space to shine, with our first-month / happiness with christmas offer guaranteed! ('christmas offer' in
-    serif, picked out,
+    """The owner's line word for word, in two lines ('Christmas offer' in serif, picked out,
     a flat sparkle before it and a flat star after it)."""
     if anchor == "m":
         A.promise(c, cx, y, lead, face(I, size, 400), "ms", ink, hi)
@@ -212,7 +211,7 @@ def m60(c):
         round_print(c, n, cx + R * np.cos(a), cy + R * np.sin(a), 176, CROP[n])
     F.line_bow(c, cx, cy + R + 22, 100, CHERRY, w=6.5)
     t(d, cx, cy - 6, "red nova", fit_serif(["red nova"], 380, 104), (60, 74, 58), -1, "ms")
-    t(d, cx, cy + 56, "is now open", serif(56), CHERRY, 0, "ms")
+    t(d, cx, cy + 56, "our newest room", serif(50), CHERRY, 0, "ms")
     t(d, cx, cy + 108, "come take a peek!", face(C, 36, 600), (110, 118, 100), 0, "ms")
     promise(c, cx, 1066, (60, 60, 52), CHERRY)
     F.flat_pill(c, cx, 1138, 560, 68, CTA, PINE, WHITE, face(I, 25, 600))
@@ -356,7 +355,7 @@ def m64(c):
         elif k == 1:
             d.rectangle((u(X), u(Y), u(X + cw), u(Y + chh)), fill=CHERRY + (255,))
             t(d, X + cw / 2, Y + 104, "red nova", serif(62), (252, 244, 236), -1, "ms")
-            t(d, X + cw / 2, Y + 156, "is now open", serif(40), (250, 214, 200), 0, "ms")
+            t(d, X + cw / 2, Y + 156, "our newest room", serif(36), (250, 214, 200), 0, "ms")
         else:
             d.rectangle((u(X), u(Y), u(X + cw), u(Y + chh)), fill=PINE + (255,))
             F.flat_star(c, X + cw / 2, Y + 82, 96, (236, 196, 100))

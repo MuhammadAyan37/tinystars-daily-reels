@@ -1,8 +1,8 @@
 """Red Nova, round five: six fully Christmas samples (36 to 41), with the offer said gently instead of outright.
 
 The owner asked for everything to be Christmas, and for the promise not to sound desperate. On Nov 12 they gave the
-line to use everywhere: "Red Nova is now open, a new space to shine, with our first-month happiness with Christmas
-offer guaranteed", with
+line to use everywhere, word for word: "Red Nova is now open — A new space to shine, with our first-month happiness
+with Christmas offer guaranteed!", with
 a sparkle before it and a star after it (drawn flat, see rednova_ad.promise).
 
   36  Pine grid: the room in a photo grid, a pine garland with lights and baubles, a deep green panel
@@ -45,7 +45,7 @@ CREAM = (250, 244, 232)
 WARM = [(255, 214, 140), (255, 96, 96), (255, 200, 92), (255, 238, 200), (140, 220, 160)]
 
 LINE = R.GUAR
-TITLE = "Red Nova is now open"
+TITLE = "Red Nova"
 SUB = "a new room, just in time for Christmas"
 CTA = "Book a tour  ·  (780) 230-1599"
 WEB = "tinystars.ca"
@@ -260,7 +260,7 @@ def x37(c):
     card(c, "RB_books", 306, 800, 420, 280, 2, border=12, r=22, rim=rim)
     S.button(c, 790 - 210, 640, 420, 52, "Christmas offer  ·  new room opened:", CREAM, CRANBERRY, face(D, 20, 700))
     logo_type(c, 790, 790, ["Red Nova"], fit("Unbounded", ["Red Nova"], 440, 96, 900), 0, stroke=5)
-    L.offer_banner(c, 566, 822, 450, 154, L.BANNER, [(0, (26, 96, 64)), (1, (14, 60, 42))], L.banner_font(450), 32,
+    L.offer_banner(c, 566, 816, 450, 166, L.BANNER, [(0, (26, 96, 64)), (1, (14, 60, 42))], L.banner_font(450), 29,
                    marks=True)
     holly(c, 1004, 832, 58, 20)
     L.star_buddy(c, 90, 1048, 180, 8, hat=True)
@@ -308,7 +308,7 @@ def x38(c):
 
 
 def x39(c):
-    """Red panel: the grid on top, a cranberry panel with a garland across its top, 'Red Nova is now open!' in logo
+    """Red panel: the grid on top, a cranberry panel with a garland across its top, 'Red Nova!' in logo
     lettering, the offer on a cream pill, the star buddy in a Santa hat and the contact row."""
     W, H = BASE
     c.paste(SNOWY + (255,), (0, 0, u(W), u(720)))
@@ -322,10 +322,10 @@ def x39(c):
     snow(c, 140, 52, y0=720, alpha=0.7, big=4)
     garland(c, (-40, 704), (540, 780), (1120, 704), seed=9, bauble_cols=[GOLD_PUFF, [(0, (255, 255, 255)),
                                                                                      (1, (210, 214, 226))]])
-    logo_type(c, W / 2, 922, ["Red Nova is now open!"], fit("Unbounded", ["Red Nova is now open!"], W - 130, 74, 900), 0,
+    logo_type(c, W / 2, 922, ["Red Nova!"], fit("Unbounded", ["Red Nova!"], W - 130, 74, 900), 0,
               stroke=5)
     S.button(c, W / 2 - 400, 960, 800, 96, "", CREAM, CREAM, face(D, 24, 700))
-    line(c, W / 2, 999, 38, face(B, 28, 700), CRANBERRY, (22, 110, 70))
+    line(c, W / 2, 999, 36, face(B, 25, 700), CRANBERRY, (22, 110, 70))
     gold_button(c, W / 2 - 300, 1086, 600, 78, "Book a tour today", face(B, 30, 700), fg=CRANBERRY)
     L.star_buddy(c, 990, 1130, 130, 8, hat=True)
     holly(c, 96, 1120, 64, -14)
