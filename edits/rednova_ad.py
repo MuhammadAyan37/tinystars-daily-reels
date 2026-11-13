@@ -855,8 +855,9 @@ def best(i):
     BEST.mkdir(exist_ok=True)
     name = f"Red Nova ad {i:02d}"
     master.save(BEST / f"{name} - full size {big[0]}x{big[1]}.png", optimize=True)
-    master.resize(SIZE, Image.LANCZOS).save(BEST / f"{name} - post {SIZE[0]}x{SIZE[1]}.jpg", quality=100,
-                                            subsampling=0)
+    post = master.resize(SIZE, Image.LANCZOS)
+    post.save(BEST / f"{name} - post {SIZE[0]}x{SIZE[1]}.jpg", quality=100, subsampling=0)
+    post.save(BEST / f"{name} - post {SIZE[0]}x{SIZE[1]}.png", optimize=True)  # the same, lossless
     print("wrote", BEST / name, flush=True)
 
 
