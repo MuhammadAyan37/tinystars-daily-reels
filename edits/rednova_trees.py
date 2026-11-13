@@ -4,7 +4,7 @@ its own colours.
 The room's six best photos are stacked one, two, three into a Christmas tree, dressed with tinsel beads, small
 baubles and warm fairy lights, a topper, and wrapped presents underneath. The photos have the soft, airy grade of the
 aesthetic set; the words are lowercase in Instrument Serif and Inter Tight; there is a fine film grain over it all.
-The offer is said gently: "a new space to shine, with our first-month happiness guarantee" (the owner's line).
+The offer is said gently: "a new space to shine, with our first-month happiness with christmas offer guaranteed".
 
   42  blush: pink tiers, pearl beads, a satin bow on top
   43  sage: soft sage tiers on cream, champagne beads, a gold star

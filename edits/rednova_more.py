@@ -48,7 +48,8 @@ CROP = {"RC_sand": (0.47, 0.8, 1.6), "RC_kitchen": (0.5, 0.56, 1.25), "RC_books"
 
 # ---------- words ----------
 def promise(c, cx, y, ink, hi, size=26, lead=36, anchor="m", x=None):
-    """a new space to shine, with our / first-month happiness guarantee! ('happiness guarantee' in serif, picked out,
+    """a new space to shine, with our first-month / happiness with christmas offer guaranteed! ('christmas offer' in
+    serif, picked out,
     a flat sparkle before it and a flat star after it)."""
     if anchor == "m":
         A.promise(c, cx, y, lead, face(I, size, 400), "ms", ink, hi)

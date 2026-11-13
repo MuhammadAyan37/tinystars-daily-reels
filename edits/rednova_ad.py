@@ -2,7 +2,7 @@
 for any time of year.
 
 Every sample says the same few things: Red Nova is now open, the promise (a new space to shine, with our first-month
-happiness guarantee), and how to book a tour. The photos are the new room itself, taken the day it opened, with
+happiness with Christmas offer guaranteed), and how to book a tour. The photos are the new room itself, taken the day it opened, with
 nobody in them; they still went through photos.py like every other photo.
 
   Christmas   1 Ornaments: the room hung on the tree as photo baubles, on a snowy night
@@ -40,13 +40,14 @@ from offer_samples import (BASE, CROPS, INK, LABELS, LIFT, OUT, PHONE, SIZE, SOF
                            sparkle, star, stick, t, tile, u)
 
 ROOM = "Red Nova"
-# The owner's line (Nov 12): "✨ Red Nova is now open — A new space to shine, with our first-month happiness guarantee! ⭐".
-# The headlines carry "Red Nova is now open"; the rest is the promise, with the sparkle and the star drawn flat.
-GUAR = ["A new space to shine, with our", "first-month happiness guarantee!"]
-HAPPY = "happiness guarantee"
+# The owner's line (Nov 12): "✨ Red Nova is now open — A new space to shine, with our first-month happiness with
+# Christmas offer guaranteed! ⭐". The headlines carry "Red Nova is now open"; the rest is the promise, word for word,
+# with the sparkle and the star drawn flat and "Christmas offer" picked out.
+GUAR = ["A new space to shine, with our first-month", "happiness with Christmas offer guaranteed!"]
+HAPPY = "Christmas offer"
 PROM = GUAR
 PROM_FIT = ["M  " + s + "  M" for s in GUAR]  # room for the sparkle and the star when sizing the type
-LEAD, BIG = "A new space to shine, with our", ["first-month happiness", "guarantee!"]
+LEAD, BIG = "A new space to shine, with our first-month", ["happiness with Christmas", "offer guaranteed!"]
 NOW_OPEN = "Red Nova is now open"
 CTA = f"Book a tour  ·  {PHONE}"
 XMAS = "Christmas offer"
@@ -124,7 +125,7 @@ def marks(c, x, y, lead, lines, f, track, anchor, col, n=None):
 
 
 def promise(c, x, y, lead, f, fill, word_fill, track=0.0, anchor="ls", lines=PROM, mark=None, hang=False):
-    """The promise in two lines with 'happiness guarantee' picked out, a sparkle before it and a star after it.
+    """The promise in two lines with 'Christmas offer' picked out, a sparkle before it and a star after it.
     Left-aligned, both lines step in so the sparkle stays inside the margin, unless it may hang into the margin."""
     d = ImageDraw.Draw(c)
     if anchor[0] == "l" and not hang:
@@ -703,9 +704,9 @@ def r3(c):
     fl = fit(B, [LEAD], W - 150, 46, 500, -0.4)
     glow_text(c, 104, 966, LEAD, fl, (246, 234, 240), -0.4)
     twinkle(c, 66, 950, 30, GOLD)
-    f = fit(B, BIG + ["guarantee!  M"], W - 96, 116, 800, -3)
-    accent(c, 46, 1076, BIG[0], "happiness", f, WHITE, GOLD, -3)
-    accent(c, 46, 1176, BIG[1], "guarantee", f, WHITE, GOLD, -3)
+    f = fit(B, [BIG[0], BIG[1] + "  M"], W - 96, 116, 800, -3)
+    accent(c, 46, 1076, BIG[0], "Christmas", f, WHITE, GOLD, -3)
+    accent(c, 46, 1176, BIG[1], "offer", f, WHITE, GOLD, -3)
     sz = f.size / O.S
     flat_star(c, 46 + wid(BIG[1], f, -3) + sz * 0.42, 1176 - sz * 0.38, sz * 0.62, GOLD)
     button(c, 52, 1222, 640, 88, CTA, WHITE, RUBY, face(B, 31, 700))
@@ -721,7 +722,7 @@ def r3(c):
 
 
 def r4(c):
-    """Scrapbook: taped polaroids of the room with handwritten captions, 'happiness' circled in pen, a sticky note.
+    """Scrapbook: taped polaroids of the room with handwritten captions, 'Christmas' circled in pen, a sticky note.
     Caveat, Bricolage."""
     W, H = BASE
     B, C = "BricolageGrotesque", "Caveat"
@@ -740,16 +741,16 @@ def r4(c):
     doodle_star(c, 72, 640, 46, S.SUN, seed=1)
     doodle_star(c, 1020, 660, 38, CHERRY, seed=2)
     heart(c, 400, 640, 26, CHERRY)
-    cap = f"{NOW_OPEN}! a new space to shine, with our..."
+    cap = f"{NOW_OPEN}! a new space to shine, with our first-month..."
     twinkle(c, 74, 724, 34, S.SUN)
     t(d, 108, 744, cap, fit(C, [cap], W - 160, 60, 700), PEN, 0)
-    BIG2 = ["first-month", "happiness  guarantee!"]
-    f = fit(B, BIG2 + ["happiness  guarantee!  M"], W - 100, 112, 800, -3)
+    BIG2 = ["happiness with  Christmas", "offer  guaranteed!"]
+    f = fit(B, [BIG2[0], BIG2[1] + "  M"], W - 100, 112, 800, -3)
     t(d, 50, 862, BIG2[0], f, RUBY, -3)
-    wr = wid("happiness", f, -3)
+    pre, wr = wid("happiness with  ", f, -3), wid("Christmas", f, -3)
     sz = f.size / O.S
     t(d, 50, 966, BIG2[1], f, RUBY, -3)
-    loop_around(c, 50 + 12, 966 - sz * 0.7, 50 + wr - 16, 966 + sz * 0.02, CHERRY, 5.5)
+    loop_around(c, 50 + pre + 12, 862 - sz * 0.7, 50 + pre + wr - 16, 862 + sz * 0.02, CHERRY, 5.5)
     doodle_star(c, 50 + wid(BIG2[1], f, -3) + sz * 0.5, 966 - sz * 0.4, sz * 0.36, S.SUN, seed=4)
     ramp_button(c, 56, 1030, 560, 90, CTA, [(0, (236, 50, 74)), (1, (150, 10, 40))], WHITE, face(B, 30, 650))
     note = Image.new("RGBA", (u(290), u(250)), (255, 234, 128, 255))

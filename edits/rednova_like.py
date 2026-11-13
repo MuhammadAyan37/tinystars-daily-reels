@@ -39,7 +39,7 @@ ORANGE = S.ORANGE
 PHONE = "(780) 230-1599"
 EMAIL = "info@tinystars.ca"
 ADDR = "10629 West Side Drive, Grande Prairie"
-PROM1 = "A new space to shine, with our first-month happiness guarantee!"
+BANNER = ["A new space to shine, with", "our first-month happiness", "with Christmas offer", "guaranteed!"]
 
 PHOTOS = {"RB_sand": "IMG_1286", "RB_kitchen": "IMG_1294", "RB_books": "IMG_1308", "RB_tent": "IMG_1291",
           "RB_rug": "IMG_1310", "RB_busy": "IMG_1312"}
@@ -173,10 +173,9 @@ def star_buddy(c, cx, cy, size, turn=-8, hat=False):
 
 
 def one_line(c, y, ink, hi, size=27):
-    """The promise on one line, 'happiness guarantee' picked out, a sparkle before it and a star after it."""
-    f = fit(D, ["M  " + PROM1 + "  M"], BASE[0] - 110, size, 600)
-    S.accent(c, BASE[0] / 2, y, PROM1, R.HAPPY, f, ink, hi, 0, "ms")
-    R.marks(c, BASE[0] / 2, y, 0, [PROM1], f, 0, "ms", hi)
+    """The promise in two lines, 'Christmas offer' picked out, a sparkle before it and a star after it."""
+    f = fit(D, R.PROM_FIT, BASE[0] - 110, size, 600)
+    R.promise(c, BASE[0] / 2, y, 34, f, ink, hi, 0, "ms")
 
 
 def offer_banner(c, x, y, w, h, lines, stops, f, lead, marks=False):
@@ -191,6 +190,11 @@ def offer_banner(c, x, y, w, h, lines, stops, f, lead, marks=False):
         t(d, x + w / 2, y0 + k * lead, s, f, WHITE, -0.3, "ms")
     if marks:
         R.marks(c, x + w / 2, y0, lead, lines, f, -0.3, "ms", (255, 226, 130))
+
+
+def banner_font(w):
+    """Bold type for the four-line offer banner, as big as fits with the sparkle and the star."""
+    return fit(B, ["M  " + s + "  M" for s in BANNER], w - 30, 28, 750)
 
 
 def tag(c, cx, cy, s, bg, fg, f, h=52, turn=0):
@@ -211,9 +215,9 @@ def l30(c):
     d = ImageDraw.Draw(c)
     t(d, W / 2, 1046, "Red Nova, our newest room, is now open.", fit(F, ["Red Nova, our newest room, is now open."], W - 120, 52,
                                                                     500, -0.6, opsz=72), PLUM, -0.6, "ms")
-    one_line(c, 1100, (84, 70, 92), MAGENTA)
-    t(d, W / 2, 1140, "Grande Prairie  ·  tinystars.ca", face(D, 19, 500), (150, 140, 150), 1, "ms")
-    S.button(c, W / 2 - 280, 1176, 560, 74, f"Book a tour  ·  {PHONE}", PURPLE, WHITE, face(D, 24, 700))
+    one_line(c, 1096, (84, 70, 92), MAGENTA)
+    t(d, W / 2, 1166, "Grande Prairie  ·  tinystars.ca", face(D, 19, 500), (150, 140, 150), 1, "ms")
+    S.button(c, W / 2 - 280, 1194, 560, 74, f"Book a tour  ·  {PHONE}", PURPLE, WHITE, face(D, 24, 700))
 
 
 def l31(c):
@@ -232,8 +236,8 @@ def l31(c):
     d = ImageDraw.Draw(c)
     t(d, W / 2, 1060, "Red Nova, our newest room, is now open.", fit(F, ["Red Nova, our newest room, is now open."], W - 120, 52,
                                                                     500, -0.6, opsz=72), PLUM, -0.6, "ms")
-    one_line(c, 1112, (84, 70, 92), CHERRY)
-    S.button(c, W / 2 - 280, 1152, 560, 74, f"Book a tour  ·  {PHONE}", CHERRY, WHITE, face(D, 24, 700))
+    one_line(c, 1108, (84, 70, 92), CHERRY)
+    S.button(c, W / 2 - 280, 1170, 560, 74, f"Book a tour  ·  {PHONE}", CHERRY, WHITE, face(D, 24, 700))
     t(d, W / 2, 1270, "Grande Prairie  ·  tinystars.ca", face(D, 19, 500), (150, 140, 150), 1, "ms")
     for x, y, s_ in [(180, 1000, 18), (900, 960, 22), (300, 1250, 14)]:
         sparkle(c, x, y, s_, (226, 180, 90))
@@ -258,8 +262,8 @@ def l32(c):
     t(d, W - 60, 870, "Grande Prairie", face(D, 19, 500), SOFT, 0.5, "rs")
     t(d, W / 2, 1042, "Red Nova", serif(150, italic=False), PLUM, -2, "ms")
     t(d, W / 2, 1090, "our newest room is open", serif(44), (130, 100, 140), 0, "ms")
-    one_line(c, 1146, (84, 70, 92), MAGENTA)
-    S.button(c, W / 2 - 280, 1184, 560, 74, f"Book a tour  ·  {PHONE}", PURPLE, WHITE, face(D, 24, 700))
+    one_line(c, 1142, (84, 70, 92), MAGENTA)
+    S.button(c, W / 2 - 280, 1204, 560, 74, f"Book a tour  ·  {PHONE}", PURPLE, WHITE, face(D, 24, 700))
     t(d, W / 2, 1306, "tinystars.ca", face(D, 19, 600), (150, 140, 150), 1, "ms")
 
 
@@ -284,8 +288,7 @@ def own_post(c, names, xmas=False):
     S.button(c, 790 - 210, 610, 420, 54, lab, PURPLE, WHITE, face(D, 22 if xmas else 25, 700))
     logo_type(c, 790, 760, ["Red Nova"], fit(UB, ["Red Nova"], 440, 96, 900), 0, stroke=5)
     stops = [(0, CHERRY), (1, MAGENTA)] if xmas else [(0, MAGENTA), (1, (250, 136, 56))]
-    offer_banner(c, 566, 800, 450, 150, ["A new space to shine,", "with our first-month", "happiness guarantee!"],
-                 stops, face(B, 30, 750), 40, marks=True)
+    offer_banner(c, 566, 796, 450, 158, BANNER, stops, banner_font(450), 33, marks=True)
     if xmas:
         holly(c, 1000, 806, 60, 20)
     star_buddy(c, 84 if xmas else 96, 1046 if xmas else 1022, 186, 8 if xmas else -10, hat=xmas)

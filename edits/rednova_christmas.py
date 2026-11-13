@@ -1,7 +1,8 @@
 """Red Nova, round five: six fully Christmas samples (36 to 41), with the offer said gently instead of outright.
 
 The owner asked for everything to be Christmas, and for the promise not to sound desperate. On Nov 12 they gave the
-line to use everywhere: "Red Nova is now open, a new space to shine, with our first-month happiness guarantee", with
+line to use everywhere: "Red Nova is now open, a new space to shine, with our first-month happiness with Christmas
+offer guaranteed", with
 a sparkle before it and a star after it (drawn flat, see rednova_ad.promise).
 
   36  Pine grid: the room in a photo grid, a pine garland with lights and baubles, a deep green panel
@@ -53,7 +54,7 @@ ADDR = "10629 West Side Drive, Grande Prairie"
 
 # ---------- words ----------
 def line(c, x, y, lead, f, ink, hi, anchor="ms"):
-    """The promise in two lines, 'happiness guarantee' picked out, a sparkle before it and a star after it."""
+    """The promise in two lines, 'Christmas offer' picked out, a sparkle before it and a star after it."""
     R.promise(c, x, y, lead, f, ink, hi, -0.2, anchor)
 
 
@@ -259,8 +260,8 @@ def x37(c):
     card(c, "RB_books", 306, 800, 420, 280, 2, border=12, r=22, rim=rim)
     S.button(c, 790 - 210, 640, 420, 52, "Christmas offer  ·  new room opened:", CREAM, CRANBERRY, face(D, 20, 700))
     logo_type(c, 790, 790, ["Red Nova"], fit("Unbounded", ["Red Nova"], 440, 96, 900), 0, stroke=5)
-    L.offer_banner(c, 566, 826, 450, 140, ["A new space to shine,", "with our first-month", "happiness guarantee!"],
-                   [(0, (26, 96, 64)), (1, (14, 60, 42))], face(B, 29, 750), 38, marks=True)
+    L.offer_banner(c, 566, 822, 450, 154, L.BANNER, [(0, (26, 96, 64)), (1, (14, 60, 42))], L.banner_font(450), 32,
+                   marks=True)
     holly(c, 1004, 832, 58, 20)
     L.star_buddy(c, 90, 1048, 180, 8, hat=True)
     gift(c, 860, 1020, 120, 96, [(0, (60, 140, 96)), (1, (22, 86, 58))], GOLD_RAMP, GOLD_PUFF)
