@@ -23,6 +23,8 @@ Usage: python -I edits/rednova_ad.py [1 2 3 ...]   (all thirteen when none is na
   -> exports/rednova_ad_<n>.jpg          1440 x 1800 (4:5)
   -> exports/rednova_ads_christmas.jpg   samples 1 to 7 side by side
   -> exports/rednova_ads_anytime.jpg     samples 8 to 13
+       python -I edits/rednova_ad.py --best 7   (a chosen sample at full quality)
+  -> exports/Red Nova ad best quality/   a 2880 x 3600 PNG master and the 1440 x 1800 feed upload, JPG quality 100
 """
 import sys
 from pathlib import Path
@@ -47,6 +49,9 @@ GUAR = ["Red Nova is now open — A new space to shine, with our", "first-month 
 HAPPY = "Christmas offer"
 PROM = GUAR
 PROM_FIT = ["M  " + s + "  M" for s in GUAR]  # room for the sparkle and the star when sizing the type
+# Nov 13: the owner chose sample 7 and reworded its line: "...with our first-month happiness guaranteed with Christmas
+# offer!" (same words, "guaranteed" moved up), so 'Christmas offer' and the star now close the line.
+GUAR_7 = ["Red Nova is now open — A new space to shine, with our", "first-month happiness guaranteed with Christmas offer!"]
 LEAD = ["Red Nova is now open — A new space to shine,", "with our first-month"]
 BIG = ["happiness with Christmas", "offer guaranteed!"]
 CTA = f"Book a tour  ·  {PHONE}"
@@ -630,8 +635,8 @@ def x7(c):
     x, y, w, h = cell(0, 3, 3)
     panel(c, x, y, w, h, 26, CREAM, lift=0)
     t(d, W / 2, y + 62, f"{XMAS.upper()}  ·  FOR NEW FAMILIES", face(B, 21, 800), CHERRY, 3, "ms")
-    f = fit(B, PROM_FIT, w - 70, 54, 800, -1.2)
-    promise(c, W / 2, y + 132, 62, f, INK, CHERRY, -1.2, "ms")
+    f = fit(B, ["M  " + s + "  M" for s in GUAR_7], w - 70, 54, 800, -1.2)
+    promise(c, W / 2, y + 132, 62, f, INK, CHERRY, -1.2, "ms", lines=GUAR_7)
     button(c, W / 2 - 330, 1124, 660, 82, CTA, WHITE, RUBY, face(B, 30, 700))
     footer(c, 1268, face(B, 21, 500), (246, 214, 222), items=(WEB, ADDRESS))
 
@@ -838,7 +843,32 @@ def render(i):
     return out
 
 
+BEST = OUT / "Red Nova ad best quality"
+
+
+def best(i):
+    """One chosen sample at full quality: drawn at twice the feed size (2880 x 3600, itself supersampled 2x) and kept as
+    a lossless PNG master, then scaled down from that for Meta's largest 4:5 feed upload, 1440 x 1800, at JPG quality
+    100 with full colour detail."""
+    big = (SIZE[0] * 2, SIZE[1] * 2)
+    O.S = big[0] / BASE[0] * SS
+    c = Image.new("RGBA", (u(BASE[0]), u(BASE[1])), WHITE + (255,))
+    SAMPLES[i](c)
+    master = c.convert("RGB").resize(big, Image.LANCZOS)
+    del c
+    BEST.mkdir(exist_ok=True)
+    name = f"Red Nova ad {i:02d}"
+    master.save(BEST / f"{name} - full size {big[0]}x{big[1]}.png", optimize=True)
+    master.resize(SIZE, Image.LANCZOS).save(BEST / f"{name} - post {SIZE[0]}x{SIZE[1]}.jpg", quality=100,
+                                            subsampling=0)
+    print("wrote", BEST / name, flush=True)
+
+
 def main():
+    if "--best" in sys.argv:
+        for i in [int(a) for a in sys.argv[1:] if a.isdigit()]:
+            best(i)
+        return
     picks = [int(a) for a in sys.argv[1:] if a.isdigit()] or list(SAMPLES)
     outs = {}
     for i in picks:

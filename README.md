@@ -108,7 +108,7 @@ The glass, the balloon shading and the foil are computed from the image itself (
 - 4, garland: polaroids hung on a string of fairy lights
 - 5, snow globe: the room inside a snow globe on a gold base
 - 6, candy cane: puffy "NOW OPEN" letters on candy stripes, photo stickers, a holographic star
-- 7, advent calendar: the room behind numbered doors
+- 7, advent calendar: the room behind numbered doors. This is the one the owner chose (Nov 13). Its line is reworded to "...with our first-month happiness guaranteed with Christmas offer!", and `--best 7` draws it at full quality in `exports/Red Nova ad best quality/`: a 2880 x 3600 PNG master and the 1440 x 1800 feed upload at JPG quality 100
 
 Six work at any time of year:
 
