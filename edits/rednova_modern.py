@@ -30,7 +30,7 @@ import rednova_ad as R  # noqa: E402
 from offer_modern import aurora, glow_text, heart, inflate, liquid_pill, shade  # noqa: E402
 from offer_samples import (BASE, CROPS, INK, LABELS, LIFT, OUT, SIZE, SOFT, SS, WEB, WHITE, accent, button,  # noqa: E402
                            die_cut, face, fit, glow, logo, panel, picture, put, ramp, sparkle, star, stick, t, u)
-from rednova_ad import (ADDRESS, CHERRY, CREAM, CTA, DEEP_GOLD, GOLD, PROM, RED_PUFF, RED_SATIN, ROOM, RUBY,  # noqa
+from rednova_ad import (ADDRESS, CHERRY, CREAM, CTA, DEEP_GOLD, GOLD, NOW_OPEN, PROM_FIT, RED_PUFF, RED_SATIN, ROOM, RUBY,  # noqa
                         WINE, XMAS, badge_logo, band, bow, fit_serif, footer, holly, promise, serif, snow, wid)
 
 B, U = "BricolageGrotesque", "Unbounded"
@@ -310,11 +310,10 @@ def s14(c):
         shaped(c, n, x, 716, 322, 216, r=28, lift=0.12)
         chip_on(c, x + 14, 880, LABELS[n], 16)
     spin_badge(c, 930, 680, 210, "NEW ROOM • NOW OPEN • RED NOVA • ", CHERRY, WHITE, GOLD)
-    f = fit(B, [f"{ROOM} is open."], 1000, 96, 800, -3)
-    t(d, 36, 1032, f"{ROOM} is open.", f, INK, -3)
-    fp = fit(B, PROM, 1000, 40, 500, -0.5)
-    t(d, 40, 1090, PROM[0], fp, SOFT, -0.5)
-    accent(c, 40, 1136, PROM[1], "refund", fp, SOFT, CHERRY, -0.5)
+    f = fit(B, [f"{NOW_OPEN}."], 1000, 96, 800, -3)
+    t(d, 36, 1032, f"{NOW_OPEN}.", f, INK, -3)
+    fp = fit(B, PROM_FIT, 1000, 40, 500, -0.5)
+    promise(c, 40, 1090, 46, fp, SOFT, CHERRY, -0.5)
     button(c, 40, 1172, 1000, 86, CTA, CHERRY, WHITE, face(B, 32, 700))
     footer(c, 1306, face(B, 20, 500), SOFT, items=(WEB, ADDRESS))
 
@@ -335,7 +334,7 @@ def s15(c):
     for i, n in enumerate(["RN_kitchen", "RN_books", "RN_tent", "RN_rug"]):
         x, y = 574 + (i % 2) * 240, 412 + (i // 2) * 307
         shaped(c, n, x, y, 226, 293, r=26, lift=0.3)
-    f2 = fit(B, PROM, W - 120, 46, 750, -1)
+    f2 = fit(B, PROM_FIT, W - 120, 46, 750, -1)
     promise(c, W / 2, 1084, 56, f2, WHITE, GOLD, -1, "ms")
     button(c, W / 2 - 340, 1170, 680, 86, CTA, WHITE, RUBY, face(B, 32, 700))
     footer(c, 1300, face(B, 20, 500), (255, 214, 220), items=(WEB, ADDRESS))
@@ -356,11 +355,10 @@ def s16(c):
     shaped(c, "RN_sand", 568, 540, 420, 420, "star", crop=SAND_CLOSE, rim=10, lift=0.3)
     for x, y, s_, col in [(520, 120, 30, CHERRY), (40, 900, 26, GOLD), (1030, 560, 24, (124, 58, 220))]:
         sparkle(c, x, y, s_, col)
-    f = fit(B, [f"{ROOM} is open."], W - 100, 92, 800, -3)
-    t(d, W / 2, 1040, f"{ROOM} is open.", f, INK, -3, "ms")
-    fp = fit(B, PROM, W - 170, 40, 500, -0.5)
-    t(d, W / 2, 1096, PROM[0], fp, SOFT, -0.5, "ms")
-    accent(c, W / 2, 1142, PROM[1], "refund", fp, SOFT, CHERRY, -0.5, "ms")
+    f = fit(B, [f"{NOW_OPEN}."], W - 100, 92, 800, -3)
+    t(d, W / 2, 1040, f"{NOW_OPEN}.", f, INK, -3, "ms")
+    fp = fit(B, PROM_FIT, W - 170, 40, 500, -0.5)
+    promise(c, W / 2, 1096, 46, fp, SOFT, CHERRY, -0.5, "ms")
     button(c, W / 2 - 330, 1180, 660, 84, CTA, CHERRY, WHITE, face(B, 31, 700))
     footer(c, 1310, face(B, 20, 500), SOFT, items=(WEB, ADDRESS))
 
@@ -384,7 +382,7 @@ def s17(c):
     shaped(c, "RN_rug", 547, 700, 493, 250, r=28, lift=0.16)
     chip_on(c, 56, 896, LABELS["RN_tent"])
     chip_on(c, 563, 896, LABELS["RN_rug"])
-    fp = fit(B, PROM, W - 140, 48, 760, -1)
+    fp = fit(B, PROM_FIT, W - 140, 48, 760, -1)
     promise(c, W / 2, 1030, 58, fp, INK, CHERRY, -1, "ms")
     button(c, W / 2 - 340, 1118, 680, 86, CTA, CHERRY, WHITE, face(B, 32, 700))
     footer(c, 1300, face(B, 20, 500), SOFT, items=(WEB, ADDRESS))
@@ -404,7 +402,7 @@ def s18(c):
     d = ImageDraw.Draw(c)
     glow_text(c, W / 2, 990, f"Swipe inside {ROOM}, our newest room", face(B, 40, 650), WHITE, -0.4, "ms",
               col=(30, 6, 30), a=0.5)
-    fp = fit(B, PROM, W - 140, 48, 760, -1)
+    fp = fit(B, PROM_FIT, W - 140, 48, 760, -1)
     promise(c, W / 2, 1060, 58, fp, WHITE, (255, 214, 120), -1, "ms")
     button(c, W / 2 - 340, 1140, 680, 86, CTA, WHITE, RUBY, face(B, 32, 700))
     footer(c, 1296, face(B, 20, 500), (250, 226, 236), items=(WEB, ADDRESS))
@@ -420,7 +418,7 @@ def s19(c):
     c.alpha_composite(logo(104), (u(40), u(26)))
     S.pill_sticker(c, 870, 76, XMAS, face(B, 24, 700), CHERRY, WHITE, -3)
     d = ImageDraw.Draw(c)
-    t(d, 40, 260, f"{ROOM} is open", fit_serif([f"{ROOM} is open"], 760, 128), CHERRY, -1)
+    t(d, 40, 260, NOW_OPEN, fit_serif([NOW_OPEN], 760, 128), CHERRY, -1)
     holly(c, 930, 214, 84, -10)
     hx, hy, hw, hh = 40, 300, 600, 640
     shaped(c, "RN_sand", hx, hy, hw, hh, r=30, crop=(0.47, 0.78, 1.45), lift=0.25)
@@ -431,7 +429,7 @@ def s19(c):
         y = hy + i * (204 + 14)
         shaped(c, n, 654, y, 386, 204, r=26, lift=0.14)
         chip_on(c, 668, y + 204 - 50, LABELS[n], 16)
-    fp = fit(B, PROM, W - 120, 48, 760, -1)
+    fp = fit(B, PROM_FIT, W - 120, 48, 760, -1)
     promise(c, 40, 1020, 58, fp, INK, CHERRY, -1)
     button(c, 40, 1110, 1000, 86, CTA, CHERRY, WHITE, face(B, 32, 700))
     footer(c, 1300, face(B, 20, 500), SOFT, items=(WEB, ADDRESS))
@@ -465,9 +463,8 @@ def s20(c):
     d.line((u(40), u(966), u(W - 40), u(966)), fill=INK + (255,), width=u(1))
     F = "Fraunces"
     t(d, 40, 1012, f"{XMAS.upper()}  ·  FOR NEW FAMILIES", face(I, 18, 800), CHERRY, 3)
-    fp = fit(F, PROM, W - 80, 50, 480, -0.8, opsz=72)
-    t(d, 40, 1074, PROM[0], fp, INK, -0.8)
-    accent(c, 40, 1132, PROM[1], "refund", fp, INK, CHERRY, -0.8)
+    fp = fit(F, PROM_FIT, W - 80, 50, 480, -0.8, opsz=72)
+    promise(c, 40, 1074, 58, fp, INK, CHERRY, -0.8)
     button(c, 40, 1176, 620, 82, CTA, INK, WHITE, face(I, 28, 700))
     t(d, W - 40, 1210, WEB, face(I, 22, 700), INK, 0, "rs")
     t(d, W - 40, 1244, "Grande Prairie", face(I, 20, 500), SOFT, 0, "rs")
@@ -489,7 +486,7 @@ def s21(c):
     t(d, W / 2, 360, ROOM, fit_serif([ROOM], 820, 150), WHITE, -1, "ms")
     film(c, ["RN_books", "RN_sand", "RN_kitchen", "RN_tent"], W / 2, 630, 330, 248, 6)
     t(d, W / 2, 920, "our newest room is open", serif(56), (255, 226, 230), 0, "ms")
-    fp = fit(B, PROM, W - 140, 48, 760, -1)
+    fp = fit(B, PROM_FIT, W - 140, 48, 760, -1)
     promise(c, W / 2, 1010, 58, fp, WHITE, GOLD, -1, "ms")
     button(c, W / 2 - 340, 1100, 680, 86, CTA, GOLD, WINE, face(B, 32, 750))
     footer(c, 1290, face(B, 20, 500), (250, 214, 222), items=(WEB, ADDRESS))

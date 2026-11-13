@@ -26,6 +26,7 @@ from PIL import Image, ImageChops, ImageDraw, ImageFilter
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import offer as O  # noqa: E402
 import offer_samples as S  # noqa: E402
+import rednova_ad as R  # noqa: E402
 import rednova_modern as M  # noqa: E402
 from offer_modern import aurora, glow_text, heart, inflate, liquid_pill, pen, shade  # noqa: E402
 from offer_samples import (BASE, CROPS, LABELS, LIFT, OUT, SIZE, SS, WHITE, face, fit, glow, logo, panel,  # noqa: E402
@@ -47,8 +48,10 @@ BUTTER = (250, 240, 212)
 BLUSH = (250, 230, 228)
 CHAMPAGNE = (214, 182, 120)
 
-TITLE = "red nova is open"
-PROM = ["love your first month, or we'll", "refund your parent portion."]
+TITLE = "red nova is now open"
+# the owner's line, in this set's lowercase: a new space to shine, with our first-month happiness guarantee
+PROM = ["a new space to shine, with our", "first-month happiness guarantee!"]
+HAPPY = "happiness guarantee"
 CTA = "book a tour  ·  (780) 230-1599"
 WEB = "tinystars.ca"
 ADDR = "10629 west side drive, grande prairie"
@@ -140,15 +143,24 @@ def pill(c, x, y, w, h, s, bg, fg, f, anchor="l"):
 
 
 def promise(c, x, y, lead, f, anchor="ls", ink=COCOA, word=ROSEWOOD):
-    """The promise in a light sans, with 'refund' in rosewood italic serif."""
+    """The promise in a light sans, with 'happiness guarantee' in rosewood italic serif, a flat sparkle before it
+    and a flat star after it (left-aligned, the sparkle hangs in the margin)."""
     d = ImageDraw.Draw(c)
     t(d, x, y, PROM[0], f, ink, 0, anchor)
-    a, b = "refund", PROM[1][len("refund"):]  # b keeps its leading space
+    i = PROM[1].index(HAPPY)
+    a, b, e = PROM[1][:i], HAPPY, PROM[1][i + len(HAPPY):]
     fs = serif(f.size / O.S * 1.18)
-    wa, wb = wid(a, fs), wid(b, f)
-    x0 = x - (wa + wb) / 2 if anchor[0] == "m" else x
-    t(d, x0, y + lead, a, fs, word)
-    t(d, x0 + wa, y + lead, b, f, ink)
+    wa, wb, we = wid(a, f), wid(b, fs), wid(e, f)
+    x0 = x - (wa + wb + we) / 2 if anchor[0] == "m" else x
+    t(d, x0, y + lead, a, f, ink)
+    t(d, x0 + wa, y + lead, b, fs, word)
+    t(d, x0 + wa + wb, y + lead, e, f, ink)
+    sz = f.size / O.S
+    m = sz * 0.62
+    w0 = wid(PROM[0], f)
+    xs = (x - w0 / 2 if anchor[0] == "m" else x) - sz * 0.34 - m / 2
+    R.twinkle(c, xs, y - sz * 0.36, m, word)
+    R.flat_star(c, x0 + wa + wb + we + sz * 0.3 + m / 2, y + lead - sz * 0.36, m * 1.05, word)
 
 
 def footer(c, y, ink=TAUPE, x=None, email=False):
@@ -409,8 +421,10 @@ def a28(c):
         t(d, 664, y, s_, face(I, 26, 400), COCOA)
     d.line((u(616), u(790), u(988), u(790)), fill=(226, 214, 200, 255), width=u(1.5))
     fs = serif(36)
-    for k, s_ in enumerate(["love your first month,", "or we'll refund your", "parent portion."]):
-        t(d, 616, 846 + k * 44, s_, fs, ROSEWOOD if k == 1 else COCOA)
+    for k, s_ in enumerate(["a new space to shine,", "with our first-month", "happiness guarantee!"]):
+        t(d, 616, 846 + k * 44, s_, fs, ROSEWOOD if k == 2 else COCOA)
+    R.twinkle(c, 616 + wid("a new space to shine,", fs) + 22, 846 - 13, 22, ROSEWOOD)
+    R.flat_star(c, 616 + wid("happiness guarantee!", fs) + 20, 934 - 13, 23, ROSEWOOD)
     pill(c, 56, 1080, 968, 82, CTA, COCOA, LINEN, face(I, 28, 600))
     footer(c, 1240)
 

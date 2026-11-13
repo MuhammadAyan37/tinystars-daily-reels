@@ -116,18 +116,9 @@ def tree10(c, i):
     F.present(c, 640, 958, 92, 64, b2, r2)
     accent = p["acc"] if not dark else p["gold"]
     t(d, W / 2, 1112, F.TITLE, fit_serif([F.TITLE], 860, 92), accent, -1, "ms")
-    f = face(I, 26, 400)
-    t(d, W / 2, 1158, F.LINE[0], f, p["ink"], 0, "ms")
-    a = "worry-free"
-    pre = F.LINE[1][:F.LINE[1].index(a)]
-    fs = serif(31)
-    wp, wa, wb = A.wid(pre, f), A.wid(a, fs), A.wid(".", f)
-    x0 = W / 2 - (wp + wa + wb) / 2
-    t(d, x0, 1194, pre, f, p["ink"])
-    t(d, x0 + wp, 1194, a, fs, accent)
-    t(d, x0 + wp + wa, 1194, ".", f, p["ink"])
+    A.promise(c, W / 2, 1158, 36, face(I, 26, 400), "ms", p["ink"], accent)
     F.flat_pill(c, W / 2, 1220, 560, 68, F.CTA, accent, p["cta_fg"], face(I, 25, 600))
-    t(d, W / 2, 1322, f"{F.ASK}   ·   tinystars.ca", face(I, 19, 500), p["soft"], 0.4, "ms")
+    t(d, W / 2, 1322, f"tinystars.ca   ·   {A.ADDR}", face(I, 19, 500), p["soft"], 0.4, "ms")
 
 
 SAMPLES = {i: (lambda c, i=i: tree10(c, i)) for i in range(54, 60)}

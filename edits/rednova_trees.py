@@ -4,7 +4,7 @@ its own colours.
 The room's six best photos are stacked one, two, three into a Christmas tree, dressed with tinsel beads, small
 baubles and warm fairy lights, a topper, and wrapped presents underneath. The photos have the soft, airy grade of the
 aesthetic set; the words are lowercase in Instrument Serif and Inter Tight; there is a fine film grain over it all.
-The offer is said gently: "we're so sure you'll love it, your first month is worry-free".
+The offer is said gently: "a new space to shine, with our first-month happiness guarantee" (the owner's line).
 
   42  blush: pink tiers, pearl beads, a satin bow on top
   43  sage: soft sage tiers on cream, champagne beads, a gold star
@@ -34,10 +34,8 @@ from offer_samples import BASE, CROPS, INK, LIFT, OUT, SIZE, SS, WHITE, face, gl
 from rednova_ad import ball, bez, fit_serif, lights, serif, snow  # noqa: E402
 
 I = "InterTight"
-TITLE = "red nova is open"
+TITLE = "red nova is now open"
 SUB = "a new room, just in time for christmas"
-LINE = ["we're so sure you'll love it,", "your first month is worry-free."]
-ASK = "ask us about our first-month promise"
 CTA = "book a tour  ·  (780) 230-1599"
 FOOT = "tinystars.ca  ·  10629 west side drive, grande prairie"
 
@@ -229,18 +227,9 @@ def photo_tree(c, i):
     gift(c, 330, 912, 130, 92, g1, r1, b1)
     gift(c, 636, 924, 104, 80, g2, r2, b2)
     t(d, W / 2, 1100, TITLE, fit_serif([TITLE], 860, 96), p["title"], -1, "ms")
-    f = face(I, 27, 400)
-    t(d, W / 2, 1150, LINE[0], f, p["ink"], 0, "ms")
-    a, b = "worry-free", "."
-    pre = LINE[1][:LINE[1].index(a)]
-    fs = serif(32)
-    wp, wa, wb = A.wid(pre, f), A.wid(a, fs), A.wid(b, f)
-    x0 = W / 2 - (wp + wa + wb) / 2
-    t(d, x0, 1188, pre, f, p["ink"])
-    t(d, x0 + wp, 1188, a, fs, p["title"])
-    t(d, x0 + wp + wa, 1188, b, f, p["ink"])
+    A.promise(c, W / 2, 1150, 38, face(I, 27, 400), "ms", p["ink"], p["title"])
     A.pill(c, W / 2, 1214, 560, 72, CTA, p["cta"], p["cta_fg"], face(I, 25, 600), "m")
-    t(d, W / 2, 1320, f"{ASK}   ·   tinystars.ca", face(I, 19, 500), p["soft"], 0.4, "ms")
+    t(d, W / 2, 1320, f"tinystars.ca   ·   {A.ADDR}", face(I, 19, 500), p["soft"], 0.4, "ms")
 
 
 SAMPLES = {i: (lambda c, i=i: photo_tree(c, i)) for i in PAL}

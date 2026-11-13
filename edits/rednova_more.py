@@ -31,10 +31,9 @@ from rednova_ad import fit_serif, leaf_mask, serif  # noqa: E402
 from rednova_modern import ring_text  # noqa: E402
 
 I, C = "InterTight", "Caveat"
-TITLE = "red nova is open"
+TITLE = "red nova is now open"
 SUB = "a new room, just in time for christmas"
 CTA = "book a tour  ·  (780) 230-1599"
-ASK = "ask us about our first-month promise"
 FOOT = "tinystars.ca  ·  10629 west side drive, grande prairie"
 
 CHERRY = (176, 34, 52)
@@ -49,23 +48,15 @@ CROP = {"RC_sand": (0.47, 0.8, 1.6), "RC_kitchen": (0.5, 0.56, 1.25), "RC_books"
 
 # ---------- words ----------
 def promise(c, cx, y, ink, hi, size=26, lead=36, anchor="m", x=None):
-    """we're so sure you'll love it, / your first month is worry-free. ('worry-free' in serif, picked out)."""
-    d = ImageDraw.Draw(c)
-    f, fs = face(I, size, 400), serif(size * 1.2)
-    l1, l2 = "we're so sure you'll love it,", "your first month is "
+    """a new space to shine, with our / first-month happiness guarantee! ('happiness guarantee' in serif, picked out,
+    a flat sparkle before it and a flat star after it)."""
     if anchor == "m":
-        t(d, cx, y, l1, f, ink, 0, "ms")
-        w = A.wid(l2, f) + A.wid("worry-free", fs) + A.wid(".", f)
-        x0 = cx - w / 2
+        A.promise(c, cx, y, lead, face(I, size, 400), "ms", ink, hi)
     else:
-        t(d, x, y, l1, f, ink)
-        x0 = x
-    t(d, x0, y + lead, l2, f, ink)
-    t(d, x0 + A.wid(l2, f), y + lead, "worry-free", fs, hi)
-    t(d, x0 + A.wid(l2, f) + A.wid("worry-free", fs), y + lead, ".", f, ink)
+        A.promise(c, x, y, lead, face(I, size, 400), "ls", ink, hi)
 
 
-def small(c, y, ink, s=f"{ASK}   ·   tinystars.ca", x=None):
+def small(c, y, ink, s=FOOT.replace("  ·  ", "   ·   "), x=None):
     t(ImageDraw.Draw(c), BASE[0] / 2 if x is None else x, y, s, face(I, 19, 500), ink, 0.4, "ms" if x is None else "ls")
 
 
@@ -220,7 +211,7 @@ def m60(c):
         round_print(c, n, cx + R * np.cos(a), cy + R * np.sin(a), 176, CROP[n])
     F.line_bow(c, cx, cy + R + 22, 100, CHERRY, w=6.5)
     t(d, cx, cy - 6, "red nova", fit_serif(["red nova"], 380, 104), (60, 74, 58), -1, "ms")
-    t(d, cx, cy + 56, "is open", serif(56), CHERRY, 0, "ms")
+    t(d, cx, cy + 56, "is now open", serif(56), CHERRY, 0, "ms")
     t(d, cx, cy + 108, "come take a peek!", face(C, 36, 600), (110, 118, 100), 0, "ms")
     promise(c, cx, 1066, (60, 60, 52), CHERRY)
     F.flat_pill(c, cx, 1138, 560, 68, CTA, PINE, WHITE, face(I, 25, 600))
@@ -364,7 +355,7 @@ def m64(c):
         elif k == 1:
             d.rectangle((u(X), u(Y), u(X + cw), u(Y + chh)), fill=CHERRY + (255,))
             t(d, X + cw / 2, Y + 104, "red nova", serif(62), (252, 244, 236), -1, "ms")
-            t(d, X + cw / 2, Y + 156, "is open", serif(40), (250, 214, 200), 0, "ms")
+            t(d, X + cw / 2, Y + 156, "is now open", serif(40), (250, 214, 200), 0, "ms")
         else:
             d.rectangle((u(X), u(Y), u(X + cw), u(Y + chh)), fill=PINE + (255,))
             F.flat_star(c, X + cw / 2, Y + 82, 96, (236, 196, 100))
@@ -402,7 +393,7 @@ def m65(c):
     t(d, W / 2, 978, SUB, face(C, 36, 600), PINE, 0, "ms")
     promise(c, W / 2, 1034, (70, 52, 46), CHERRY, size=25, lead=34)
     F.flat_pill(c, W / 2, 1098, 540, 66, CTA, CHERRY, WHITE, face(I, 24, 600))
-    small(c, 1232, (130, 112, 104))
+    small(c, 1232, (130, 112, 104), s="tinystars.ca")
     small(c, 1262, (150, 132, 124), s="10629 west side drive, grande prairie")
 
 

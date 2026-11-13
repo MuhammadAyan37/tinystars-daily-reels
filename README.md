@@ -100,7 +100,7 @@ The glass, the balloon shading and the foil are computed from the image itself (
 
 ## The picture ad: Red Nova, the new room
 
-`rednova_ad.py` makes thirteen samples announcing Red Nova, the daycare's newest room, with the promise "Love your first month, or we'll refund your parent portion." They use the photos of the room taken the day it opened, before any children were in it. Seven are dressed for Christmas:
+`rednova_ad.py` makes thirteen samples announcing Red Nova, the daycare's newest room, with the owner's line "Red Nova is now open, a new space to shine, with our first-month happiness guarantee", a flat sparkle before it and a flat star after it. Every Red Nova sample (1 to 65) carries this line; it replaced the earlier refund wording on Nov 12. They use the photos of the room taken the day it opened, before any children were in it. Seven are dressed for Christmas:
 
 - 1, ornaments: the room hung on the tree as gold-rimmed photo baubles, on a snowy night
 - 2, Christmas card: an arched window onto the room, holly in the corners, a red and gold border
@@ -115,7 +115,7 @@ Six work at any time of year:
 - 8, grand opening: the room with a ribbon and bow across it, ready to cut
 - 9, liquid glass over an aurora of red and purple
 - 10, magazine cover: the new room issue
-- 11, scrapbook: taped polaroids, "refund" circled in pen, a sticky note
+- 11, scrapbook: taped polaroids, "happiness" circled in pen, a sticky note
 - 12, clean bento grid: "Say hello to Red Nova."
 - 13, room tour: a big photo with the play kitchen, mural, hideout and tables pointed out
 
@@ -164,7 +164,7 @@ They're written to `exports/rednova_ad_22.jpg` through `exports/rednova_ad_29.jp
 
 The photos get a natural, bright grade (`natural`). They're written to `exports/rednova_ad_30.jpg` through `exports/rednova_ad_35.jpg`, plus `exports/rednova_ads_like.jpg`.
 
-`rednova_christmas.py` makes six that are Christmas through and through (36 to 41). They put the promise gently: "We're so sure you'll love it, your first month is worry-free", with "Ask us about our first-month promise" under it, so it reads as confident rather than desperate.
+`rednova_christmas.py` makes six that are Christmas through and through (36 to 41). They put the promise gently, as the owner's happiness-guarantee line, so it reads as confident rather than desperate.
 - **Pieces drawn in code:** pine garlands with lights and baubles, a woven red tartan, wrapped presents, a fir tree of photos, gold bead tinsel, polaroids pegged to a garland, and the star buddy in a Santa hat.
 - **The six:** a pine grid, tartan, a photo tree, a red panel, a card edged in lights, and a garland at night.
 

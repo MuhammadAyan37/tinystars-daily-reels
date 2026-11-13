@@ -30,10 +30,8 @@ from offer_samples import BASE, INK, LIFT, OUT, SIZE, SS, WHITE, face, logo, pic
 from rednova_ad import bez, fit_serif, serif  # noqa: E402
 
 I = "InterTight"
-TITLE = "red nova is open"
+TITLE = "red nova is now open"
 SUB = "a new room, just in time for christmas"
-LINE = ["we're so sure you'll love it,", "your first month is worry-free."]
-ASK = "ask us about our first-month promise"
 CTA = "book a tour  ·  (780) 230-1599"
 
 SPOTS = [("RB_sand", 540, 372, 250, 176, (0.47, 0.8, 1.6), 0),
@@ -232,18 +230,9 @@ def tree(c, i):
     present(c, 336, 922, 124, 84, b1, r1)
     present(c, 628, 934, 98, 72, b2, r2)
     t(d, W / 2, 1100, TITLE, fit_serif([TITLE], 860, 96), p["acc"] if not dark else p["gold"], -1, "ms")
-    f = face(I, 27, 400)
-    t(d, W / 2, 1150, LINE[0], f, p["ink"], 0, "ms")
-    a = "worry-free"
-    pre = LINE[1][:LINE[1].index(a)]
-    fs = serif(32)
-    wp, wa, wb = A.wid(pre, f), A.wid(a, fs), A.wid(".", f)
-    x0 = W / 2 - (wp + wa + wb) / 2
-    t(d, x0, 1188, pre, f, p["ink"])
-    t(d, x0 + wp, 1188, a, fs, p["acc"] if not dark else p["gold"])
-    t(d, x0 + wp + wa, 1188, ".", f, p["ink"])
+    A.promise(c, W / 2, 1150, 38, face(I, 27, 400), "ms", p["ink"], p["acc"] if not dark else p["gold"])
     flat_pill(c, W / 2, 1216, 560, 70, CTA, p["acc"] if not dark else p["gold"], p["cta_fg"], face(I, 25, 600))
-    t(d, W / 2, 1322, f"{ASK}   ·   tinystars.ca", face(I, 19, 500), p["soft"], 0.4, "ms")
+    t(d, W / 2, 1322, f"tinystars.ca   ·   {A.ADDR}", face(I, 19, 500), p["soft"], 0.4, "ms")
 
 
 SAMPLES = {i: (lambda c, i=i: tree(c, i)) for i in PAL}

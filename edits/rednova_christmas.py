@@ -1,8 +1,8 @@
 """Red Nova, round five: six fully Christmas samples (36 to 41), with the offer said gently instead of outright.
 
-The owner asked for everything to be Christmas, and for the promise not to sound desperate. So instead of "we'll
-refund your parent portion", these say "We're so sure you'll love it, your first month is worry-free", with
-"Ask us about our first-month promise" underneath: the same promise, put confidently, and it gets parents asking.
+The owner asked for everything to be Christmas, and for the promise not to sound desperate. On Nov 12 they gave the
+line to use everywhere: "Red Nova is now open, a new space to shine, with our first-month happiness guarantee", with
+a sparkle before it and a star after it (drawn flat, see rednova_ad.promise).
 
   36  Pine grid: the room in a photo grid, a pine garland with lights and baubles, a deep green panel
   37  Tartan: the daycare's own post style on red tartan, gold frames, the star buddy in a Santa hat, gifts
@@ -24,6 +24,7 @@ from PIL import Image, ImageDraw, ImageFilter
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import offer as O  # noqa: E402
 import offer_samples as S  # noqa: E402
+import rednova_ad as R  # noqa: E402
 import rednova_like as L  # noqa: E402
 from offer_modern import aurora, inflate  # noqa: E402
 from rednova_modern import shaped  # noqa: E402
@@ -42,9 +43,8 @@ SNOWY = (250, 246, 238)
 CREAM = (250, 244, 232)
 WARM = [(255, 214, 140), (255, 96, 96), (255, 200, 92), (255, 238, 200), (140, 220, 160)]
 
-LINE = ["We're so sure you'll love it,", "your first month is worry-free."]
-ASK = "Ask us about our first-month promise."
-TITLE = "Red Nova is open"
+LINE = R.GUAR
+TITLE = "Red Nova is now open"
 SUB = "a new room, just in time for Christmas"
 CTA = "Book a tour  ·  (780) 230-1599"
 WEB = "tinystars.ca"
@@ -53,10 +53,8 @@ ADDR = "10629 West Side Drive, Grande Prairie"
 
 # ---------- words ----------
 def line(c, x, y, lead, f, ink, hi, anchor="ms"):
-    """The gentle promise in two lines, with 'worry-free' picked out."""
-    d = ImageDraw.Draw(c)
-    t(d, x, y, LINE[0], f, ink, -0.2, anchor)
-    S.accent(c, x, y + lead, LINE[1], "worry-free", f, ink, hi, -0.2, anchor)
+    """The promise in two lines, 'happiness guarantee' picked out, a sparkle before it and a star after it."""
+    R.promise(c, x, y, lead, f, ink, hi, -0.2, anchor)
 
 
 def foot(c, y, ink, x=None, items=(WEB, ADDR)):
@@ -243,8 +241,7 @@ def x36(c):
     t(d, W / 2, 1046, SUB.upper(), face(D, 18, 700), (214, 232, 218), 2.8, "ms")
     line(c, W / 2, 1100, 40, face(D, 28, 600), SNOWY, GOLD)
     gold_button(c, W / 2 - 300, 1170, 600, 76, CTA, face(D, 25, 700))
-    t(d, W / 2, 1290, ASK, face(D, 20, 600), (214, 232, 218), 0.3, "ms")
-    foot(c, 1322, (170, 200, 180))
+    foot(c, 1310, (170, 200, 180))
 
 
 def x37(c):
@@ -262,8 +259,8 @@ def x37(c):
     card(c, "RB_books", 306, 800, 420, 280, 2, border=12, r=22, rim=rim)
     S.button(c, 790 - 210, 640, 420, 52, "Christmas offer  ·  new room opened:", CREAM, CRANBERRY, face(D, 20, 700))
     logo_type(c, 790, 790, ["Red Nova"], fit("Unbounded", ["Red Nova"], 440, 96, 900), 0, stroke=5)
-    L.offer_banner(c, 566, 826, 450, 140, ["We're so sure you'll love", "it, your first month is", "worry-free!"],
-                   [(0, (26, 96, 64)), (1, (14, 60, 42))], face(B, 30, 750), 38)
+    L.offer_banner(c, 566, 826, 450, 140, ["A new space to shine,", "with our first-month", "happiness guarantee!"],
+                   [(0, (26, 96, 64)), (1, (14, 60, 42))], face(B, 29, 750), 38, marks=True)
     holly(c, 1004, 832, 58, 20)
     L.star_buddy(c, 90, 1048, 180, 8, hat=True)
     gift(c, 860, 1020, 120, 96, [(0, (60, 140, 96)), (1, (22, 86, 58))], GOLD_RAMP, GOLD_PUFF)
@@ -271,8 +268,7 @@ def x37(c):
          RED_PUFF)
     gold_button(c, W / 2 - 300, 1060, 600, 80, "Book a tour today", face(B, 31, 700))
     panel(c, 0, 1182, W, 200, 0, CREAM, lift=0.3)
-    t(ImageDraw.Draw(c), W / 2, 1238, ASK, face(D, 21, 700), CRANBERRY, 0.3, "ms")
-    L.contact_row(c, 1300, 18, ink=INK, cols=(XRED, (22, 86, 58), (196, 140, 40)))
+    L.contact_row(c, 1272, 18, ink=INK, cols=(XRED, (22, 86, 58), (196, 140, 40)))
 
 
 def x38(c):
@@ -307,11 +303,11 @@ def x38(c):
     t(d, W / 2, 1104, TITLE, fit_serif([TITLE], 860, 92), SNOWY, -1, "ms")
     line(c, W / 2, 1152, 38, face(D, 27, 600), (232, 238, 232), GOLD)
     gold_button(c, W / 2 - 300, 1212, 600, 74, CTA, face(D, 25, 700))
-    foot(c, 1324, (170, 196, 186), items=(ASK, WEB))
+    foot(c, 1324, (170, 196, 186))
 
 
 def x39(c):
-    """Red panel: the grid on top, a cranberry panel with a garland across its top, 'Red Nova is open!' in logo
+    """Red panel: the grid on top, a cranberry panel with a garland across its top, 'Red Nova is now open!' in logo
     lettering, the offer on a cream pill, the star buddy in a Santa hat and the contact row."""
     W, H = BASE
     c.paste(SNOWY + (255,), (0, 0, u(W), u(720)))
@@ -325,14 +321,13 @@ def x39(c):
     snow(c, 140, 52, y0=720, alpha=0.7, big=4)
     garland(c, (-40, 704), (540, 780), (1120, 704), seed=9, bauble_cols=[GOLD_PUFF, [(0, (255, 255, 255)),
                                                                                      (1, (210, 214, 226))]])
-    logo_type(c, W / 2, 922, ["Red Nova is open!"], fit("Unbounded", ["Red Nova is open!"], W - 130, 74, 900), 0,
+    logo_type(c, W / 2, 922, ["Red Nova is now open!"], fit("Unbounded", ["Red Nova is now open!"], W - 130, 74, 900), 0,
               stroke=5)
     S.button(c, W / 2 - 400, 960, 800, 96, "", CREAM, CREAM, face(D, 24, 700))
     line(c, W / 2, 999, 38, face(B, 28, 700), CRANBERRY, (22, 110, 70))
     gold_button(c, W / 2 - 300, 1086, 600, 78, "Book a tour today", face(B, 30, 700), fg=CRANBERRY)
     L.star_buddy(c, 990, 1130, 130, 8, hat=True)
     holly(c, 96, 1120, 64, -14)
-    t(ImageDraw.Draw(c), W / 2, 1222, ASK, face(D, 20, 600), (255, 222, 222), 0.3, "ms")
     L.contact_row(c, 1300, 18, ink=SNOWY, cols=((236, 192, 98), (40, 130, 86), (236, 192, 98)), sep=False)
 
 
@@ -360,8 +355,7 @@ def x40(c):
     t(d, W / 2, 984, SUB.upper(), face(D, 18, 700), PINE, 2.8, "ms")
     line(c, W / 2, 1036, 40, face(D, 28, 600), INK, XRED)
     S.button(c, W / 2 - 300, 1098, 600, 76, CTA, XRED, WHITE, face(D, 25, 700))
-    t(d, W / 2, 1220, ASK, face(D, 20, 600), PINE, 0.3, "ms")
-    foot(c, 1256, (120, 110, 100))
+    foot(c, 1240, (120, 110, 100))
 
 
 def x41(c):
@@ -385,7 +379,6 @@ def x41(c):
     line(c, W / 2, 930, 40, face(D, 28, 600), (236, 242, 236), GOLD)
     gold_button(c, W / 2 - 300, 1000, 600, 78, CTA, face(D, 25, 700))
     L.star_buddy(c, 120, 1130, 160, 8, hat=True)
-    t(d, W / 2, 1172, ASK, face(D, 20, 600), (200, 222, 208), 0.3, "ms")
     foot(c, 1300, (170, 196, 186))
 
 

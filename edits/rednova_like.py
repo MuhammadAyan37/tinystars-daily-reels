@@ -23,6 +23,7 @@ from PIL import Image, ImageDraw, ImageFilter
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import offer as O  # noqa: E402
 import offer_samples as S  # noqa: E402
+import rednova_ad as R  # noqa: E402
 import rednova_modern as M  # noqa: E402
 from offer_modern import inflate, puffy  # noqa: E402
 from offer_samples import (BASE, CROPS, INDIGO, INK, LABELS, LIFT, MAGENTA, OUT, SIZE, SOFT, SS, SUN, WHITE,  # noqa
@@ -38,7 +39,7 @@ ORANGE = S.ORANGE
 PHONE = "(780) 230-1599"
 EMAIL = "info@tinystars.ca"
 ADDR = "10629 West Side Drive, Grande Prairie"
-PROM1 = "Love your first month, or we'll refund your parent portion."
+PROM1 = "A new space to shine, with our first-month happiness guarantee!"
 
 PHOTOS = {"RB_sand": "IMG_1286", "RB_kitchen": "IMG_1294", "RB_books": "IMG_1308", "RB_tent": "IMG_1291",
           "RB_rug": "IMG_1310", "RB_busy": "IMG_1312"}
@@ -171,7 +172,14 @@ def star_buddy(c, cx, cy, size, turn=-8, hat=False):
     put(c, lay, *xy)
 
 
-def offer_banner(c, x, y, w, h, lines, stops, f, lead):
+def one_line(c, y, ink, hi, size=27):
+    """The promise on one line, 'happiness guarantee' picked out, a sparkle before it and a star after it."""
+    f = fit(D, ["M  " + PROM1 + "  M"], BASE[0] - 110, size, 600)
+    S.accent(c, BASE[0] / 2, y, PROM1, R.HAPPY, f, ink, hi, 0, "ms")
+    R.marks(c, BASE[0] / 2, y, 0, [PROM1], f, 0, "ms", hi)
+
+
+def offer_banner(c, x, y, w, h, lines, stops, f, lead, marks=False):
     """The offer on a bright ramp banner with rounded ends, in white."""
     b = ramp(u(w), u(h), stops, 0)
     b.putalpha(O.rounded(u(w), u(h), u(28)))
@@ -181,6 +189,8 @@ def offer_banner(c, x, y, w, h, lines, stops, f, lead):
     y0 = y + h / 2 - (len(lines) - 1) * lead / 2 + f.size / O.S * 0.34
     for k, s in enumerate(lines):
         t(d, x + w / 2, y0 + k * lead, s, f, WHITE, -0.3, "ms")
+    if marks:
+        R.marks(c, x + w / 2, y0, lead, lines, f, -0.3, "ms", (255, 226, 130))
 
 
 def tag(c, cx, cy, s, bg, fg, f, h=52, turn=0):
@@ -199,9 +209,9 @@ def l30(c):
     lg = logo(150)
     c.alpha_composite(lg, (u(W / 2) - lg.width // 2, u(826)))
     d = ImageDraw.Draw(c)
-    t(d, W / 2, 1046, "Red Nova, our newest room, is open.", fit(F, ["Red Nova, our newest room, is open."], W - 120, 52,
+    t(d, W / 2, 1046, "Red Nova, our newest room, is now open.", fit(F, ["Red Nova, our newest room, is now open."], W - 120, 52,
                                                                     500, -0.6, opsz=72), PLUM, -0.6, "ms")
-    S.accent(c, W / 2, 1100, PROM1, "refund", face(D, 27, 600), (84, 70, 92), MAGENTA, 0, "ms")
+    one_line(c, 1100, (84, 70, 92), MAGENTA)
     t(d, W / 2, 1140, "Grande Prairie  ·  tinystars.ca", face(D, 19, 500), (150, 140, 150), 1, "ms")
     S.button(c, W / 2 - 280, 1176, 560, 74, f"Book a tour  ·  {PHONE}", PURPLE, WHITE, face(D, 24, 700))
 
@@ -220,9 +230,9 @@ def l31(c):
     c.alpha_composite(lg, (u(W / 2) - lg.width // 2, u(818)))
     tag(c, W / 2, 976, "Christmas offer", CHERRY, WHITE, face(D, 21, 700), h=46, turn=-2)
     d = ImageDraw.Draw(c)
-    t(d, W / 2, 1060, "Red Nova, our newest room, is open.", fit(F, ["Red Nova, our newest room, is open."], W - 120, 52,
+    t(d, W / 2, 1060, "Red Nova, our newest room, is now open.", fit(F, ["Red Nova, our newest room, is now open."], W - 120, 52,
                                                                     500, -0.6, opsz=72), PLUM, -0.6, "ms")
-    S.accent(c, W / 2, 1112, PROM1, "refund", face(D, 27, 600), (84, 70, 92), CHERRY, 0, "ms")
+    one_line(c, 1112, (84, 70, 92), CHERRY)
     S.button(c, W / 2 - 280, 1152, 560, 74, f"Book a tour  ·  {PHONE}", CHERRY, WHITE, face(D, 24, 700))
     t(d, W / 2, 1270, "Grande Prairie  ·  tinystars.ca", face(D, 19, 500), (150, 140, 150), 1, "ms")
     for x, y, s_ in [(180, 1000, 18), (900, 960, 22), (300, 1250, 14)]:
@@ -248,7 +258,7 @@ def l32(c):
     t(d, W - 60, 870, "Grande Prairie", face(D, 19, 500), SOFT, 0.5, "rs")
     t(d, W / 2, 1042, "Red Nova", serif(150, italic=False), PLUM, -2, "ms")
     t(d, W / 2, 1090, "our newest room is open", serif(44), (130, 100, 140), 0, "ms")
-    S.accent(c, W / 2, 1146, PROM1, "refund", face(D, 27, 600), (84, 70, 92), MAGENTA, 0, "ms")
+    one_line(c, 1146, (84, 70, 92), MAGENTA)
     S.button(c, W / 2 - 280, 1184, 560, 74, f"Book a tour  ·  {PHONE}", PURPLE, WHITE, face(D, 24, 700))
     t(d, W / 2, 1306, "tinystars.ca", face(D, 19, 600), (150, 140, 150), 1, "ms")
 
@@ -274,8 +284,8 @@ def own_post(c, names, xmas=False):
     S.button(c, 790 - 210, 610, 420, 54, lab, PURPLE, WHITE, face(D, 22 if xmas else 25, 700))
     logo_type(c, 790, 760, ["Red Nova"], fit(UB, ["Red Nova"], 440, 96, 900), 0, stroke=5)
     stops = [(0, CHERRY), (1, MAGENTA)] if xmas else [(0, MAGENTA), (1, (250, 136, 56))]
-    offer_banner(c, 566, 800, 450, 150, ["Love your first month,", "or we'll refund your", "parent portion!"],
-                 stops, face(B, 31, 750), 40)
+    offer_banner(c, 566, 800, 450, 150, ["A new space to shine,", "with our first-month", "happiness guarantee!"],
+                 stops, face(B, 30, 750), 40, marks=True)
     if xmas:
         holly(c, 1000, 806, 60, 20)
     star_buddy(c, 84 if xmas else 96, 1046 if xmas else 1022, 186, 8 if xmas else -10, hat=xmas)
@@ -308,12 +318,12 @@ def l35(c):
     c.alpha_composite(lg, (u(W / 2) - lg.width // 2, u(718)))
     for x, y, sz, col in [(400, 760, 26, SUN), (680, 790, 30, MAGENTA), (90, 900, 22, SUN), (990, 920, 24, MAGENTA)]:
         sparkle(c, x, y, sz, col)
-    logo_type(c, W / 2, 976, ["Red Nova is open!"], fit(UB, ["Red Nova is open!"], W - 120, 74, 900), 0, stroke=5)
+    logo_type(c, W / 2, 976, ["Red Nova is now open!"], fit(UB, ["Red Nova is now open!"], W - 120, 74, 900), 0,
+              stroke=5)
     S.button(c, W / 2 - 400, 1008, 800, 90, "", PURPLE, WHITE, face(D, 24, 700))
     d = ImageDraw.Draw(c)
     fp = face(B, 27, 700)
-    t(d, W / 2, 1044, "Love your first month, or we'll", fp, WHITE, -0.2, "ms")
-    S.accent(c, W / 2, 1080, "refund your parent portion.", "refund", fp, WHITE, (255, 214, 110), -0.2, "ms")
+    R.promise(c, W / 2, 1044, 36, fp, WHITE, (255, 214, 110), -0.2, "ms")
     ramp_button(c, W / 2 - 300, 1124, 600, 78, "Book a tour today", S.PINK_RAMP, WHITE, face(B, 29, 700))
     star_buddy(c, 1000, 1150, 120, 10)
     contact_row(c, 1290, 18)

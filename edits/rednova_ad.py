@@ -1,8 +1,8 @@
 """Red Nova, our newest room, is open: thirteen picture-ad samples to choose from, seven dressed for Christmas and six
 for any time of year.
 
-Every sample says the same few things: the new room is open (Red Nova), the promise (love your first month, or we'll
-refund your parent portion), and how to book a tour. The photos are the new room itself, taken the day it opened, with
+Every sample says the same few things: Red Nova is now open, the promise (a new space to shine, with our first-month
+happiness guarantee), and how to book a tour. The photos are the new room itself, taken the day it opened, with
 nobody in them; they still went through photos.py like every other photo.
 
   Christmas   1 Ornaments: the room hung on the tree as photo baubles, on a snowy night
@@ -15,7 +15,7 @@ nobody in them; they still went through photos.py like every other photo.
   Any time    8 Grand opening: the room with a ribbon and bow across it, ready to cut
               9 Liquid glass over an aurora of red and purple
              10 Magazine cover: the new room issue
-             11 Scrapbook: taped polaroids, the promise circled in pen
+             11 Scrapbook: taped polaroids, the guarantee circled in pen
              12 Clean bento grid: say hello to Red Nova
              13 Room tour: a big photo with what's where pointed out
 
@@ -40,8 +40,14 @@ from offer_samples import (BASE, CROPS, INK, LABELS, LIFT, OUT, PHONE, SIZE, SOF
                            sparkle, star, stick, t, tile, u)
 
 ROOM = "Red Nova"
-PROM = ["Love your first month, or we'll", "refund your parent portion."]
-LEAD, BIG = "Love your first month,", ["or we'll refund your", "parent portion."]
+# The owner's line (Nov 12): "✨ Red Nova is now open — A new space to shine, with our first-month happiness guarantee! ⭐".
+# The headlines carry "Red Nova is now open"; the rest is the promise, with the sparkle and the star drawn flat.
+GUAR = ["A new space to shine, with our", "first-month happiness guarantee!"]
+HAPPY = "happiness guarantee"
+PROM = GUAR
+PROM_FIT = ["M  " + s + "  M" for s in GUAR]  # room for the sparkle and the star when sizing the type
+LEAD, BIG = "A new space to shine, with our", ["first-month happiness", "guarantee!"]
+NOW_OPEN = "Red Nova is now open"
 CTA = f"Book a tour  ·  {PHONE}"
 XMAS = "Christmas offer"
 ADDRESS = "10629 West Side Drive, Grande Prairie"
@@ -92,11 +98,40 @@ def wid(s, f, track=0.0):
     return O.width(ImageDraw.Draw(Image.new("L", (1, 1))), s, f, track) / O.S
 
 
-def promise(c, x, y, lead, f, fill, word_fill, track=0.0, anchor="ls", lines=PROM):
-    """The promise in two lines with 'refund' picked out."""
+def flat_star(c, cx, cy, size, col, turn=-8):
+    m = star(size, 0.5, turn)
+    lay = Image.new("RGBA", m.size, col + (255,))
+    lay.putalpha(m)
+    c.alpha_composite(lay, (u(cx) - m.width // 2, u(cy) - m.height // 2))
+
+
+def twinkle(c, cx, cy, size, col):
+    """The sparkle emoji, drawn flat: one four-point twinkle and a small one above it."""
+    sparkle(c, cx, cy, size, col)
+    sparkle(c, cx - size * 0.52, cy - size * 0.5, size * 0.42, col)
+
+
+def marks(c, x, y, lead, lines, f, track, anchor, col, n=None):
+    """A sparkle before the first line and a star after the last, like the owner's ✨ ... ⭐."""
+    sz = f.size / O.S
+    m = sz * 0.62
+    w0, w1 = wid(lines[0], f, track), wid(lines[-1], f, track)
+    x0 = x - w0 / 2 if anchor[0] == "m" else x
+    x1 = x + w1 / 2 if anchor[0] == "m" else x + w1
+    yl = y + lead * ((n or len(lines)) - 1)
+    twinkle(c, x0 - sz * 0.34 - m / 2, y - sz * 0.36, m, col)
+    flat_star(c, x1 + sz * 0.3 + m / 2, yl - sz * 0.36, m * 1.05, col)
+
+
+def promise(c, x, y, lead, f, fill, word_fill, track=0.0, anchor="ls", lines=PROM, mark=None, hang=False):
+    """The promise in two lines with 'happiness guarantee' picked out, a sparkle before it and a star after it.
+    Left-aligned, both lines step in so the sparkle stays inside the margin, unless it may hang into the margin."""
     d = ImageDraw.Draw(c)
+    if anchor[0] == "l" and not hang:
+        x += f.size / O.S * 0.96
     t(d, x, y, lines[0], f, fill, track, anchor)
-    accent(c, x, y + lead, lines[1], "refund", f, fill, word_fill, track, anchor)
+    accent(c, x, y + lead, lines[1], HAPPY, f, fill, word_fill, track, anchor)
+    marks(c, x, y, lead, lines, f, track, anchor, mark or word_fill)
 
 
 def footer(c, y, f, fill, x=None, items=(WEB, "Grande Prairie")):
@@ -408,7 +443,7 @@ def x1(c):
     t(d, W / 2, 800, ROOM, fit_serif([ROOM], 900, 178), WHITE, -1, "ms")
     liquid(c, 44, 846, W - 88, 344, 48, blur=18, bend=32, tint=(26, 6, 40), alpha=0.36)
     S.pill_sticker(c, W / 2, 904, XMAS, face(B, 24, 700), CHERRY, WHITE, -2, h=54)
-    f = fit(B, PROM, W - 170, 56, 760, -1.2)
+    f = fit(B, PROM_FIT, W - 170, 56, 760, -1.2)
     promise(c, W / 2, 1000, 64, f, WHITE, GOLD, -1.2, "ms")
     button(c, W / 2 - 330, 1088, 660, 82, CTA, WHITE, RUBY, face(B, 30, 700))
     footer(c, 1262, face(B, 21, 500), (226, 214, 236), items=(WEB, ADDRESS))
@@ -440,7 +475,7 @@ def x2(c):
         d.line((u(x - 110), u(962), u(x + 110), u(962)), fill=DEEP_GOLD + (255,), width=u(2))
     sparkle(c, W / 2, 962, 26, DEEP_GOLD)
     t(d, W / 2, 1018, XMAS.upper(), face(F, 20, 700, opsz=12), CHERRY, 3.2, "ms")
-    f = fit(F, PROM, W - 200, 44, 500, -0.6, opsz=40)
+    f = fit(F, PROM_FIT, W - 200, 44, 500, -0.6, opsz=40)
     promise(c, W / 2, 1072, 54, f, INK, CHERRY, -0.6, "ms")
     S.button(c, W / 2 - 300, 1152, 600, 78, CTA, CHERRY, WHITE, face(F, 27, 650, opsz=24))
     footer(c, 1286, face(F, 19, 500, opsz=12), SOFT, items=(WEB, ADDRESS))
@@ -472,7 +507,7 @@ def x3(c):
     bow(c, 799, 475, 120, GOLD_PUFF)
     panel(c, 40, 920, W - 80, 380, 40, CREAM, lift=0.35)
     S.pill_sticker(c, W / 2, 978, XMAS, face(B, 24, 700), CHERRY, WHITE, 0, h=54)
-    f = fit(B, PROM, W - 170, 54, 760, -1.2)
+    f = fit(B, PROM_FIT, W - 170, 54, 760, -1.2)
     promise(c, W / 2, 1070, 62, f, INK, CHERRY, -1.2, "ms")
     button(c, W / 2 - 320, 1150, 640, 80, CTA, CHERRY, WHITE, face(B, 30, 700))
     footer(c, 1272, face(B, 20, 500), SOFT, items=(WEB, ADDRESS))
@@ -505,7 +540,7 @@ def x4(c):
     t(d, W / 2, 736, "our new room is open!", face(C, 60, 700), (236, 244, 236), 0, "ms")
     t(d, W / 2, 870, ROOM, fit_serif([ROOM], 860, 156), WHITE, -1, "ms")
     t(d, W / 2, 934, XMAS.upper(), face(B, 21, 700), GOLD, 3.4, "ms")
-    f = fit(B, PROM, W - 150, 54, 760, -1.2)
+    f = fit(B, PROM_FIT, W - 150, 54, 760, -1.2)
     promise(c, W / 2, 1006, 62, f, WHITE, GOLD, -1.2, "ms")
     button(c, W / 2 - 330, 1090, 660, 84, CTA, GOLD, FOREST, face(B, 31, 750))
     footer(c, 1262, face(B, 21, 500), (200, 222, 208), items=(WEB, ADDRESS))
@@ -527,7 +562,7 @@ def x5(c):
     d = ImageDraw.Draw(c)
     t(d, W / 2, bottom - 30, "R E D   N O V A", face(B, 20, 800), (110, 66, 10), 1, "ms")
     t(d, W / 2, 940, "Our newest room is open", fit_serif(["Our newest room is open"], 940, 92), WHITE, -0.5, "ms")
-    f = fit(B, PROM, W - 150, 52, 760, -1.2)
+    f = fit(B, PROM_FIT, W - 150, 52, 760, -1.2)
     promise(c, W / 2, 1022, 60, f, (244, 236, 250), GOLD, -1.2, "ms")
     button(c, W / 2 - 330, 1110, 660, 82, CTA, WHITE, RUBY, face(B, 30, 700))
     footer(c, 1262, face(B, 21, 500), (214, 202, 230), items=(WEB, ADDRESS))
@@ -550,7 +585,7 @@ def x6(c):
     card(c, "IMG_1286", 860, 668, 290, 340, 7, border=12, r=26)
     holo_star(c, 996, 860, 132, 14)
     holly(c, 90, 860, 74, 10)
-    f = fit(B, PROM, W - 150, 54, 800, -1.2)
+    f = fit(B, PROM_FIT, W - 150, 54, 800, -1.2)
     promise(c, W / 2, 970, 64, f, INK, CHERRY, -1.2, "ms")
     puffy_button(c, W / 2 - 340, 1068, 680, 94, CTA, [(0, (236, 50, 74)), (1, (150, 10, 40))], face(B, 32, 700))
     footer(c, 1262, face(B, 21, 500), SOFT, items=(WEB, ADDRESS))
@@ -594,7 +629,7 @@ def x7(c):
     x, y, w, h = cell(0, 3, 3)
     panel(c, x, y, w, h, 26, CREAM, lift=0)
     t(d, W / 2, y + 62, f"{XMAS.upper()}  ·  FOR NEW FAMILIES", face(B, 21, 800), CHERRY, 3, "ms")
-    f = fit(B, PROM, w - 70, 54, 800, -1.2)
+    f = fit(B, PROM_FIT, w - 70, 54, 800, -1.2)
     promise(c, W / 2, y + 132, 62, f, INK, CHERRY, -1.2, "ms")
     button(c, W / 2 - 330, 1124, 660, 82, CTA, WHITE, RUBY, face(B, 30, 700))
     footer(c, 1268, face(B, 21, 500), (246, 214, 222), items=(WEB, ADDRESS))
@@ -614,10 +649,9 @@ def r1(c):
     bow(c, W / 2, 738, 128, RED_PUFF)
     d = ImageDraw.Draw(c)
     t(d, W / 2, 958, "GRAND OPENING  ·  OUR NEWEST ROOM", face(B, 22, 800), CHERRY, 3.2, "ms")
-    t(d, W / 2, 1050, f"{ROOM} is open.", fit(B, [f"{ROOM} is open."], W - 120, 92, 800, -3), INK, -3, "ms")
-    f = fit(B, PROM, W - 170, 40, 500, -0.4)
-    t(d, W / 2, 1114, PROM[0], f, SOFT, -0.4, "ms")
-    accent(c, W / 2, 1162, PROM[1], "refund", f, SOFT, CHERRY, -0.4, "ms")
+    t(d, W / 2, 1050, f"{NOW_OPEN}.", fit(B, [f"{NOW_OPEN}."], W - 120, 92, 800, -3), INK, -3, "ms")
+    f = fit(B, PROM_FIT, W - 170, 40, 500, -0.4)
+    promise(c, W / 2, 1114, 48, f, SOFT, CHERRY, -0.4, "ms")
     button(c, W / 2 - 320, 1196, 640, 80, CTA, CHERRY, WHITE, face(B, 29, 700))
     footer(c, 1318, face(B, 19, 500), SOFT, items=(WEB, ADDRESS))
 
@@ -639,9 +673,8 @@ def r2(c):
     x = 80
     t(d, x, 790, "Say hello to", face(B, 46, 500), (250, 230, 236), -0.4)
     t(d, x - 4, 912, f"{ROOM}.", face(B, 132, 800), WHITE, -4)
-    f = fit(B, PROM, W - 2 * x, 42, 600, -0.6)
-    t(d, x, 984, PROM[0], f, (248, 232, 240), -0.6)
-    accent(c, x, 1034, PROM[1], "refund", f, (248, 232, 240), GOLD, -0.6)
+    f = fit(B, PROM_FIT, W - 2 * x, 42, 600, -0.6)
+    promise(c, x, 984, 50, f, (248, 232, 240), GOLD, -0.6, hang=True)
     button(c, x, 1084, W - 2 * x, 92, CTA, WHITE, RUBY, face(B, 33, 700))
     for cx, s in zip([W / 2 - 300, W / 2, W / 2 + 290], ["Now enrolling", "Grande Prairie", WEB]):
         liquid_pill(c, cx, 1276, s, face(B, 22, 600), h=54, alpha=0.1)
@@ -667,10 +700,14 @@ def r3(c):
         glow_text(c, 148, y + 12, LABELS[n], face(B, 34, 750), WHITE, -0.3)
     S.sticker(c, 870, 610, 300, [("NOW", -14, face(B, 52, 800, wdth=75)), ("OPEN", 38, face(B, 52, 800, wdth=75))],
               -10, fill=CHERRY)
-    glow_text(c, 52, 966, LEAD, face(B, 46, 500), (246, 234, 240), -0.4)
-    f = fit(B, BIG, W - 96, 116, 800, -3)
-    accent(c, 46, 1076, BIG[0], "refund", f, WHITE, GOLD, -3)
-    t(d, 46, 1176, BIG[1], f, WHITE, -3)
+    fl = fit(B, [LEAD], W - 150, 46, 500, -0.4)
+    glow_text(c, 104, 966, LEAD, fl, (246, 234, 240), -0.4)
+    twinkle(c, 66, 950, 30, GOLD)
+    f = fit(B, BIG + ["guarantee!  M"], W - 96, 116, 800, -3)
+    accent(c, 46, 1076, BIG[0], "happiness", f, WHITE, GOLD, -3)
+    accent(c, 46, 1176, BIG[1], "guarantee", f, WHITE, GOLD, -3)
+    sz = f.size / O.S
+    flat_star(c, 46 + wid(BIG[1], f, -3) + sz * 0.42, 1176 - sz * 0.38, sz * 0.62, GOLD)
     button(c, 52, 1222, 640, 88, CTA, WHITE, RUBY, face(B, 31, 700))
     bx, by, bw, bh = 742, 1222, 290, 88
     panel(c, bx, by, bw, bh, 10, WHITE, lift=0)
@@ -684,7 +721,7 @@ def r3(c):
 
 
 def r4(c):
-    """Scrapbook: taped polaroids of the room with handwritten captions, 'refund' circled in pen, a sticky note.
+    """Scrapbook: taped polaroids of the room with handwritten captions, 'happiness' circled in pen, a sticky note.
     Caveat, Bricolage."""
     W, H = BASE
     B, C = "BricolageGrotesque", "Caveat"
@@ -703,16 +740,17 @@ def r4(c):
     doodle_star(c, 72, 640, 46, S.SUN, seed=1)
     doodle_star(c, 1020, 660, 38, CHERRY, seed=2)
     heart(c, 400, 640, 26, CHERRY)
-    t(d, 56, 744, f"{ROOM} is open! love your first month, or...", fit(C, [f"{ROOM} is open! love your first month, or..."],
-                                                                      W - 110, 60, 700), PEN, 0)
-    BIG2 = ["we'll  refund  your", "parent portion."]
-    f = fit(B, BIG2, 880, 112, 800, -3)
+    cap = f"{NOW_OPEN}! a new space to shine, with our..."
+    twinkle(c, 74, 724, 34, S.SUN)
+    t(d, 108, 744, cap, fit(C, [cap], W - 160, 60, 700), PEN, 0)
+    BIG2 = ["first-month", "happiness  guarantee!"]
+    f = fit(B, BIG2 + ["happiness  guarantee!  M"], W - 100, 112, 800, -3)
     t(d, 50, 862, BIG2[0], f, RUBY, -3)
-    pre = wid("we'll  ", f, -3)
-    wr = wid("refund", f, -3)
+    wr = wid("happiness", f, -3)
     sz = f.size / O.S
-    loop_around(c, 50 + pre + 12, 862 - sz * 0.7, 50 + pre + wr - 16, 862 + sz * 0.02, CHERRY, 5.5)
     t(d, 50, 966, BIG2[1], f, RUBY, -3)
+    loop_around(c, 50 + 12, 966 - sz * 0.7, 50 + wr - 16, 966 + sz * 0.02, CHERRY, 5.5)
+    doodle_star(c, 50 + wid(BIG2[1], f, -3) + sz * 0.5, 966 - sz * 0.4, sz * 0.36, S.SUN, seed=4)
     ramp_button(c, 56, 1030, 560, 90, CTA, [(0, (236, 50, 74)), (1, (150, 10, 40))], WHITE, face(B, 30, 650))
     note = Image.new("RGBA", (u(290), u(250)), (255, 234, 128, 255))
     nd = ImageDraw.Draw(note)
@@ -754,9 +792,8 @@ def r5(c):
     tile(c, "IMG_1286", 40, 802, 317, 192, 28)
     tile(c, "IMG_1308", 371, 802, 317, 192, 28)
     panel(c, 40, 1012, W - 80, 160, 28, (255, 236, 238), lift=0)
-    fp = fit(I, PROM, W - 160, 42, 700, -1)
-    t(d, 80, 1078, PROM[0], fp, INK, -1)
-    accent(c, 80, 1130, PROM[1], "refund", fp, INK, CHERRY, -1)
+    fp = fit(I, PROM_FIT, W - 160, 42, 700, -1)
+    promise(c, 72, 1078, 52, fp, INK, CHERRY, -1)
     button(c, 40, 1190, W - 80, 86, CTA, CHERRY, WHITE, face(I, 31, 700))
     footer(c, 1320, face(I, 19, 500), SOFT, items=(WEB, ADDRESS))
 
@@ -778,10 +815,9 @@ def r6(c):
     callout(c, 676, 404, 860, 440, "Little tables", f)
     d = ImageDraw.Draw(c)
     t(d, W / 2, 870, "TAKE A PEEK INSIDE OUR NEWEST ROOM", face(B, 21, 800), GOLD, 3.2, "ms")
-    t(d, W / 2, 970, f"{ROOM} is open.", fit(B, [f"{ROOM} is open."], W - 120, 96, 800, -3), WHITE, -3, "ms")
-    fp = fit(B, PROM, W - 170, 42, 600, -0.6)
-    t(d, W / 2, 1040, PROM[0], fp, (236, 222, 232), -0.6, "ms")
-    accent(c, W / 2, 1090, PROM[1], "refund", fp, (236, 222, 232), GOLD, -0.6, "ms")
+    t(d, W / 2, 970, f"{NOW_OPEN}.", fit(B, [f"{NOW_OPEN}."], W - 120, 96, 800, -3), WHITE, -3, "ms")
+    fp = fit(B, PROM_FIT, W - 170, 42, 600, -0.6)
+    promise(c, W / 2, 1040, 50, fp, (236, 222, 232), GOLD, -0.6, "ms")
     button(c, W / 2 - 330, 1132, 660, 84, CTA, CHERRY, WHITE, face(B, 31, 700))
     footer(c, 1280, face(B, 21, 500), (200, 182, 196), items=(WEB, ADDRESS))
 
